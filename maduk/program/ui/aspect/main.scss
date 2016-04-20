@@ -1,0 +1,15 @@
+/* EXTERNALS DEPS */
+@import  "./resources/bower_components/semantic-ui-icon/icon.min.css";
+@import  "resources/bower_components/bootstrap/scss/bootstrap.scss";
+
+/* EXTERNAL DEPS */
+@import "modules/animations/default-animations.scss";
+@import "modules/mixins/default-mixins.scss";
+@import "modules/defaults/default.scss";
+
+/* MAIN PAGE */
+@import "modules/views/_main.scss";
+/* MAIN CONSTRUCTORS */
+@import "modules/views/_constructors.scss";
+
+

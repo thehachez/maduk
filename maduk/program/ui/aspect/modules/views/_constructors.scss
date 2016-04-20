@@ -1,0 +1,380 @@
+/// constructors
+.container_con_middle {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    div {
+        display: flex;
+    }
+    @include collapse();
+}
+
+.flexit {
+    display: flex;
+    justify-content: center;
+    * {
+        align-self: center;
+    }
+}
+
+.ul_navs {
+    display: flex;
+    @include collapse();
+}
+
+.li_navs {
+    width: 100%;
+    display: flex;
+    @include collapse();
+}
+
+.flex_start {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.flex_end {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.ul_nav_panel_start {
+    width: 100%;
+    height: 100%;
+    align-self: flex-start;
+}
+
+.ul_nav_panel_end {
+    width: 45%;
+    height: 60%;
+    align-self: center;
+}
+
+.ul_nav_panel_end_RegPanel {
+    width: 35%;
+    height: 100%;
+    align-self: flex-end;
+}
+
+.div_item {
+    width: 30%;
+    @extend .flexit;
+    svg {
+        align-self: center;
+        width: 40%;
+        fill: #474a4d;
+    }
+}
+
+.div_item_opt {
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0px !important;
+    padding: 0px;
+    align-self: center;
+}
+
+.li_opt {
+    cursor: pointer;
+    color: #ccc;
+    border: 1px solid #474a4d;
+    border-left: 0;
+    &:hover {
+        background: #474a4d;
+        color: #0084dd;
+    }
+}
+
+.li_opt:nth-child(1) {
+    border-left: 1px solid #474a4d;
+}
+
+.div_text_target {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    p {
+        align-self: center;
+        font-size: 1.1rem;
+        color: #B0BEC5;
+        @include collapse();
+    }
+}
+
+.middle_container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    overflow: auto;
+    justify-content: center;
+    border-right: 1px solid #474a4d;
+    ul:nth-child(2n) {
+        margin-right: 0;
+    }
+}
+
+.constructors_boxes {
+    width: 45%;
+    height: 45%;
+    display: flex;
+    flex-wrap: wrap;
+    border: 3px solid #007acc;
+    box-shadow: 0 2px 5px #1f2224;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 0;
+    margin-right: 4%;
+    margin-bottom: 4%;
+    @include constructorsBoxes();
+    li {
+        width: 100%;
+        display: flex;
+    }
+}
+
+.cn_boxes_name {
+    height: 40%;
+    padding-left: 8%;
+    p {
+        text-transform: capitalize;
+        font-size: 1.6rem;
+        align-self: center;
+        @include collapse();
+    }
+}
+
+.cn_boxes_inf {
+    height: 30%;
+    padding-left: 8%;
+    p:nth-child(2) {
+        padding-left: 10px;
+    }
+    p {
+        font-size: 1.2rem;
+        align-self: center;
+        color: #B0BEC5;
+    }
+}
+
+.cn_boxes_stat {
+    justify-content: flex-end;
+    height: 30%;
+}
+
+.ul_explorers_boxes {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    padding: 0;
+    margin: 0;
+    align-self: flex-end;
+    justify-content: flex-end;
+    li {
+        width: 100%;
+        height: 100%;
+        max-width: 22%;
+        display: flex;
+        @include collapse();
+        svg {
+            width: 55%;
+            align-self: center;
+        }
+    }
+}
+
+.floatPanel {
+    position: absolute;
+    top: -100%;
+    z-index: 99999;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.floatConstructor_creator_in {
+    @extend .floatPanel;
+    @include FloatConstructorCreatorAnimationIn();
+}
+
+.floatConstructor_creator_end {
+    @extend .floatPanel;
+    @include FloatConstructorCreatorAnimationEnd();
+}
+
+.flcon_grid_creator_row_cn {
+    width: 70%;
+    height: 85%;
+    align-self: center;
+    background: #FFF;
+    box-shadow: 0px 1px 2px #101010;
+}
+
+.flcon_grid_creator_row_top {
+    width: 100%;
+    height: 7%;
+    @include make-row();
+    @include collapse();
+}
+
+.flcon_grid_creator_row_bot {
+    width: 100%;
+    height: 93%;
+    @include make-row();
+    @include collapse();
+}
+
+.float_con_mid_col_left {
+    height: 100%;
+    display: flex;
+    @include collapse();
+    @extend .col-xs-0;
+    @extend .col-sm-0;
+    @extend .col-md-0;
+    @extend .col-lg-0;
+    @extend .col-xl-0;
+}
+
+.float_con_mid_col_mid {
+    height: 100%;
+    display: flex;
+    @include collapse();
+    @extend .col-xs-9;
+    @extend .col-sm-9;
+    @extend .col-md-9;
+    @extend .col-lg-9;
+    @extend .col-xl-9;
+}
+
+.float_con_mid_col_right {
+    height: 100%;
+    display: flex;
+    @include collapse();
+    @extend .col-xs-10;
+    @extend .col-sm-10;
+    @extend .col-md-3;
+    @extend .col-lg-3;
+    @extend .col-xl-3;
+}
+
+.ul_forms {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0px;
+    padding-top: 5%;
+    margin: 0px;
+}
+
+.li_form {
+    width: 40%;
+    height: 15%;
+    flex-direction: column;
+    margin-left: 5%;
+    display: flex;
+    justify-content: center;
+    span {
+        margin-bottom: 12px;
+    }
+}
+
+.const_input {
+    height: 35px;
+    padding-left: 4%;
+    border: 1px solid #CFD8DC;
+}
+
+.const_select {
+    height: 35px;
+    padding-left: 2%;
+    background: #ECEFF1;
+    border: 0;
+    text-transform: capitalize;
+}
+
+.ul_const_explorers {
+    width: 100%;
+    display: flex;
+    @include collapse();
+    li {
+        cursor: pointer;
+        opacity: 0.4;
+        align-self: center;
+        @include collapse();
+        &:hover {
+            -webkit-filter: none;
+        }
+    }
+}
+
+.browser_select {
+    opacity: 10 !important;
+}
+
+.browser_noselect {
+    -webkit-filter: grayscale(100%);
+}
+
+.input_target_protocol {
+    flex-wrap: wrap;
+    select {
+        text-align-last: center;
+        width: 20% !important;
+        -webkit-appearance: none;
+        height: 35px;
+        border: 0;
+        color: white;
+    }
+    div {
+        width: 100%;
+    }
+    input {
+        border-left: 0px;
+        width: 80%;
+    }
+}
+
+.proto_http {
+    background: #0084dd;
+}
+
+.proto_https {
+    background: #64DD17;
+}
+
+.proto_ws {
+    background: #AA00FF;
+}
+
+.const_div_button {
+    width: 120px;
+    height: 70%;
+    background: #007acc;
+    display: flex;
+    align-self: flex-end;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    &:hover {
+        background: #B0BEC5;
+    }
+    p {
+        padding: 0;
+        margin: 0;
+        align-self: center;
+        color: white;
+        font-size: 1rem;
+        text-transform: uppercase;
+    }
+}
+
+.li_boutton {
+    justify-content: flex-end !important;
+}

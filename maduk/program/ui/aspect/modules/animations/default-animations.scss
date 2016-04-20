@@ -1,0 +1,48 @@
+@mixin FloatConstructorCreatorAnimationIn() {
+    -webkit-animation-name: FloatConstructorCreatorAnimationIn;
+    -webkit-animation-timing-function: ease;
+    -webkit-animation-duration: 0.5s;
+    -webkit-animation-fill-mode: forwards;
+
+    @keyframes FloatConstructorCreatorAnimationIn {
+        0% {
+            -webkit-transform: translateY(-100%);
+        }
+        50% {
+            -webkit-transform: translateY(105%);
+        }
+        100% {
+            -webkit-transform: translateY(100%);
+        }
+    }
+}
+
+@mixin FloatConstructorCreatorAnimationEnd() {
+    -webkit-animation-name: FloatConstructorCreatorAnimationEnd;
+    -webkit-animation-timing-function: ease;
+    -webkit-animation-duration: 0.3s;
+    -webkit-animation-fill-mode: forwards;
+
+    @keyframes FloatConstructorCreatorAnimationEnd {
+        0% {
+            -webkit-transform: translateY(100%);
+        }
+        100% {
+            -webkit-transform: translateY(-100%);
+        }
+    }
+}
+
+@mixin constructorsBoxes() {
+    -webkit-animation-name: constructorsBoxes;
+    -webkit-animation-timing-function: ease;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-fill-mode: forwards;
+    opacity: 0;
+    @keyframes constructorsBoxes {
+       to {
+           opacity: 10;
+       }
+    }
+}
+

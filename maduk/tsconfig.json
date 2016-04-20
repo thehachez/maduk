@@ -1,0 +1,19 @@
+{
+    "version": "1.8.10",
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es2015",
+        "sourceMap": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "moduleResolution": "node",
+        "jsx": "react"
+    },
+    "awesomeTypescriptLoaderOptions": {
+        "useBabel": true,
+        "useCache ": true
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}

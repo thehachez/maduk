@@ -1,0 +1,12 @@
+// FONTS
+@mixin getFont($name, $url) {
+    @font-face {
+        font-family: $name;
+        src: url($url);
+    }
+}
+
+@mixin collapse() {
+    margin: 0px !important;
+    padding: 0px !important;
+}

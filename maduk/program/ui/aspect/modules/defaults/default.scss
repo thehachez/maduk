@@ -1,0 +1,127 @@
+/// <reference path="../mixins/default-mixins.scss" />
+
+/* @media customs */
+// Extra small screen / phone
+$xs: 0;
+// Small screen / phone
+$sm: 544px;
+// Medium screen / tablet
+$md: 768px;
+// Large screen / desktop
+$lg: 992px;
+// Extra large screen / wide desktop
+$xl: 1200px;
+
+// colors
+
+/* defaults colors */
+$p: #00B0FF;
+$font_color: #616161;
+
+// svg
+$svgSize: 50% !default;
+$svgFill: #fff;
+
+// fonts
+@include getFont('wf_segoe', 'resources/fonts/wf_segoe-ui_normal.woff');
+$family: 'wf_segoe', sans-serif;
+
+html,
+body {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    font-family: $family;
+    color: $font_color;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #26292c;
+}
+
+.root {
+    width: 100%;
+    height: 100%;
+}
+
+*:focus {
+    outline: none;
+ -webkit-overflow-scrolling: touch;
+    
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    width: auto !important;
+    color: inherit !important;
+}
+
+a:active {
+    color: inherit !important;
+}
+
+svg {
+    width: $svgSize;
+    fill: $svgFill;
+}
+
+/* PLACE HOLDERS */
+
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+    color: #e0e0e0;
+}
+
+::-ms-clear {
+    display: none;
+}
+input::-webkit-se { background: transparent; }
+
+.bt_blue {
+    width: 120px;
+    height: 70%;
+    background: #40C4FF;
+    display: flex;
+    justify-content: center;  
+    cursor: pointer;
+    border-bottom: 4px solid #03A9F4;
+    &:hover {
+        background: #B0BEC5;
+    border-bottom: 4px solid #78909C;
+    }
+    p {
+        padding: 0;
+        margin: 0;
+        align-self: center;
+        color: white;
+        font-size: 1rem;
+        text-transform: uppercase;
+    }
+}
+
+::-webkit-scrollbar {
+    width: 15px;
+}
+
+::-webkit-scrollbar-track {
+    border: 1px solid #44474b;
+    opacity: 0.4;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #44474b;
+}
+
+.border-none {
+    border: 0 !important;
+    &:hover {
+        color: white !important;
+    }
+}
+
+form {
+    width: 100% !important;
+    height: 100% !important;
+}
