@@ -46,23 +46,27 @@
 
 	"use strict";
 	
+	var q = __webpack_require__(265);
 	var React = __webpack_require__(1);
 	var main_1 = __webpack_require__(157);
 	var store_1 = __webpack_require__(261);
 	var react_dom_1 = __webpack_require__(267);
 	var react_redux_1 = __webpack_require__(240);
 	var parser_1 = __webpack_require__(268);
-	var $ = __webpack_require__(265);
-	// ROOT THE WEB DRIVER CLIENT
+	// window.location.pathname = "ste";
 	var parser = new parser_1.ParseDOM({
 	    appType: "legacy"
 	});
 	var elementId = "__root_maduk_";
-	var mainContainer = $('<div/>', {
+	var mainContainer = q('<div/>', {
 	    id: elementId
 	});
-	$(function (eve) {
-	    $("body").before(mainContainer);
+	q(window).on('beforeunload', function () {
+	    q.get("http://localhost:5232/clientevents/beforeunload");
+	});
+	q(function (eve) {
+	    q("html").append(mainContainer);
+	    q.get("http://localhost:5232/clientevents/load");
 	    react_dom_1.render(React.createElement(react_redux_1.Provider, { store: store_1.store }, React.createElement(main_1.App, null)), document.getElementById(elementId));
 	});
 
@@ -32455,7 +32459,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var core_1 = __webpack_require__(269);
-	var $ = __webpack_require__(265);
+	var q = __webpack_require__(265);
 	// FLUX
 	var fluxActions = __webpack_require__(259);
 	var store_1 = __webpack_require__(261);
@@ -32476,7 +32480,6 @@
 	        /// KEY CONFIG
 	        _this.defaultKeyMenu = 88;
 	        _this.defaultCaptureSelector = 75;
-	        _this.setGlobalsEvents(window);
 	        return _this;
 	    }
 	
@@ -32484,17 +32487,18 @@
 	        key: 'root',
 	        value: function root() {
 	            /// this method start the DOM parser
-	            if (window.frames.length) {
-	                try {
-	                    for (var index = 0; index < window.frames.length; index++) {
-	                        this.bindEvents(window.frames[index].document);
-	                    }
-	                } catch (err) {
-	                    this.logError(err, "there was a problem in the maduk dom parser: in root");
-	                }
-	            } else {
-	                this.bindEvents(document);
-	            }
+	            this.setGlobalsEvents(window);
+	            // if (window.frames.length) {
+	            //     try {
+	            //         for (let index = 0; index < window.frames.length; index++) {
+	            //             this.bindEvents(window.frames[index].document);
+	            //         }
+	            //     } catch (err) {
+	            //         this.logError(err, "there was a problem in the maduk dom parser: in root");
+	            //     }
+	            // } else {
+	            //     this.bindEvents(document);
+	            // }
 	        }
 	    }, {
 	        key: 'seachInframes',
@@ -32524,7 +32528,7 @@
 	            var _this2 = this;
 	
 	            /// detect key pressed for call actions
-	            $(element).keydown(function (event) {
+	            q(element).keydown(function (event) {
 	                var key = event.keyCode || event.which;
 	                // set action keys for get element unique selector
 	                if (event.ctrlKey && event.shiftKey && key === _this2.defaultCaptureSelector) {
@@ -32550,16 +32554,13 @@
 	                    /* Optional Options for the unique selector  */
 	                    var options = {};
 	                    while (currentNode = ni.nextNode()) {
-	                        $(currentNode).click(function (eve) {
-	                            if (!_this3.keyActivated) return;
-	                            eve.preventDefault();
-	                            eve.stopPropagation();
+	                        q(currentNode).click(function (eve) {
+	                            if (_this3.keyActivated) return false;
 	                            if (_this3.appType === "legacy") {
 	                                _this3.seachInframes(window.frames, unique(eve.target, options));
 	                            } else {
 	                                _this3.seachInBody(unique(eve.target, options));
 	                            }
-	                            return false;
 	                        });
 	                    }
 	                })();

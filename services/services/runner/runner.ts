@@ -38,7 +38,7 @@ export class Runner {
 
     constructor(options: OptionsConstructor) {
         this.name = options.name;
-        this.url = `${options.protocol}://${options.url}:${options.port}`;
+        this.url = `${options.protocol}://${options.url}:${options.port}${options.path ? "/" + options.path : ""}`;
         this.runner = webdriverio.remote(options.config);
     }
 

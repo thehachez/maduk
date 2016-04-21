@@ -1,22 +1,29 @@
+import * as q from 'jquery';
 import * as React from 'react';
 import { App } from './containers/main';
 import { store } from './store';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { ParseDOM } from './core/parser';
-import * as $ from 'jquery';
 
-// ROOT THE WEB DRIVER CLIENT
+// window.location.pathname = "ste";
 const parser = new ParseDOM({
     appType: "legacy"
 });
 const elementId = "__root_maduk_";
-const mainContainer = $('<div/>', {
+const mainContainer = q('<div/>', {
     id: elementId,
 });
 
-$((eve) => {
-    $("body").before(mainContainer);
+q(window).on('beforeunload', ()=> {
+   q.get("http://localhost:5232/clientevents/beforeunload");
+});
+
+q((eve) => {
+    
+    q("html").append(mainContainer);
+    q.get("http://localhost:5232/clientevents/load");
+    
     render(
         <Provider store={ store }>
             <App />

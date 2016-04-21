@@ -4,14 +4,15 @@ import * as _ from 'lodash';
 export class Middleware {
     
     changeMidStack: Array<Function>;
-    onRequestRedy: (response) => void;
-    onWrite: (data) => void;
+    onrequest: (response) => void;
+    onwrite: (data) => void;
     
     constructor() {
 
     }
 
     interceptMiddleware(proxyRes, req, config, response) {
+        
         var _write = response.write,
             _end = response.end,
             _writeHead = response.writeHead,
@@ -37,35 +38,18 @@ export class Middleware {
 
                 // REWRITE RESPONSE
                 response.write = function (data) {
-                    let dataDecoded = data.toString(),
-                        appType: string = "legacy";
+                    // let dataDecoded = data.toString();
 
-                    // dataDecoded = datamanagment
-                    //     .set(dataDecoded)
-                    //     .pipe(datamanagment.replaceInData({
-                    //         source: "http://localhost:8888/ste",
-                    //         type: "encapsulate"
-                    //     }))
-                    //     // .pipe(datamanagment.replaceInData({
-                    //     //     source: "http://localhost:8287/wsstyle.css",
-                    //     //     type: "link"
-                    //     // }))
-                    //     // .pipe(datamanagment.replaceInData({
-                    //     //     source: "http://localhost:8287/clientroot.bundle.js",
-                    //     //     type: "script"
-                    //     // }))
-                    //     .return();
-
-                    _write.call(response, new Buffer(dataDecoded), "utf8", (dat) => {
+                    _write.call(response, new Buffer(data), "utf8", (dat) => {
                         // REWRITE RESPONSE END
-                        if (_.isFunction(this.onWrite)) this.onWrite(data);
+                        if (_.isFunction(this.onwrite)) this.onwrite(data);
 
                     });
                 }
 
                 // REWRITE RESPONSE END
 
-                if (_.isFunction(this.onRequestRedy)) this.onRequestRedy(response);
+                if (_.isFunction(this.onrequest)) this.onrequest(response);
 
             } else {
 

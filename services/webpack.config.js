@@ -27,7 +27,7 @@ module.exports = {
     watch: true,
     target: 'node',
     entry: {
-        service: './services/services.ts',
+        root: './services/root.ts',
     },
     output: {
         filename: './bin/[name].js'

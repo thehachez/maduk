@@ -23,6 +23,8 @@
 /// <reference path="node-notifier/node-notifier.d.ts" />
 /// <reference path="unique-selector/unique-selector.d.ts" />
 /// <reference path="jquery/jquery.d.ts" />
+/// <reference path="jsdom/jsdom.d.ts" />
+
 
 
 

@@ -43,9 +43,9 @@ class ManageData implements ManageDataDef {
         queryTemplate = this.dataPipe;
 
         let ifScript: string,
-        ifLink: string,
-        ifCapIn: string,
-        ifCapOut: string;
+            ifLink: string,
+            ifCapIn: string,
+            ifCapOut: string;
 
         switch (options.type) {
             case "script":
@@ -94,3 +94,19 @@ class ManageData implements ManageDataDef {
 }
 
 export default new ManageData();
+
+                    // dataDecoded = datamanagment
+                    //     .set(dataDecoded)
+                    //     .pipe(datamanagment.replaceInData({
+                    //         source: "http://localhost:8888/ste",
+                    //         type: "encapsulate"
+                    //     }))
+                    //     // .pipe(datamanagment.replaceInData({
+                    //     //     source: "http://localhost:8287/wsstyle.css",
+                    //     //     type: "link"
+                    //     // }))
+                    //     // .pipe(datamanagment.replaceInData({
+                    //     //     source: "http://localhost:8287/clientroot.bundle.js",
+                    //     //     type: "script"
+                    //     // }))
+                    //     .return();

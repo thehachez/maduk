@@ -1,27 +1,36 @@
 import { Middleware } from './middleware';
 const foxy = require("foxy");
 
+interface Config {
+    proxyPort: number | string,
+    port?: number,
+    url: string,
+    path?: string
+}
+
+
 export class Proxy extends Middleware {
     // PROXY CLASS
     /////////////////////////
     proxy: any;
-    constructor(config: {
-        proxyPort: number | string,
-        port?: number,
-        url: string,
-        path?: string
-    }) {
+    config: Config;
+
+    constructor(config: Config) {
         super();
+        this.config = config;
+    }
+
+    start() {
+
         var middleware = this.interceptMiddleware.bind(this);
-        
         const set = {
             proxyRes: [
                 middleware
             ]
         };
 
-        this.proxy = foxy(config.url, set)
-            .listen(config.proxyPort);
+        this.proxy = foxy(this.config.url, set)
+            .listen(this.config.proxyPort);
     }
 }
 
