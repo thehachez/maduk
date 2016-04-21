@@ -2,9 +2,11 @@ import datamanagment from './lib/managedata';
 import * as _ from 'lodash';
 
 export class Middleware {
+    
     changeMidStack: Array<Function>;
-    onwrite: () => void;
-
+    onRequestRedy: (response) => void;
+    onWrite: (data) => void;
+    
     constructor() {
 
     }
@@ -55,13 +57,15 @@ export class Middleware {
                     //     .return();
 
                     _write.call(response, new Buffer(dataDecoded), "utf8", (dat) => {
-                        console.log("body writed");
+                        // REWRITE RESPONSE END
+                        if (_.isFunction(this.onWrite)) this.onWrite(data);
+
                     });
                 }
 
                 // REWRITE RESPONSE END
 
-                this.onwrite();
+                if (_.isFunction(this.onRequestRedy)) this.onRequestRedy(response);
 
             } else {
 

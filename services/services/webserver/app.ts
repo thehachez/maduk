@@ -24,7 +24,6 @@ export class webServer {
   // public static bootstrap(): Server {
   //   return new Server();
   // }
-
   constructor(config: {
     port: number
   }) {
@@ -46,6 +45,7 @@ export class webServer {
   /////////
 
   private config() {
+
     const app = this.app;
     const port = this.normalizePort(process.env.PORT || this.port);
 

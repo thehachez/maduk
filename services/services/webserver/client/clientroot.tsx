@@ -1,10 +1,10 @@
 import * as React from 'react';
+import { App } from './containers/main';
+import { store } from './store';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { store } from './store';
-import { App } from './containers/main';
-import * as $ from 'jquery';
 import { ParseDOM } from './core/parser';
+import * as $ from 'jquery';
 
 // ROOT THE WEB DRIVER CLIENT
 const parser = new ParseDOM({
@@ -22,5 +22,3 @@ $((eve) => {
             <App />
         </Provider>, document.getElementById(elementId));
 });
-
-

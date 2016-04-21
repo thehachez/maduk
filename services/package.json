@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "main": "program.js",
   "scripts": {
-    "start": "program.js",
-    "gulp": "gulp",
-    "webpack": "webpack -w"
+    "webpack": "webpack -w",
+    "webpack_client": "webpack -w --config webpack.config.client.js",
+    "compile": "npm webpack webpack_client",
+    "sele": "java -jar standalone_2.48.2.jar -Dwebdriver.ie.driver=D:/MADUKPROJECT/services/drivers/IEDriverServer.exe"
   },
   "dependencies": {
     "express": "~4.13.1",
@@ -24,7 +25,7 @@
   },
   "devDependencies": {
     "babel": "6.5.2",
-    "babel-core": "^6.7.4",
+    "babel-core": "^6.7.4", 
     "babel-loader": "6.2.4",
     "babel-plugin-transform-object-rest-spread": "^6.6.5",
     "babel-plugin-transform-runtime": "^6.6.0",

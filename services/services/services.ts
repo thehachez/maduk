@@ -1,7 +1,9 @@
-import { Runner } from './services/runner/runner';
-import { Proxy } from './services/proxy/proxy';
-import { webServer } from './services/webserver/app';
-import * as injectors from './services/injectors';
+import { Runner } from './runner/runner';
+import { Proxy } from './proxy/proxy';
+import { webServer } from './webserver/app';
+import * as scripts from './runner/scripts/boot';
+import * as path from 'path';
+
 
 const runnerConfig = {
     // app config
@@ -11,13 +13,13 @@ const runnerConfig = {
     port: 8888,
     // webdriver config
     config: {
-        // logLevel: "command",
+        //logLevel: "data",
         version: '11',
         platform: 'WINDOWS',
         tags: ['tag1', 'tag2'],
         name: 'default',
         desiredCapabilities: {
-            browserName: "chrome"
+            browserName: "internet explorer"
         }
     }
 }
@@ -44,14 +46,14 @@ webserver.onListen = (inf) => {
     console.log("WEBSERVER LISTEN ON PORT:" + inf);
 }
 
-proxy.onwrite = () => {
+proxy.onRequestRedy = () => {
     client.then(() => {
         client.getTitle().then((title) => {
             console.log(title)
         })
     })
         .timeoutsAsyncScript(5000)
-        .executeAsync(injectors.root).then((res: any) => {
-            console.log("content load status: ", res.value.message);
+        .executeAsync(scripts.boot).then((res: any) => {
+            console.log("content load status: ", res.value);
         });
 }

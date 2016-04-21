@@ -1,36 +1,27 @@
-﻿var webpack = require('webpack');
+var webpack = require('webpack');
 var path = require("path");
 var WebpackBuildNotifierPlugin = require("webpack-build-notifier");
 var CONFIG = {
     proccess: 'dev'
 }
 
-var fs = require('fs');
-var nodeModules = {};
-fs.readdirSync('node_modules')
-    .filter(function (x) {
-        return ['.bin'].indexOf(x) === -1;
-    })
-    .forEach(function (mod) {
-        nodeModules[mod] = 'commonjs ' + mod;
-    });
-
 module.exports = {
     context: __dirname,
     node: {
         __dirname: true,
-        __filename: true
+        __filename: false
     },
     devtool: 'source-map',
     debug: true,
     cache: true,
     watch: true,
-    target: 'node',
+    target: 'web',
     entry: {
-        service: './services/services.ts',
+        clientroot: './services/webserver/client/clientroot.tsx'
     },
     output: {
-        filename: './bin/[name].js'
+        path: path.resolve(__dirname, "services/webserver/client/statics"),
+        filename: '[name].js'
     },
     plugins: [
         new WebpackBuildNotifierPlugin(),
@@ -38,7 +29,8 @@ module.exports = {
         new webpack.DefinePlugin({
             'process.env': {
                 'NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-            }
+            },
+            $dirname: '__dirname'
         })
     ],
     resolve: {
@@ -61,6 +53,5 @@ module.exports = {
                 exclude: /node_modules/
             }
         ]
-    },
-    externals: nodeModules
+    }
 }

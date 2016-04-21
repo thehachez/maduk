@@ -2,7 +2,7 @@ export function boot(callback) {
     if (document.getElementById("script_bolt_unique") || document.getElementById("link_bolt_unique")) return;
     var webserver = {
         url: "http://localhost:5232",
-        fileName: "clientroot.bundle.js"
+        fileName: "clientroot.js"
     }
     // (<any>window)._ = _;
     var dataTotal = 2;
@@ -35,7 +35,6 @@ export function boot(callback) {
             message: "script load error"
         });
     })
-
 
     newLinkTag.type = 'text/css';
     newScriptTag.id = 'link_bolt_unique';
