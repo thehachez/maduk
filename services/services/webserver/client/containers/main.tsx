@@ -38,7 +38,7 @@ class AppView extends React.Component<any, any> {
 
         return (
             <div id="__main_maduk_">
-                <MainPanel />
+                <MainPanel />  
             </div>
         )
     }

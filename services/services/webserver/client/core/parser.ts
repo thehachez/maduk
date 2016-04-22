@@ -37,13 +37,14 @@ export class ParseDOM extends MadukClient {
     private root() {
         var self = this;
 
-        // funcion iniciadora
-        // comprueba si existen frames en el documento
-        // en el caso de que si lo reduce y bidea los eventos
-
+        // se mapean los frames actuales incluyendo si existe el body
+        // en mapframes se bidean un evento de carga en caso en caso de que cambien los datos
+        // de los frames
+        // deberia tener un iterador en caso de que ayan mas frames con el mismo nombre
+        // actualmente esta harcodeado para frames de nombre unico
+        
         if (this.framesExist) {
             
-            this.set(window, document);
             this.mapFrames(window.frames, (frame: {
                 win: Window,
                 doc: Document,
@@ -52,7 +53,8 @@ export class ParseDOM extends MadukClient {
 
                 let frameNode: any;
                 const {  win, doc, name } = frame;
-
+                this.set(win, doc);
+                
                 if (q(`[name="${name}"]`)[0]) {
                     frameNode = q(`[name="${name}"]`)[0];
                     frameNode.onload = function () {

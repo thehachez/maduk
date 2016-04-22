@@ -1,0 +1,23 @@
+/// <reference path="../mixins/default-mixins.scss" />
+
+/* defaults colors */
+$p: #00B0FF;
+$font_color: #616161;
+
+// svg
+$svgSize: 50% !default;
+$svgFill: #fff;
+
+// fonts
+@include getFont('wf_segoe', 'resources/fonts/wf_segoe-ui_normal.woff');
+$family: 'wf_segoe', sans-serif;
+
+html,
+body {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+

@@ -4759,7 +4759,7 @@ footer {
 
 .nav_col_left {
   height: 100%;
-  background: #0084dd;
+  background: #4FC3F7;
   margin: 0px !important;
   padding: 0px !important; }
 
@@ -4772,7 +4772,7 @@ footer {
   height: 100%;
   display: flex;
   justify-content: center;
-  background: #0084dd;
+  background: #4FC3F7;
   margin: 0px !important;
   padding: 0px !important; }
 
@@ -4783,7 +4783,7 @@ footer {
 
 .footer_col_left {
   height: 100%;
-  background: #0084dd;
+  background: #4FC3F7;
   margin: 0px !important;
   padding: 0px !important; }
 
@@ -4805,11 +4805,21 @@ footer {
   height: 100%;
   justify-content: center;
   display: flex; }
-  .logo_item p {
+  .logo_item svg {
+    width: 65%; }
+
+.logo_text {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center; }
+  .logo_text p {
     font-size: 1rem;
     align-self: center;
     font-weight: 700;
-    color: #FFF; }
+    color: #FFF;
+    margin: 0px !important;
+    padding: 0px !important; }
 
 .navigationPanel_ul {
   width: 50%;
@@ -4946,7 +4956,7 @@ footer {
   border-left: 0; }
   .li_opt:hover {
     background: #474a4d;
-    color: #0084dd; }
+    color: #4FC3F7; }
 
 .li_opt:nth-child(1) {
   border-left: 1px solid #474a4d; }
@@ -4978,7 +4988,7 @@ footer {
   height: 45%;
   display: flex;
   flex-wrap: wrap;
-  border: 3px solid #007acc;
+  border: 3px solid #4FC3F7;
   box-shadow: 0 2px 5px #1f2224;
   cursor: pointer;
   padding: 0;
@@ -5188,10 +5198,10 @@ footer {
     width: 80%; }
 
 .proto_http {
-  background: #0084dd; }
+  background: #263238; }
 
 .proto_https {
-  background: #64DD17; }
+  background: #00E676; }
 
 .proto_ws {
   background: #AA00FF; }
@@ -5199,7 +5209,7 @@ footer {
 .const_div_button {
   width: 120px;
   height: 70%;
-  background: #007acc;
+  background: #4FC3F7;
   display: flex;
   align-self: flex-end;
   justify-content: center;

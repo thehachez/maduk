@@ -1,32 +1,58 @@
-body {
-    width: 100%;
-    height: 100%;
-    margin: 0px;
-    padding: 0px;
-}
+/* EXTERNALS DEPS */
+/* defaults colors */
+@font-face {
+  font-family: "wf_segoe";
+  src: url("resources/fonts/wf_segoe-ui_normal.woff"); }
 
+html,
+body {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  margin: 0 !important;
+  padding: 0 !important; }
+
+/* MAIN PANELS */
 #__root_maduk_ {
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    height: 0px;
-    margin: 0px;
-    padding: 0px;
-}
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 0px;
+  margin: 0px !important;
+  padding: 0px !important; }
 
 #__main_maduk_ {
-    width: 100%;
-    height: 100%;
-    margin: 0px;
-    padding: 0px;
-}
+  width: 100%;
+  height: 100%;
+  margin: 0px !important;
+  padding: 0px !important; }
 
 #__ul_mainpanel_ {
-    width: 100%;
+  width: 100%;
+  height: 100%;
+  background: #4FC3F7;
+  overflow: hidden;
+  box-shadow: 0px 0px 10px #c3c3c3;
+  margin: 0px !important;
+  padding: 0px !important; }
+
+#__ul_containeritems_ {
+  width: 20%;
+  height: 100%;
+  list-style: none;
+  display: table;
+  margin: 0px !important;
+  padding: 0px !important; }
+  #__ul_containeritems_ li {
+    width: 25%;
     height: 100%;
-    margin: 0px;
-    padding: 0px;
-    background: #0084dd;
-    box-shadow: 0px 0px 10px #333;
-}
+    display: table-cell;
+    vertical-align: middle; }
+    #__ul_containeritems_ li svg {
+      fill: #FFF;
+      width: 40%;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      cursor: pointer; }

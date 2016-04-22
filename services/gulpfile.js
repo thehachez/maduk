@@ -5,14 +5,14 @@ var gulpSass = require('gulp-sass');
 var gulpNotify = require('gulp-notify');
 var gulpRename = require("gulp-rename");
 
-var root = "./program/";
-var dev = true;
+var root = "./services/webserver/client/";
+var dev = false;
 
 var config = {
-    sassFilesPath: root + "ui/aspect/modules/**/*.scss",
-    sassFilesEntry: root + "ui/aspect/main.scss",
-    sassfileName: dev ? 'main_dev.css' : 'main.css',
-    sassFilesOutput: root + "ui/aspect/"
+    sassFilesPath: root + "aspect/modules/**/*.scss",
+    sassFilesEntry: root + "aspect/main.scss",
+    sassfileName: dev ? 'clientroot_dev.css' : 'clientroot.css',
+    sassFilesOutput: root + "statics"
 };
 
 gulp.task('default', function () {

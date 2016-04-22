@@ -86,7 +86,7 @@
     border-left: 0;
     &:hover {
         background: #474a4d;
-        color: #0084dd;
+        color: #4FC3F7;
     }
 }
 
@@ -124,7 +124,7 @@
     height: 45%;
     display: flex;
     flex-wrap: wrap;
-    border: 3px solid #007acc;
+    border: 3px solid #4FC3F7;
     box-shadow: 0 2px 5px #1f2224;
     cursor: pointer;
     padding: 0;
@@ -342,11 +342,11 @@
 }
 
 .proto_http {
-    background: #0084dd;
+    background: #263238;
 }
 
 .proto_https {
-    background: #64DD17;
+    background: #00E676;
 }
 
 .proto_ws {
@@ -356,7 +356,7 @@
 .const_div_button {
     width: 120px;
     height: 70%;
-    background: #007acc;
+    background: #4FC3F7;
     display: flex;
     align-self: flex-end;
     justify-content: center;
