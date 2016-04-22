@@ -10,6 +10,7 @@ const client = runner.start();
 
 /// PROXY EVENTS
 //////
+
 proxy.onrequest = function () {
     // START THE DRIVER CONTROLLER
     client.then(() => {
@@ -51,4 +52,3 @@ api.ondriver("beforeunload", (request: Express.Request) => {
 
 proxy.start();
 api.start();
-

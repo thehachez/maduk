@@ -28,6 +28,7 @@ module.exports = {
     target: 'node',
     entry: {
         root: './services/root.ts',
+        test: './services/test.ts'
     },
     output: {
         filename: './bin/[name].js'

@@ -13,74 +13,132 @@ const unique = uniquemodule.default;
 /// app type legacy
 export class ParseDOM extends MadukClient {
 
+    appType: string;
     keyActivated: boolean;
     keysPress: number[];
 
     defaultKeyMenu: number;
     defaultCaptureSelector: number;
+    frames: Document[];
+    framesExist: boolean | number;
 
     constructor(config) {
         super(config);
-        this.root();
 
         /// KEY CONFIG
-        this.defaultKeyMenu = 88;
-        this.defaultCaptureSelector = 75;
+        this.defaultKeyMenu = 88; // key -> k
+        this.defaultCaptureSelector = 75; // key -> x 
+        this.appType = "legacy";
+        this.frames = [];
+        this.framesExist = this.ifExistFrames();
+        this.root();
     }
 
     private root() {
-        /// this method start the DOM parser
-        this.setGlobalsEvents(window);
+        var self = this;
 
-        // if (window.frames.length) {
-        //     try {
+        // funcion iniciadora
+        // comprueba si existen frames en el documento
+        // en el caso de que si lo reduce y bidea los eventos
 
-        //         for (let index = 0; index < window.frames.length; index++) {
-        //             this.bindEvents(window.frames[index].document);
-        //         }
+        if (this.framesExist) {
+            
+            this.set(window, document);
+            this.mapFrames(window.frames, (frame: {
+                win: Window,
+                doc: Document,
+                name: string
+            }) => {
 
-        //     } catch (err) {
+                let frameNode: any;
+                const {  win, doc, name } = frame;
 
-        //         this.logError(err, "there was a problem in the maduk dom parser: in root");
-        //     }
+                if (q(`[name="${name}"]`)[0]) {
+                    frameNode = q(`[name="${name}"]`)[0];
+                    frameNode.onload = function () {
+                        console.log("load")
+                        self.set(win, doc);
+                    };
+                }
+            });
 
-        // } else {
+        } else {
 
-        //     this.bindEvents(document);
-        // }
+            this.set(window, document);
+        }
     }
 
-    private seachInframes(frames, queryCssPath): Element {
-        /// seach the selector in all DOM frames
+    private set(win, doc) {
+        this.setEventsPerElement(win, doc);
+        this.setGlobalsEvents(win, doc);
+    }
+
+    private getFrame(name: string) {
+        if (window.frames[name]) {
+            return {
+                win: window.frames[name].window,
+                doc: window.frames[name].document
+            };
+        }
+    }
+
+    private spyMethod(target, method, handler: Function) {
+        // metodo para observar cambios en el metodo del target que seria un objeto
+        // si este cambia llama a una funcion handler
+        const realMethod = target[method];
+        target[method] = function () {
+            if (_.isFunction(handler)) handler(arguments);
+            return realMethod.apply(this, arguments);
+        }
+    }
+
+    private mapFrames(winFrames, frameBack: (frame: {
+        win: Window,
+        doc: Document,
+        name?: string
+    }) => void): Document[] | boolean {
+
+        // metodo para mapear los window object y document object de los frames.
+        // tener en cuenta que el el dom tamb puede tener body
+        let body = q("body");
+
         try {
 
-            for (let index = 0; index < window.frames.length; index++) {
-                if (!frames[index].document.querySelector(queryCssPath)) continue;
-                else return frames[index].document.querySelector(queryCssPath);
+            for (let index = 0; index < winFrames.length; index++) {
+                this.frames.push(winFrames[index]);
+                frameBack({
+                    name: winFrames[index].window.name,
+                    win: winFrames[index].window,
+                    doc: winFrames[index].document
+                });
             }
 
-        } catch (err) {
-
-            this.logError(err, "there was a problem in the maduk dom parser: search in frames");
-        }
-    }
-
-    private seachInBody(queryCssPath): Element {
-        /// seach the selector in DOM body
-        try {
-
-            if (!document.querySelector(queryCssPath)) return;
-            else return document.querySelector(queryCssPath);
+            if (body) frameBack({
+                win: window,
+                doc: document
+            });
 
         } catch (err) {
 
-            this.logError(err, "there was a problem in the maduk dom parser: search in body");
+            this.logError(err, "there was a problem in the maduk dom parser: reduce frames");
+            return false;
         }
+
+        return this.frames;
     }
 
-    private setGlobalsEvents(element: Window) {
-        /// detect key pressed for call actions
-        q(element).keydown((event: KeyboardEvent) => {
+    private ifExistFrames() {
+        return window.frames.length ? window.frames.length : false;
+    }
+
+    private ifAppIs(type: string) {
+        return this.appType === type ? true : false;
+    }
+
+    private setGlobalsEvents(win: Window, doc: Document, elements?: HTMLElement) {
+        // metodo para setear los eventos globales en window y document y en elementos particulares.
+
+        q(win).keydown((event: KeyboardEvent) => {
             const key: number = event.keyCode || event.which;
 
             // set action keys for get element unique selector
@@ -101,35 +159,42 @@ export class ParseDOM extends MadukClient {
         });
     }
 
-    private bindEvents(element) {
-        /// create expecial iterator of iterate all nodes in the DOM
+    private getUniqueSelector(doc: Document, queryCssPath): Element {
         try {
 
-            let currentNode,
-                ni = document.createNodeIterator(element, NodeFilter.SHOW_ALL);
+            if (!doc.querySelector(queryCssPath)) return;
+            else return doc.querySelector(queryCssPath);
 
-            /* Optional Options for the unique selector  */
+        } catch (err) {
+
+            this.logError(err, "there was a problem in the maduk dom parser: get unique seletor");
+        }
+    }
+
+    private setEventsPerElement(win: Window, doc: Document, elements?: HTMLElement) {
+        // metodo para iterar sobre todos los elementos del DOM
+        try {
+
+            let currentNode;
+            let ni = doc.createNodeIterator(doc, NodeFilter.SHOW_ALL);
             const options = {
                 // Array of selector types based on which the unique selector will be generate
                 // selectorTypes: [ 'ID', 'Class', 'Tag', 'NthChild' ]
             }
 
             while (currentNode = ni.nextNode()) {
+
                 q(currentNode).click((eve) => {
+
                     if (this.keyActivated) return false;
 
-                    if (this.appType === "legacy") {
-                        this.seachInframes(window.frames, unique(eve.target, options));
-                    } else {
-                        this.seachInBody(unique(eve.target, options));
-                    }
-
+                    this.getUniqueSelector(doc, unique(eve.target, options));
                 });
             }
 
         } catch (err) {
 
-            this.logError(err, "there was a problem in the maduk dom parser: binding events");
+            this.logError(err, "there was a problem in the maduk dom parser: bindig events iterator nodes");
         }
     }
 }

@@ -1,5 +1,5 @@
 export const menus = {
-    animationVelocity: 200
+    animationVelocity: 50
 }
 export const API = {
     URL: "http://localhost:5232",

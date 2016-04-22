@@ -11,8 +11,8 @@ const scriptBootConfig = {
 }
 
 jsdom.env({
-    url: "http://localhost:8888/ste",
+    url: "http://localhost/ste",
     done: function (err, window) {
-        console.log(window.frames.length)
+        console.log(window)
     }
 });

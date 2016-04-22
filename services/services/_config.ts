@@ -25,8 +25,8 @@ export const servicesConfig = {
             tags: ['tag1', 'tag2'],
             name: 'default',
             desiredCapabilities: {
-                browserName: "internet explorer"
-                // browserName: "chrome"
+                //browserName: "internet explorer"
+                 browserName: "chrome"
            }
         }
     },
