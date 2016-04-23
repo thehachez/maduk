@@ -21,6 +21,10 @@ export class ParseDOM extends MadukClient {
     defaultCaptureSelector: number;
     frames: Document[];
     framesExist: boolean | number;
+    uniqueOp: {
+        selectorTypes: ['ID', 'Class', 'Tag', 'NthChild']
+    }
+    banElementTypes: string[];
 
     constructor(config) {
         super(config);
@@ -30,7 +34,9 @@ export class ParseDOM extends MadukClient {
         this.defaultCaptureSelector = 75; // key -> x 
         this.appType = "legacy";
         this.frames = [];
+        this.keyActivated = false;
         this.framesExist = this.ifExistFrames();
+        this.banElementTypes = ["html", "body", "head", "frameset", "frame", "script", "link", "meta"];
         this.root();
     }
 
@@ -42,9 +48,9 @@ export class ParseDOM extends MadukClient {
         // de los frames
         // deberia tener un iterador en caso de que ayan mas frames con el mismo nombre
         // actualmente esta harcodeado para frames de nombre unico
-        
+
         if (this.framesExist) {
-            
+
             this.mapFrames(window.frames, (frame: {
                 win: Window,
                 doc: Document,
@@ -54,7 +60,7 @@ export class ParseDOM extends MadukClient {
                 let frameNode: any;
                 const {  win, doc, name } = frame;
                 this.set(win, doc);
-                
+
                 if (q(`[name="${name}"]`)[0]) {
                     frameNode = q(`[name="${name}"]`)[0];
                     frameNode.onload = function () {
@@ -137,20 +143,54 @@ export class ParseDOM extends MadukClient {
         return this.appType === type ? true : false;
     }
 
+
+    private setIndividualEvents(element: JQuery, scope: Document) {
+        // al posar el mouse sobre los elementos se obtienen las props de los mismos
+        element.on("mouseover", (eve) => {
+            if (eve.target.tagName) {
+                //console.log(eve.target.tagName);
+            }
+            if (eve.target.id) {
+                //console.log(eve.target.id);
+            }
+
+            if (eve.target.className) {
+                //console.log(eve.target.className);
+            }
+            return false;
+        });
+
+        element.on("click", (eve) => {
+            if (this.keyActivated) {
+                eve.stopPropagation();
+                eve.preventDefault();
+                console.log(this.getUniqueSelector(scope, unique(eve.target)))
+                return false;
+            }
+        });
+
+    }
+
+
     private setGlobalsEvents(win: Window, doc: Document, elements?: HTMLElement) {
         // metodo para setear los eventos globales en window y document y en elementos particulares.
 
-        q(win).keydown((event: KeyboardEvent) => {
+        q(win).on("keyup", (event) => {
             const key: number = event.keyCode || event.which;
 
-            // set action keys for get element unique selector
-            if (event.ctrlKey
-                && event.shiftKey
-                && key === this.defaultCaptureSelector) {
-                !this.keyActivated;
+            if (key === 17) {
+                this.keyActivated = false;
             }
 
-            // set actions keys for open the client menu
+        });
+
+        q(win).on("keydown", (event) => {
+            const key: number = event.keyCode || event.which;
+
+            if (event.ctrlKey) {
+                this.keyActivated = true;
+            }
+
             if (event.ctrlKey
                 && event.shiftKey
                 && key === this.defaultKeyMenu) {
@@ -179,19 +219,14 @@ export class ParseDOM extends MadukClient {
 
             let currentNode;
             let ni = doc.createNodeIterator(doc, NodeFilter.SHOW_ALL);
-            const options = {
-                // Array of selector types based on which the unique selector will be generate
-                // selectorTypes: [ 'ID', 'Class', 'Tag', 'NthChild' ]
-            }
 
             while (currentNode = ni.nextNode()) {
+                let node = q(currentNode);
 
-                q(currentNode).click((eve) => {
-
-                    if (this.keyActivated) return false;
-
-                    this.getUniqueSelector(doc, unique(eve.target, options));
-                });
+                if (currentNode.tagName)
+                    if (!this.banElementTypes.find(ban => ban === currentNode.tagName.toLowerCase())) {
+                        this.setIndividualEvents(node, doc);
+                    }
             }
 
         } catch (err) {
