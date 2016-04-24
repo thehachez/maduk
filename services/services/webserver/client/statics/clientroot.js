@@ -32832,7 +32832,9 @@
 	
 	            // al posar el mouse sobre los elementos se obtienen las props de los mismos
 	            element.on("mouseover", function (eve) {
-	                if (eve.target.tagName) {}
+	                if (eve.target.tagName) {
+	                    console.log(eve.target.tagName);
+	                }
 	                if (eve.target.id) {}
 	                if (eve.target.className) {}
 	                return false;

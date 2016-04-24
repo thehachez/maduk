@@ -1,9 +1,9 @@
 import { Proxy } from './proxy/proxy';
 import { webServer } from './webserver/app';
-import { servicesConfig } from './_config';
+import { _proxy, _api } from './_config';
 
-export const proxy = new Proxy(servicesConfig.proxy);
-export const api = new webServer(servicesConfig.api);
+export const proxy = new Proxy(_proxy);
+export const api = new webServer(_api);
 
 
 

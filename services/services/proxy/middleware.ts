@@ -1,67 +1,60 @@
-import datamanagment from './lib/managedata';
 import * as _ from 'lodash';
 
-export class Middleware {
-    
-    changeMidStack: Array<Function>;
-    onrequest: (response) => void;
-    onwrite: (data) => void;
-    
-    constructor() {
+interface Config {
+    port: number;
+    target: string;
+    protocol: string;
+    scriptName: string;
+    linkName: string;
+}
 
-    }
-
-    interceptMiddleware(proxyRes, req, config, response) {
+export class MiddleWare {
+    selector(config: Config) {
         
-        var _write = response.write,
-            _end = response.end,
-            _writeHead = response.writeHead,
-            _headers = proxyRes.headers["content-type"],
-            _chunks: Buffer[] = [];
+        const { port, target, protocol, scriptName, linkName } = config;
+        
+        var selects = [];
+        var selectBody: any = {};
+        var selectHead: any = {};
 
-        try {
-            if (_headers
-                && typeof _headers === "string"
-                && /text\/html/g.test(_headers)
-                && /charset=utf-8/g.test(_headers)) {
+        selectHead.query = 'head';
+        selectHead.func = (node)=> {
 
-                // REWRITE RESPONSE HEADERS 
+            var out = `<link type="text/css" rel="stylesheet" href="${protocol}://${target}:${port}/${linkName}">`;
 
-                response.writeHead = function () {
-                    // This disables chunked encoding
-                    response.setHeader('transfer-encoding', '');
-                    // Disable cache for all http as well
-                    response.setHeader('cache-control', 'no-cache');
+            var rs = node.createReadStream();
+            var ws = node.createWriteStream({ outer: false });
 
-                    _writeHead.apply(this, arguments);
-                };
+            // Read the node and put it back into our write stream, 
+            // but don't end the write stream when the readStream is closed.
+            rs.pipe(ws, { end: false });
 
-                // REWRITE RESPONSE
-                response.write = function (data) {
-                    // let dataDecoded = data.toString();
-
-                    _write.call(response, new Buffer(data), "utf8", (dat) => {
-                        // REWRITE RESPONSE END
-                        if (_.isFunction(this.onwrite)) this.onwrite(data);
-
-                    });
-                }
-
-                // REWRITE RESPONSE END
-
-                if (_.isFunction(this.onrequest)) this.onrequest(response);
-
-            } else {
-
-                response.write = _write;
-                response.end = _end;
-
-            }
-
-        } catch (err) {
-
-            console.log(err);
-
+            // When the read stream has ended, attach our style to the end
+            rs.on('end', function () {
+                ws.end(out);
+            });
         }
+        
+        selectBody.query = 'body';
+        selectBody.func = (node)=> {
+
+            var out = `<script type="text/javascript" src="${protocol}://${target}:${port}/${scriptName}"></script>`;
+
+            var rs = node.createReadStream();
+            var ws = node.createWriteStream({ outer: false });
+
+            // Read the node and put it back into our write stream, 
+            // but don't end the write stream when the readStream is closed.
+            rs.pipe(ws, { end: false });
+
+            // When the read stream has ended, attach our style to the end
+            rs.on('end', function () {
+                ws.end(out);
+            });
+        }
+
+        selects.push(selectHead, selectBody);
+
+        return selects;
     }
 }

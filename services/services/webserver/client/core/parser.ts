@@ -148,7 +148,7 @@ export class ParseDOM extends MadukClient {
         // al posar el mouse sobre los elementos se obtienen las props de los mismos
         element.on("mouseover", (eve) => {
             if (eve.target.tagName) {
-                //console.log(eve.target.tagName);
+                console.log(eve.target.tagName);
             }
             if (eve.target.id) {
                 //console.log(eve.target.id);

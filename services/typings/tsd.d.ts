@@ -24,6 +24,10 @@
 /// <reference path="unique-selector/unique-selector.d.ts" />
 /// <reference path="jquery/jquery.d.ts" />
 /// <reference path="jsdom/jsdom.d.ts" />
+/// <reference path="connect/connect.d.ts" />
+/// <reference path="body-parser/body-parser.d.ts" />
+
+
 
 
 
