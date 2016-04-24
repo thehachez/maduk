@@ -29,22 +29,58 @@ export class ItemFlag extends React.Component<any, any> {
 export class ItemLabel extends React.Component<any, any> {
     render() {
         return (
-            <svg  fill="#000000" viewBox="0 0 24 24" >
-                <path d="M0 0h24v24H0z" fill="none" />
-                <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z" />
+            <svg fill="#000000" height="48" viewBox="0 0 24 24" width="48">
+                <path d="M0 0h24v24H0z" fill="none"/>
+                <path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/>
             </svg>
         )
     }
 }
 
 
-export class ItemTaskHot extends React.Component<any, any> {
+export class ItemHot extends React.Component<any, any> {
     render() {
         return (
             <svg x="0px" y="0px" viewBox="0 0 48 48" enable-background="new 0 0 48 48">
                 <path fill="#DD2C00" d="M39,28c0,8.395-6.606,15-15.001,15S9,36.395,9,28S22.479,12.6,20.959,5C24,5,39,15.841,39,28z" />
                 <path fill="#FF5722" d="M33,32c0-7.599-9-15-9-15c0,6.08-9,8.921-9,15c0,5.036,3.963,9,9,9S33,37.036,33,32z" />
                 <path fill="#FFC107" d="M18.999,35.406C19,32,24,30.051,24,27c0,0,4.999,3.832,4.999,8.406c0,2.525-2.237,4.574-5,4.574S18.998, 37.932, 18.999, 35.406z" />
+            </svg>
+        )
+    }
+}
+
+export class ItemCodeColor extends React.Component<any, any> {
+    render() {
+        return (
+            <svg version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 48 48" enable-background="new 0 0 48 48">
+                <g>
+                    <polygon fill="#3F51B5" points="36,34 33,31.5 39.8,24 33,16.5 36,14 45,24     " />
+                    <polygon fill="#3F51B5" points="13,34 4,24 13,14 16,16.5 9.1,24 16,31.5     " />
+                </g>
+                <polygon fill="#2196F3" points="21,39 17.2,37.7 27,9 30.8,10.3 " />
+            </svg>
+        )
+    }
+}
+
+export class ItemList extends React.Component<any, any> {
+    render() {
+        return (
+            <svg fill="#000000" height="48" viewBox="0 0 24 24" width="48">
+                <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
+                <path d="M0 0h24v24H0z" fill="none"/>
+            </svg>
+        )
+    }
+}
+
+export class ItemRedoList extends React.Component<any, any> {
+    render() {
+        return (
+            <svg fill="#000000" height="48" viewBox="0 0 24 24" width="48">
+                <path d="M14 5h8v2h-8zm0 5.5h8v2h-8zm0 5.5h8v2h-8zM2 11.5C2 15.08 4.92 18 8.5 18H9v2l3-3-3-3v2h-.5C6.02 16 4 13.98 4 11.5S6.02 7 8.5 7H12V5H8.5C4.92 5 2 7.92 2 11.5z"/>
+                <path d="M0 0h24v24H0z" fill="none"/>
             </svg>
         )
     }

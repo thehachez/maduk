@@ -7,6 +7,7 @@ import { bindActionCreators } from 'redux';
 import * as actions from '../actions';
 // components 
 import { MainPanel } from '../components/mainpanel';
+import { BottomPanel } from '../components/bottompanel';
 
 interface Props {
     children?: any;
@@ -18,6 +19,7 @@ interface Props {
 function mapStateToProps(state: StateDef, props: any) {
     return {
         mangeMenu: state.mangeMenu,
+        seletorProps: state.seletorProps
     };
 }
 
@@ -34,11 +36,18 @@ class AppView extends React.Component<any, any> {
 
     render() {
 
-        const { actions, mangeMenu } = this.props
+        const { actions, mangeMenu, seletorProps } = this.props
 
         return (
-            <div id="__main_maduk_">
-                <MainPanel />  
+            <div>
+                <div id="__mad_topper_">
+                    <MainPanel />
+                </div>
+                <div id="__mad_bottom_">
+                    <BottomPanel
+                        seletorProps = { seletorProps }
+                        />
+                </div>
             </div>
         )
     }

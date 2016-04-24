@@ -147,16 +147,8 @@ export class ParseDOM extends MadukClient {
     private setIndividualEvents(element: JQuery, scope: Document) {
         // al posar el mouse sobre los elementos se obtienen las props de los mismos
         element.on("mouseover", (eve) => {
-            if (eve.target.tagName) {
-                console.log(eve.target.tagName);
-            }
-            if (eve.target.id) {
-                //console.log(eve.target.id);
-            }
+            dispatch(fluxActions.showSelectorsInfo(eve));
 
-            if (eve.target.className) {
-                //console.log(eve.target.className);
-            }
             return false;
         });
 
@@ -195,7 +187,10 @@ export class ParseDOM extends MadukClient {
                 && event.shiftKey
                 && key === this.defaultKeyMenu) {
                 // REDUX DISPATCH ACTION
-                dispatch(fluxActions.manageMainMenu());
+                if (store.getState().mangeMenu)
+                    dispatch(fluxActions.hiddeTopMenu());
+                else
+                    dispatch(fluxActions.showTopMenu());
             }
 
         });

@@ -8,11 +8,10 @@ export class CotaninerItems extends React.Component<Props, any> {
     render() {
         return (
             <ul id="__ul_containeritems_">
-                <li><Items.ItemConfig /></li>
-                <li><Items.ItemMicro /></li>
+                <li><Items.ItemRedoList /></li>
+                <li><Items.ItemLabel /></li>
                 <li><Items.ItemSearch /></li>
                 <li><Items.ItemCode /></li>
-                
             </ul>
         )
     }

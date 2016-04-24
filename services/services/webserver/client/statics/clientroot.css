@@ -14,18 +14,16 @@ body {
 
 /* MAIN PANELS */
 #__root_maduk_ {
+  z-index: 999999999;
+  margin: 0px !important;
+  padding: 0px !important; }
+
+#__mad_topper_ {
   position: absolute;
   left: 0px;
   top: 0px;
   width: 100%;
   height: 0px;
-  z-index: 999999999;
-  margin: 0px !important;
-  padding: 0px !important; }
-
-#__main_maduk_ {
-  width: 100%;
-  height: 100%;
   margin: 0px !important;
   padding: 0px !important; }
 
@@ -60,5 +58,65 @@ body {
       #__ul_containeritems_ li svg:hover {
         fill: #4FC3F7; }
 
+#__mad_bottom_ {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  height: 40px; }
+
+#__con_bottompanel_ {
+  width: 100%;
+  height: 100%;
+  background: #FFF;
+  box-shadow: 0px 0px 10px #dfdfdf; }
+  #__con_bottompanel_ ul {
+    list-style: none; }
+
+.__con_bottompanel_left {
+  width: 33.3%;
+  height: 100%;
+  float: left; }
+
+.__con_bottompanel_mid {
+  width: 33.3%;
+  height: 100%;
+  float: left; }
+
+.__con_bottompanel_right {
+  width: 33.3%;
+  height: 100%;
+  float: left; }
+
+.__ul_bottompanel_right {
+  width: 70%;
+  height: 100%;
+  float: right;
+  display: table;
+  margin: 0px !important;
+  padding: 0px !important; }
+  .__ul_bottompanel_right li {
+    height: 100%;
+    display: table-cell;
+    vertical-align: middle; }
+    .__ul_bottompanel_right li svg {
+      width: 60%;
+      fill: #333; }
+    .__ul_bottompanel_right li p {
+      font-size: 17px;
+      font-family: "arial";
+      text-align: right;
+      font-weight: 700;
+      color: #333; }
+
+.__li_btp_item {
+  width: 20%;
+  padding-left: 10px; }
+
+.__li_btp_selector {
+  width: 80%;
+  max-width: 188px;
+  overflow: hidden; }
+
 .__selection_class {
-  border: 1px solid #4FC3F7; }
+  border: 1px solid #000; }

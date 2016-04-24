@@ -1746,10 +1746,17 @@
 	            var protocol = config.protocol;
 	            var scriptName = config.scriptName;
 	            var linkName = config.linkName;
+	            var divRootId = config.divRootId;
 	
 	            var selects = [];
 	            var selectBody = {};
 	            var selectHead = {};
+	            var selectFrameSet = {};
+	            var safe = false;
+	            selectFrameSet.query = 'frameset';
+	            selectFrameSet.func = function (node) {
+	                safe = true;
+	            };
 	            selectHead.query = 'head';
 	            selectHead.func = function (node) {
 	                var out = '<link type="text/css" rel="stylesheet" href="' + protocol + '://' + target + ':' + port + '/' + linkName + '">';
@@ -1760,6 +1767,7 @@
 	                rs.pipe(ws, { end: false });
 	                // When the read stream has ended, attach our style to the end
 	                rs.on('end', function () {
+	                    if (safe) out = "";
 	                    ws.end(out);
 	                });
 	            };
@@ -1773,10 +1781,11 @@
 	                rs.pipe(ws, { end: false });
 	                // When the read stream has ended, attach our style to the end
 	                rs.on('end', function () {
+	                    if (safe) out = "";
 	                    ws.end(out);
 	                });
 	            };
-	            selects.push(selectHead, selectBody);
+	            selects.push(selectFrameSet, selectHead, selectBody);
 	            return selects;
 	        }
 	    }]);
@@ -2177,7 +2186,8 @@
 	// set initial state
 	
 	exports.initialState = {
-	    mangeMenu: false
+	    mangeMenu: false,
+	    seletorProps: {}
 	};
 
 /***/ },
@@ -2237,6 +2247,9 @@
 
 	"use strict";
 	
+	exports._application = {
+	    appType: "legacy"
+	};
 	exports._api = {
 	    port: 5232
 	};
@@ -2252,7 +2265,8 @@
 	    target: "localhost",
 	    protocol: "http",
 	    scriptName: "clientroot.js",
-	    linkName: "clientroot.css"
+	    linkName: "clientroot.css",
+	    divRootId: "__root_maduk_"
 	};
 	exports._runner = {
 	    // app config

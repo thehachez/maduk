@@ -1,3 +1,7 @@
+export const _application = {
+    appType: "legacy"
+}
+
 export const _api = {
     port: 5232
 }
@@ -15,7 +19,8 @@ export const _proxyMiddleware = {
     target: "localhost",
     protocol: "http",
     scriptName: "clientroot.js",
-    linkName: "clientroot.css"
+    linkName: "clientroot.css",
+    divRootId: "__root_maduk_"
 };
 
 export const _runner = {
