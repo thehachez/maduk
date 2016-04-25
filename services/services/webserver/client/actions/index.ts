@@ -9,14 +9,15 @@ export interface ActionsDef {
 export const constants = {
     SHOW_TOP_MENU: "SHOW_TOP_MENU",
     HIDDE_TOP_MENU: "HIDDE_TOP_MENU",
-    SHOW_SELECTORS_INFO: "SHOW_SELECTORS_INFO"
+    SHOW_SELECTORS_INFO: "SHOW_SELECTORS_INFO",
+    ADD_SELECTOR: "ADD_SELECTOR"
 }
 
 export function showTopMenu() {
     const menu = q("#__mad_topper_");
     // SHOW AND ANIMATE CLIENT MAIN PANEL
     menu.animate({
-        height: "60px"
+        width: "25%"
     }, menus.animationVelocity);
 
     return {
@@ -28,9 +29,9 @@ export function hiddeTopMenu() {
     const menu = q("#__mad_topper_");
     // SHOW AND ANIMATE CLIENT MAIN PANEL
     menu.css({
-        height: "60px"
+        width: "25%"
     }).animate({
-        height: "0px"
+        width: "0%"
     }, menus.animationVelocity);
 
     return {
@@ -38,24 +39,50 @@ export function hiddeTopMenu() {
     }
 }
 
-export function showSelectorsInfo(event: JQueryEventObject) {
-    const selectorProps: any = {};
+export function showSelectorsInfo(eve: JQueryEventObject) {
+    const hoverSelectorProps: any = {};
 
-    if (event.target.tagName) {
-        selectorProps.tagName = event.target.tagName;
+    if (eve.target.tagName) {
+        hoverSelectorProps.tagName = eve.target.tagName;
     }
-    if (event.target.id) {
-        selectorProps.id = event.target.id;
+    if (eve.target.id) {
+        hoverSelectorProps.id = eve.target.id;
     }
-    if (event.target.className) {
-        selectorProps.tagName = event.target.className;
+    if (eve.target.className) {
+        hoverSelectorProps.tagName = eve.target.className;
     }
-    if (event.target.nodeName) {
-        selectorProps.nodeName = event.target.nodeName;
+    if (eve.target.nodeName) {
+        hoverSelectorProps.nodeName = eve.target.nodeName;
     }
-
+    //constants.SHOW_SELECTORS_INFO
     return {
-        type: constants.SHOW_SELECTORS_INFO,
+        type: "SHOW_SELECTORS_INFO",
+        payload: {
+            hoverSelectorProps
+        }
+    }
+}
+
+export function addSelector(eve: JQueryEventObject, uniqueSelector) {
+    const selectorProps: any = {};
+    
+    selectorProps.uselector = uniqueSelector;
+    
+    if (eve.target.tagName) {
+        selectorProps.tagName = eve.target.tagName;
+    }
+    if (eve.target.id) {
+        selectorProps.id = eve.target.id;
+    }
+    if (eve.target.className) {
+        selectorProps.tagName = eve.target.className;
+    }
+    if (eve.target.nodeName) {
+        selectorProps.nodeName = eve.target.nodeName;
+    }
+    
+    return {
+        type: constants.ADD_SELECTOR,
         payload: {
             selectorProps
         }

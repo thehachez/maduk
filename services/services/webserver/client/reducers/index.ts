@@ -13,10 +13,22 @@ function mangeMenu(state = false, action): boolean {
     }
 }
 
-function seletorProps(state = {}, action) {
+function selectorProps(state = {}, action) {
     switch (action.type) {
         case constants.SHOW_SELECTORS_INFO:
-            return action.payload.selectorProps;
+            return action.payload.hoverSelectorProps;
+        default:
+            return state;
+    }
+}
+
+function selectorsStack(state = [], action) {
+    let selectors = Array.from(state);
+
+    switch (action.type) {
+        case constants.ADD_SELECTOR:
+            selectors.push(action.payload.selectorProps);                        
+            return selectors;
         default:
             return state;
     }
@@ -24,6 +36,7 @@ function seletorProps(state = {}, action) {
 
 export const rootReducer = combineReducers({
     mangeMenu,
-    seletorProps
+    selectorProps,
+    selectorsStack
 });
 

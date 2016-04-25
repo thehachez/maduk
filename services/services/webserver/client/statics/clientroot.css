@@ -14,49 +14,100 @@ body {
 
 /* MAIN PANELS */
 #__root_maduk_ {
-  z-index: 999999999;
+  font-family: "arial";
   margin: 0px !important;
   padding: 0px !important; }
+  #__root_maduk_ ul {
+    list-style: none; }
 
 #__mad_topper_ {
   position: absolute;
   left: 0px;
   top: 0px;
-  width: 100%;
-  height: 0px;
-  margin: 0px !important;
-  padding: 0px !important; }
+  width: 0%;
+  height: 100%;
+  z-index: 999999999;
+  box-shadow: 0 0 5px #333; }
 
 #__ul_mainpanel_ {
   width: 100%;
   height: 100%;
   background: #26292c;
   overflow: hidden;
-  box-shadow: 0px 0px 10px #000;
   margin: 0px !important;
   padding: 0px !important; }
 
-#__ul_containeritems_ {
-  width: 20%;
-  height: 100%;
-  list-style: none;
+#__con_containeritems_ {
+  width: 100%;
+  height: 100%; }
+
+#__ul_containeritems_top {
+  width: 100%;
+  height: 10%;
   display: table;
   margin: 0px !important;
   padding: 0px !important; }
-  #__ul_containeritems_ li {
+  #__ul_containeritems_top li {
     width: 25%;
     height: 100%;
     display: table-cell;
     vertical-align: middle; }
-    #__ul_containeritems_ li svg {
+    #__ul_containeritems_top li svg {
       fill: #FFF;
-      width: 40%;
+      width: 30%;
       display: block;
       margin-left: auto;
       margin-right: auto;
       cursor: pointer; }
-      #__ul_containeritems_ li svg:hover {
-        fill: #4FC3F7; }
+      #__ul_containeritems_top li svg:hover {
+        fill: #FFF176; }
+
+#__ul_containeritems_mid {
+  width: 100%;
+  height: 83%;
+  list-style: none;
+  float: left;
+  overflow: auto;
+  margin: 0px !important;
+  padding: 0px !important; }
+
+#__ul_containeritems_bot {
+  width: 100%;
+  height: 7%;
+  list-style: none;
+  float: left;
+  display: table;
+  border-top: 1px solid #52585f;
+  margin: 0px !important;
+  padding: 0px !important; }
+  #__ul_containeritems_bot li {
+    height: 100%;
+    display: table-cell;
+    vertical-align: middle; }
+
+.item_pal {
+  width: 14%; }
+  .item_pal svg {
+    fill: #FFF;
+    width: 70%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    cursor: pointer; }
+    .item_pal svg:hover {
+      fill: #FFF176; }
+
+.input_pal {
+  width: 86%; }
+  .input_pal input {
+    border: none;
+    font-size: 18px;
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+    padding-left: 15px;
+    background: transparent;
+    color: #FFF; }
 
 #__mad_bottom_ {
   position: absolute;
@@ -67,9 +118,7 @@ body {
 
 #__con_bottompanel_ {
   width: 100%;
-  height: 100%;
-  background: #FFF;
-  box-shadow: 0px 0px 10px #dfdfdf; }
+  height: 100%; }
   #__con_bottompanel_ ul {
     list-style: none; }
 
@@ -120,3 +169,59 @@ body {
 
 .__selection_class {
   border: 1px solid #000; }
+
+.ul_selectors {
+  width: 100%;
+  height: 25%;
+  float: left;
+  background: #FFF176;
+  border-bottom: 1px solid #52585f;
+  margin: 0px !important;
+  padding: 0px !important; }
+  .ul_selectors li {
+    width: 100%;
+    float: left; }
+
+.li_selec_label {
+  height: 30%;
+  color: #333;
+  font-weight: 700; }
+  .li_selec_label p {
+    padding: 0px;
+    padding-left: 15px; }
+
+.li_selec_props {
+  height: 70%;
+  color: #333; }
+  .li_selec_props ul {
+    width: 100%;
+    height: 100%;
+    float: left;
+    margin: 0px !important;
+    padding: 0px !important; }
+    .li_selec_props ul li {
+      width: 100%;
+      height: 33.3%;
+      float: left;
+      display: table; }
+
+.selector_lab_item {
+  width: 15%;
+  height: 100%;
+  display: table-cell;
+  vertical-align: middle; }
+  .selector_lab_item svg {
+    width: 45%;
+    fill: #333;
+    display: block;
+    margin-left: auto;
+    margin-right: auto; }
+
+.selector_label {
+  width: 85%;
+  height: 100%;
+  display: table-cell;
+  vertical-align: middle; }
+  .selector_label p {
+    padding: 0px;
+    margin: 0px; }

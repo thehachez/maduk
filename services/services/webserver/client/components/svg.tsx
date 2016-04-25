@@ -25,11 +25,10 @@ export class ItemFlag extends React.Component<any, any> {
     }
 }
 
-
 export class ItemLabel extends React.Component<any, any> {
     render() {
         return (
-            <svg fill="#000000" height="48" viewBox="0 0 24 24" width="48">
+            <svg fill="#000000" viewBox="0 0 24 24" >
                 <path d="M0 0h24v24H0z" fill="none"/>
                 <path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/>
             </svg>
@@ -37,6 +36,16 @@ export class ItemLabel extends React.Component<any, any> {
     }
 }
 
+export class ItemAddStage extends React.Component<any, any> {
+    render() {
+        return (
+            <svg fill="#000000" viewBox="0 0 24 24" >
+                <path d="M0 0h24v24H0z" fill="none"/>
+                <path d="M14 10H2v2h12v-2zm0-4H2v2h12V6zm4 8v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM2 16h8v-2H2v2z"/>
+            </svg>
+        )
+    }
+}
 
 export class ItemHot extends React.Component<any, any> {
     render() {
@@ -53,12 +62,12 @@ export class ItemHot extends React.Component<any, any> {
 export class ItemCodeColor extends React.Component<any, any> {
     render() {
         return (
-            <svg version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 48 48" enable-background="new 0 0 48 48">
+            <svg x="0px" y="0px" viewBox="0 0 48 48" enable-background="new 0 0 48 48">
                 <g>
-                    <polygon fill="#3F51B5" points="36,34 33,31.5 39.8,24 33,16.5 36,14 45,24     " />
-                    <polygon fill="#3F51B5" points="13,34 4,24 13,14 16,16.5 9.1,24 16,31.5     " />
+                    <polygon fill="#333" points="36,34 33,31.5 39.8,24 33,16.5 36,14 45,24     " />
+                    <polygon fill="#333" points="13,34 4,24 13,14 16,16.5 9.1,24 16,31.5     " />
                 </g>
-                <polygon fill="#2196F3" points="21,39 17.2,37.7 27,9 30.8,10.3 " />
+                <polygon fill="#FDD835" points="21,39 17.2,37.7 27,9 30.8,10.3 " />
             </svg>
         )
     }
@@ -67,7 +76,7 @@ export class ItemCodeColor extends React.Component<any, any> {
 export class ItemList extends React.Component<any, any> {
     render() {
         return (
-            <svg fill="#000000" height="48" viewBox="0 0 24 24" width="48">
+            <svg fill="#000000"  viewBox="0 0 24 24" >
                 <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
                 <path d="M0 0h24v24H0z" fill="none"/>
             </svg>
@@ -78,7 +87,7 @@ export class ItemList extends React.Component<any, any> {
 export class ItemRedoList extends React.Component<any, any> {
     render() {
         return (
-            <svg fill="#000000" height="48" viewBox="0 0 24 24" width="48">
+            <svg fill="#000000"  viewBox="0 0 24 24" >
                 <path d="M14 5h8v2h-8zm0 5.5h8v2h-8zm0 5.5h8v2h-8zM2 11.5C2 15.08 4.92 18 8.5 18H9v2l3-3-3-3v2h-.5C6.02 16 4 13.98 4 11.5S6.02 7 8.5 7H12V5H8.5C4.92 5 2 7.92 2 11.5z"/>
                 <path d="M0 0h24v24H0z" fill="none"/>
             </svg>
@@ -100,9 +109,20 @@ export class ItemCode extends React.Component<any, any> {
 export class ItemMinusCircle extends React.Component<any, any> {
     render() {
         return (
-            <svg fill="#000000" height="48" viewBox="0 0 24 24" width="48">
+            <svg fill="#000000"  viewBox="0 0 24 24" >
                 <path d="M0 0h24v24H0z" fill="none"/>
                 <path d="M7 11v2h10v-2H7zm5-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+            </svg>
+        )
+    }
+}
+
+export class ItemAddCircle extends React.Component<any, any> {
+    render() {
+        return (
+            <svg fill="#000000"  viewBox="0 0 24 24" >
+                <path d="M0 0h24v24H0z" fill="none"/>
+                <path d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
             </svg>
         )
     }
@@ -111,7 +131,7 @@ export class ItemMinusCircle extends React.Component<any, any> {
 export class ItemSearch extends React.Component<any, any> {
     render() {
         return (
-            <svg fill="#000000"viewBox="0 0 24 24">
+            <svg fill="#000000" viewBox="0 0 24 24">
                 <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
                 <path d="M0 0h24v24H0z" fill="none"/>
             </svg>
@@ -130,4 +150,16 @@ export class ItemMicro extends React.Component<any, any> {
         )
     }
 };
+
+export class ItemClass extends React.Component<any, any> {
+    render() {
+        return (
+            <svg fill="#000000" viewBox="0 0 24 24">
+                <path d="M24 0H0v24h24z" fill="none"/>
+                <path d="M17.66 7.93L12 2.27 6.34 7.93c-3.12 3.12-3.12 8.19 0 11.31C7.9 20.8 9.95 21.58 12 21.58c2.05 0 4.1-.78 5.66-2.34 3.12-3.12 3.12-8.19 0-11.31zM12 19.59c-1.6 0-3.11-.62-4.24-1.76C6.62 16.69 6 15.19 6 13.59s.62-3.11 1.76-4.24L12 5.1v14.49z"/>
+            </svg>
+        )
+    }
+};
+
 

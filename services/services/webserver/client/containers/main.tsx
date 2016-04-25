@@ -19,7 +19,8 @@ interface Props {
 function mapStateToProps(state: StateDef, props: any) {
     return {
         mangeMenu: state.mangeMenu,
-        seletorProps: state.seletorProps
+        selectorProps: state.selectorProps,
+        selectorsStack: state.selectorsStack
     };
 }
 
@@ -36,16 +37,18 @@ class AppView extends React.Component<any, any> {
 
     render() {
 
-        const { actions, mangeMenu, seletorProps } = this.props
+        const { actions, mangeMenu, selectorProps, selectorsStack } = this.props
 
         return (
             <div>
                 <div id="__mad_topper_">
-                    <MainPanel />
+                    <MainPanel
+                        selectorsStack = { selectorsStack }
+                        />
                 </div>
                 <div id="__mad_bottom_">
                     <BottomPanel
-                        seletorProps = { seletorProps }
+                        selectorProps = { selectorProps }
                         />
                 </div>
             </div>

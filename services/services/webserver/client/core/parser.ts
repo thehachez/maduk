@@ -148,19 +148,19 @@ export class ParseDOM extends MadukClient {
         // al posar el mouse sobre los elementos se obtienen las props de los mismos
         element.on("mouseover", (eve) => {
             dispatch(fluxActions.showSelectorsInfo(eve));
-
             return false;
         });
 
         element.on("click", (eve) => {
+
             if (this.keyActivated) {
                 eve.stopPropagation();
-                eve.preventDefault();
-                console.log(this.getUniqueSelector(scope, unique(eve.target)))
+
+                dispatch(fluxActions.addSelector(eve, unique(eve.target)));
+                //this.getUniqueSelector(scope, unique(eve.target))
                 return false;
             }
         });
-
     }
 
 

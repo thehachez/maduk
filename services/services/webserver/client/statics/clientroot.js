@@ -29401,7 +29401,8 @@
 	function mapStateToProps(state, props) {
 	    return {
 	        mangeMenu: state.mangeMenu,
-	        seletorProps: state.seletorProps
+	        selectorProps: state.selectorProps,
+	        selectorsStack: state.selectorsStack
 	    };
 	}
 	function mapDispatchToProps(dispatch) {
@@ -29424,9 +29425,10 @@
 	            var _props = this.props;
 	            var actions = _props.actions;
 	            var mangeMenu = _props.mangeMenu;
-	            var seletorProps = _props.seletorProps;
+	            var selectorProps = _props.selectorProps;
+	            var selectorsStack = _props.selectorsStack;
 	
-	            return React.createElement("div", null, React.createElement("div", { id: "__mad_topper_" }, React.createElement(mainpanel_1.MainPanel, null)), React.createElement("div", { id: "__mad_bottom_" }, React.createElement(bottompanel_1.BottomPanel, { seletorProps: seletorProps })));
+	            return React.createElement("div", null, React.createElement("div", { id: "__mad_topper_" }, React.createElement(mainpanel_1.MainPanel, { selectorsStack: selectorsStack })), React.createElement("div", { id: "__mad_bottom_" }, React.createElement(bottompanel_1.BottomPanel, { selectorProps: selectorProps })));
 	        }
 	    }]);
 	    return AppView;
@@ -32279,13 +32281,14 @@
 	exports.constants = {
 	    SHOW_TOP_MENU: "SHOW_TOP_MENU",
 	    HIDDE_TOP_MENU: "HIDDE_TOP_MENU",
-	    SHOW_SELECTORS_INFO: "SHOW_SELECTORS_INFO"
+	    SHOW_SELECTORS_INFO: "SHOW_SELECTORS_INFO",
+	    ADD_SELECTOR: "ADD_SELECTOR"
 	};
 	function showTopMenu() {
 	    var menu = q("#__mad_topper_");
 	    // SHOW AND ANIMATE CLIENT MAIN PANEL
 	    menu.animate({
-	        height: "60px"
+	        width: "25%"
 	    }, config_1.menus.animationVelocity);
 	    return {
 	        type: exports.constants.SHOW_TOP_MENU
@@ -32296,37 +32299,61 @@
 	    var menu = q("#__mad_topper_");
 	    // SHOW AND ANIMATE CLIENT MAIN PANEL
 	    menu.css({
-	        height: "60px"
+	        width: "25%"
 	    }).animate({
-	        height: "0px"
+	        width: "0%"
 	    }, config_1.menus.animationVelocity);
 	    return {
 	        type: exports.constants.HIDDE_TOP_MENU
 	    };
 	}
 	exports.hiddeTopMenu = hiddeTopMenu;
-	function showSelectorsInfo(event) {
+	function showSelectorsInfo(eve) {
+	    var hoverSelectorProps = {};
+	    if (eve.target.tagName) {
+	        hoverSelectorProps.tagName = eve.target.tagName;
+	    }
+	    if (eve.target.id) {
+	        hoverSelectorProps.id = eve.target.id;
+	    }
+	    if (eve.target.className) {
+	        hoverSelectorProps.tagName = eve.target.className;
+	    }
+	    if (eve.target.nodeName) {
+	        hoverSelectorProps.nodeName = eve.target.nodeName;
+	    }
+	    //constants.SHOW_SELECTORS_INFO
+	    return {
+	        type: "SHOW_SELECTORS_INFO",
+	        payload: {
+	            hoverSelectorProps: hoverSelectorProps
+	        }
+	    };
+	}
+	exports.showSelectorsInfo = showSelectorsInfo;
+	function addSelector(eve, uniqueSelector) {
 	    var selectorProps = {};
-	    if (event.target.tagName) {
-	        selectorProps.tagName = event.target.tagName;
+	    selectorProps.uselector = uniqueSelector;
+	    if (eve.target.tagName) {
+	        selectorProps.tagName = eve.target.tagName;
 	    }
-	    if (event.target.id) {
-	        selectorProps.id = event.target.id;
+	    if (eve.target.id) {
+	        selectorProps.id = eve.target.id;
 	    }
-	    if (event.target.className) {
-	        selectorProps.tagName = event.target.className;
+	    if (eve.target.className) {
+	        selectorProps.tagName = eve.target.className;
 	    }
-	    if (event.target.nodeName) {
-	        selectorProps.nodeName = event.target.nodeName;
+	    if (eve.target.nodeName) {
+	        selectorProps.nodeName = eve.target.nodeName;
 	    }
 	    return {
-	        type: exports.constants.SHOW_SELECTORS_INFO,
+	        type: exports.constants.ADD_SELECTOR,
 	        payload: {
 	            selectorProps: selectorProps
 	        }
 	    };
 	}
-	exports.showSelectorsInfo = showSelectorsInfo;
+	exports.addSelector = addSelector;
 
 /***/ },
 /* 261 */
@@ -32370,7 +32397,7 @@
 	    (0, _createClass3.default)(MainPanel, [{
 	        key: 'render',
 	        value: function render() {
-	            return React.createElement("ul", { id: "__ul_mainpanel_" }, React.createElement(cotaninerItems_1.CotaninerItems, null));
+	            return React.createElement("ul", { id: "__ul_mainpanel_" }, React.createElement(cotaninerItems_1.CotaninerItems, { selectorsStack: this.props.selectorsStack }));
 	        }
 	    }]);
 	    return MainPanel;
@@ -32420,7 +32447,11 @@
 	    (0, _createClass3.default)(CotaninerItems, [{
 	        key: 'render',
 	        value: function render() {
-	            return React.createElement("ul", { id: "__ul_containeritems_" }, React.createElement("li", null, React.createElement(Items.ItemRedoList, null)), React.createElement("li", null, React.createElement(Items.ItemLabel, null)), React.createElement("li", null, React.createElement(Items.ItemSearch, null)), React.createElement("li", null, React.createElement(Items.ItemCode, null)));
+	            var selectorsStack = this.props.selectorsStack;
+	
+	            return React.createElement("div", { id: "__con_containeritems_" }, React.createElement("ul", { id: "__ul_containeritems_top" }, React.createElement("li", null, React.createElement(Items.ItemAddStage, null)), React.createElement("li", null, React.createElement(Items.ItemLabel, null)), React.createElement("li", null, React.createElement(Items.ItemMinusCircle, null)), React.createElement("li", null, React.createElement(Items.ItemAddCircle, null))), React.createElement("ul", { id: "__ul_containeritems_mid" }, selectorsStack.map(function (selector, key) {
+	                return React.createElement("ul", { className: "ul_selectors", key: key }, React.createElement("li", { className: "li_selec_label" }, React.createElement("p", null, "unique")), React.createElement("li", { className: "li_selec_props" }, React.createElement("ul", null, React.createElement("li", null, React.createElement("div", { className: "selector_lab_item" }, React.createElement(Items.ItemCode, null)), React.createElement("div", { className: "selector_label" }, React.createElement("p", null, selector.tagName))), React.createElement("li", null, React.createElement("div", { className: "selector_lab_item" }, React.createElement(Items.ItemLabel, null)), React.createElement("div", { className: "selector_label" }, React.createElement("p", null, selector.id || "no id"))), React.createElement("li", null, React.createElement("div", { className: "selector_lab_item" }, React.createElement(Items.ItemClass, null)), React.createElement("div", { className: "selector_label" }, React.createElement("p", null, selector.className || "no class"))))));
+	            })), React.createElement("ul", { id: "__ul_containeritems_bot" }, React.createElement("li", { className: "input_pal" }, React.createElement("input", { type: "text" })), React.createElement("li", { className: "item_pal" }, React.createElement(Items.ItemSearch, null))));
 	        }
 	    }]);
 	    return CotaninerItems;
@@ -32508,7 +32539,7 @@
 	    (0, _createClass3.default)(ItemLabel, [{
 	        key: "render",
 	        value: function render() {
-	            return React.createElement("svg", { fill: "#000000", height: "48", viewBox: "0 0 24 24", width: "48" }, React.createElement("path", { d: "M0 0h24v24H0z", fill: "none" }), React.createElement("path", { d: "M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z" }));
+	            return React.createElement("svg", { fill: "#000000", viewBox: "0 0 24 24" }, React.createElement("path", { d: "M0 0h24v24H0z", fill: "none" }), React.createElement("path", { d: "M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z" }));
 	        }
 	    }]);
 	    return ItemLabel;
@@ -32516,8 +32547,27 @@
 	
 	exports.ItemLabel = ItemLabel;
 	
-	var ItemHot = function (_React$Component4) {
-	    (0, _inherits3.default)(ItemHot, _React$Component4);
+	var ItemAddStage = function (_React$Component4) {
+	    (0, _inherits3.default)(ItemAddStage, _React$Component4);
+	
+	    function ItemAddStage() {
+	        (0, _classCallCheck3.default)(this, ItemAddStage);
+	        return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ItemAddStage).apply(this, arguments));
+	    }
+	
+	    (0, _createClass3.default)(ItemAddStage, [{
+	        key: "render",
+	        value: function render() {
+	            return React.createElement("svg", { fill: "#000000", viewBox: "0 0 24 24" }, React.createElement("path", { d: "M0 0h24v24H0z", fill: "none" }), React.createElement("path", { d: "M14 10H2v2h12v-2zm0-4H2v2h12V6zm4 8v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM2 16h8v-2H2v2z" }));
+	        }
+	    }]);
+	    return ItemAddStage;
+	}(React.Component);
+	
+	exports.ItemAddStage = ItemAddStage;
+	
+	var ItemHot = function (_React$Component5) {
+	    (0, _inherits3.default)(ItemHot, _React$Component5);
 	
 	    function ItemHot() {
 	        (0, _classCallCheck3.default)(this, ItemHot);
@@ -32535,8 +32585,8 @@
 	
 	exports.ItemHot = ItemHot;
 	
-	var ItemCodeColor = function (_React$Component5) {
-	    (0, _inherits3.default)(ItemCodeColor, _React$Component5);
+	var ItemCodeColor = function (_React$Component6) {
+	    (0, _inherits3.default)(ItemCodeColor, _React$Component6);
 	
 	    function ItemCodeColor() {
 	        (0, _classCallCheck3.default)(this, ItemCodeColor);
@@ -32546,7 +32596,7 @@
 	    (0, _createClass3.default)(ItemCodeColor, [{
 	        key: "render",
 	        value: function render() {
-	            return React.createElement("svg", { version: "1.1", id: "Layer_1", x: "0px", y: "0px", viewBox: "0 0 48 48", "enable-background": "new 0 0 48 48" }, React.createElement("g", null, React.createElement("polygon", { fill: "#3F51B5", points: "36,34 33,31.5 39.8,24 33,16.5 36,14 45,24     " }), React.createElement("polygon", { fill: "#3F51B5", points: "13,34 4,24 13,14 16,16.5 9.1,24 16,31.5     " })), React.createElement("polygon", { fill: "#2196F3", points: "21,39 17.2,37.7 27,9 30.8,10.3 " }));
+	            return React.createElement("svg", { x: "0px", y: "0px", viewBox: "0 0 48 48", "enable-background": "new 0 0 48 48" }, React.createElement("g", null, React.createElement("polygon", { fill: "#333", points: "36,34 33,31.5 39.8,24 33,16.5 36,14 45,24     " }), React.createElement("polygon", { fill: "#333", points: "13,34 4,24 13,14 16,16.5 9.1,24 16,31.5     " })), React.createElement("polygon", { fill: "#FDD835", points: "21,39 17.2,37.7 27,9 30.8,10.3 " }));
 	        }
 	    }]);
 	    return ItemCodeColor;
@@ -32554,8 +32604,8 @@
 	
 	exports.ItemCodeColor = ItemCodeColor;
 	
-	var ItemList = function (_React$Component6) {
-	    (0, _inherits3.default)(ItemList, _React$Component6);
+	var ItemList = function (_React$Component7) {
+	    (0, _inherits3.default)(ItemList, _React$Component7);
 	
 	    function ItemList() {
 	        (0, _classCallCheck3.default)(this, ItemList);
@@ -32565,7 +32615,7 @@
 	    (0, _createClass3.default)(ItemList, [{
 	        key: "render",
 	        value: function render() {
-	            return React.createElement("svg", { fill: "#000000", height: "48", viewBox: "0 0 24 24", width: "48" }, React.createElement("path", { d: "M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z" }), React.createElement("path", { d: "M0 0h24v24H0z", fill: "none" }));
+	            return React.createElement("svg", { fill: "#000000", viewBox: "0 0 24 24" }, React.createElement("path", { d: "M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z" }), React.createElement("path", { d: "M0 0h24v24H0z", fill: "none" }));
 	        }
 	    }]);
 	    return ItemList;
@@ -32573,8 +32623,8 @@
 	
 	exports.ItemList = ItemList;
 	
-	var ItemRedoList = function (_React$Component7) {
-	    (0, _inherits3.default)(ItemRedoList, _React$Component7);
+	var ItemRedoList = function (_React$Component8) {
+	    (0, _inherits3.default)(ItemRedoList, _React$Component8);
 	
 	    function ItemRedoList() {
 	        (0, _classCallCheck3.default)(this, ItemRedoList);
@@ -32584,7 +32634,7 @@
 	    (0, _createClass3.default)(ItemRedoList, [{
 	        key: "render",
 	        value: function render() {
-	            return React.createElement("svg", { fill: "#000000", height: "48", viewBox: "0 0 24 24", width: "48" }, React.createElement("path", { d: "M14 5h8v2h-8zm0 5.5h8v2h-8zm0 5.5h8v2h-8zM2 11.5C2 15.08 4.92 18 8.5 18H9v2l3-3-3-3v2h-.5C6.02 16 4 13.98 4 11.5S6.02 7 8.5 7H12V5H8.5C4.92 5 2 7.92 2 11.5z" }), React.createElement("path", { d: "M0 0h24v24H0z", fill: "none" }));
+	            return React.createElement("svg", { fill: "#000000", viewBox: "0 0 24 24" }, React.createElement("path", { d: "M14 5h8v2h-8zm0 5.5h8v2h-8zm0 5.5h8v2h-8zM2 11.5C2 15.08 4.92 18 8.5 18H9v2l3-3-3-3v2h-.5C6.02 16 4 13.98 4 11.5S6.02 7 8.5 7H12V5H8.5C4.92 5 2 7.92 2 11.5z" }), React.createElement("path", { d: "M0 0h24v24H0z", fill: "none" }));
 	        }
 	    }]);
 	    return ItemRedoList;
@@ -32592,8 +32642,8 @@
 	
 	exports.ItemRedoList = ItemRedoList;
 	
-	var ItemCode = function (_React$Component8) {
-	    (0, _inherits3.default)(ItemCode, _React$Component8);
+	var ItemCode = function (_React$Component9) {
+	    (0, _inherits3.default)(ItemCode, _React$Component9);
 	
 	    function ItemCode() {
 	        (0, _classCallCheck3.default)(this, ItemCode);
@@ -32611,8 +32661,8 @@
 	
 	exports.ItemCode = ItemCode;
 	
-	var ItemMinusCircle = function (_React$Component9) {
-	    (0, _inherits3.default)(ItemMinusCircle, _React$Component9);
+	var ItemMinusCircle = function (_React$Component10) {
+	    (0, _inherits3.default)(ItemMinusCircle, _React$Component10);
 	
 	    function ItemMinusCircle() {
 	        (0, _classCallCheck3.default)(this, ItemMinusCircle);
@@ -32622,7 +32672,7 @@
 	    (0, _createClass3.default)(ItemMinusCircle, [{
 	        key: "render",
 	        value: function render() {
-	            return React.createElement("svg", { fill: "#000000", height: "48", viewBox: "0 0 24 24", width: "48" }, React.createElement("path", { d: "M0 0h24v24H0z", fill: "none" }), React.createElement("path", { d: "M7 11v2h10v-2H7zm5-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" }));
+	            return React.createElement("svg", { fill: "#000000", viewBox: "0 0 24 24" }, React.createElement("path", { d: "M0 0h24v24H0z", fill: "none" }), React.createElement("path", { d: "M7 11v2h10v-2H7zm5-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" }));
 	        }
 	    }]);
 	    return ItemMinusCircle;
@@ -32630,8 +32680,27 @@
 	
 	exports.ItemMinusCircle = ItemMinusCircle;
 	
-	var ItemSearch = function (_React$Component10) {
-	    (0, _inherits3.default)(ItemSearch, _React$Component10);
+	var ItemAddCircle = function (_React$Component11) {
+	    (0, _inherits3.default)(ItemAddCircle, _React$Component11);
+	
+	    function ItemAddCircle() {
+	        (0, _classCallCheck3.default)(this, ItemAddCircle);
+	        return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ItemAddCircle).apply(this, arguments));
+	    }
+	
+	    (0, _createClass3.default)(ItemAddCircle, [{
+	        key: "render",
+	        value: function render() {
+	            return React.createElement("svg", { fill: "#000000", viewBox: "0 0 24 24" }, React.createElement("path", { d: "M0 0h24v24H0z", fill: "none" }), React.createElement("path", { d: "M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" }));
+	        }
+	    }]);
+	    return ItemAddCircle;
+	}(React.Component);
+	
+	exports.ItemAddCircle = ItemAddCircle;
+	
+	var ItemSearch = function (_React$Component12) {
+	    (0, _inherits3.default)(ItemSearch, _React$Component12);
 	
 	    function ItemSearch() {
 	        (0, _classCallCheck3.default)(this, ItemSearch);
@@ -32650,8 +32719,8 @@
 	exports.ItemSearch = ItemSearch;
 	;
 	
-	var ItemMicro = function (_React$Component11) {
-	    (0, _inherits3.default)(ItemMicro, _React$Component11);
+	var ItemMicro = function (_React$Component13) {
+	    (0, _inherits3.default)(ItemMicro, _React$Component13);
 	
 	    function ItemMicro() {
 	        (0, _classCallCheck3.default)(this, ItemMicro);
@@ -32668,6 +32737,26 @@
 	}(React.Component);
 	
 	exports.ItemMicro = ItemMicro;
+	;
+	
+	var ItemClass = function (_React$Component14) {
+	    (0, _inherits3.default)(ItemClass, _React$Component14);
+	
+	    function ItemClass() {
+	        (0, _classCallCheck3.default)(this, ItemClass);
+	        return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ItemClass).apply(this, arguments));
+	    }
+	
+	    (0, _createClass3.default)(ItemClass, [{
+	        key: "render",
+	        value: function render() {
+	            return React.createElement("svg", { fill: "#000000", viewBox: "0 0 24 24" }, React.createElement("path", { d: "M24 0H0v24h24z", fill: "none" }), React.createElement("path", { d: "M17.66 7.93L12 2.27 6.34 7.93c-3.12 3.12-3.12 8.19 0 11.31C7.9 20.8 9.95 21.58 12 21.58c2.05 0 4.1-.78 5.66-2.34 3.12-3.12 3.12-8.19 0-11.31zM12 19.59c-1.6 0-3.11-.62-4.24-1.76C6.62 16.69 6 15.19 6 13.59s.62-3.11 1.76-4.24L12 5.1v14.49z" }));
+	        }
+	    }]);
+	    return ItemClass;
+	}(React.Component);
+	
+	exports.ItemClass = ItemClass;
 	;
 
 /***/ },
@@ -32711,6 +32800,12 @@
 
 	"use strict";
 	
+	var _from = __webpack_require__(284);
+	
+	var _from2 = _interopRequireDefault(_from);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	var redux_1 = __webpack_require__(247);
 	var actions_1 = __webpack_require__(260);
 	function mangeMenu() {
@@ -32726,20 +32821,34 @@
 	            return state;
 	    }
 	}
-	function seletorProps() {
+	function selectorProps() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	    var action = arguments[1];
 	
 	    switch (action.type) {
 	        case actions_1.constants.SHOW_SELECTORS_INFO:
-	            return action.payload.selectorProps;
+	            return action.payload.hoverSelectorProps;
+	        default:
+	            return state;
+	    }
+	}
+	function selectorsStack() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	    var action = arguments[1];
+	
+	    var selectors = (0, _from2.default)(state);
+	    switch (action.type) {
+	        case actions_1.constants.ADD_SELECTOR:
+	            selectors.push(action.payload.selectorProps);
+	            return selectors;
 	        default:
 	            return state;
 	    }
 	}
 	exports.rootReducer = redux_1.combineReducers({
 	    mangeMenu: mangeMenu,
-	    seletorProps: seletorProps
+	    selectorProps: selectorProps,
+	    selectorsStack: selectorsStack
 	});
 
 /***/ },
@@ -32766,7 +32875,8 @@
 	
 	exports.initialState = {
 	    mangeMenu: false,
-	    seletorProps: {}
+	    selectorProps: {},
+	    selectorsStack: []
 	};
 
 /***/ },
@@ -32944,8 +33054,8 @@
 	            element.on("click", function (eve) {
 	                if (_this3.keyActivated) {
 	                    eve.stopPropagation();
-	                    eve.preventDefault();
-	                    console.log(_this3.getUniqueSelector(scope, unique(eve.target)));
+	                    dispatch(fluxActions.addSelector(eve, unique(eve.target)));
+	                    //this.getUniqueSelector(scope, unique(eve.target))
 	                    return false;
 	                }
 	            });
@@ -49766,11 +49876,11 @@
 	    (0, _createClass3.default)(BottomPanel, [{
 	        key: 'render',
 	        value: function render() {
-	            var _props$seletorProps = this.props.seletorProps;
-	            var tagName = _props$seletorProps.tagName;
-	            var id = _props$seletorProps.id;
-	            var className = _props$seletorProps.className;
-	            var nodeName = _props$seletorProps.nodeName;
+	            var _props$selectorProps = this.props.selectorProps;
+	            var tagName = _props$selectorProps.tagName;
+	            var id = _props$selectorProps.id;
+	            var className = _props$selectorProps.className;
+	            var nodeName = _props$selectorProps.nodeName;
 	
 	            return React.createElement("div", { id: "__con_bottompanel_" }, React.createElement("div", { className: "__con_bottompanel_left" }, React.createElement("ul", { className: "__ul_bottompanel_left" })), React.createElement("div", { className: "__con_bottompanel_mid" }, React.createElement("ul", { className: "__ul_bottompanel_mid" })), React.createElement("div", { className: "__con_bottompanel_right" }, React.createElement("ul", { className: "__ul_bottompanel_right" }, React.createElement("li", { className: "__li_btp_selector" }, React.createElement("p", null, id || tagName, " ")), React.createElement("li", { className: "__li_btp_item" }, React.createElement(Items.ItemCodeColor, null)))));
 	        }

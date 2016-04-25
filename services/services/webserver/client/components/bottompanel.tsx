@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as Items from './svg';
 
 interface Props {
-    seletorProps: {
+    selectorProps: {
         tagName: string,
         id: string,
         className: string,
@@ -13,7 +13,7 @@ interface Props {
 export class BottomPanel extends React.Component<Props, any> {
     render() {
 
-        const { tagName, id, className, nodeName } = this.props.seletorProps;
+        const { tagName, id, className, nodeName } = this.props.selectorProps;
 
         return (
             <div id="__con_bottompanel_">

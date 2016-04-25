@@ -37,6 +37,7 @@ export const _runner = {
         platform: 'WINDOWS',
         tags: ['tag1', 'tag2'],
         name: 'default',
+        timeout: 99999,
         desiredCapabilities: {
             //browserName: "internet explorer"
             browserName: "chrome"
