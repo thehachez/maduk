@@ -16,7 +16,7 @@ export class BottomPanel extends React.Component<Props, any> {
         const { tagName, id, className, nodeName } = this.props.selectorProps;
 
         return (
-            <div id="__con_bottompanel_">
+            <div className="__con_bottompanel_">
                 <div className="__con_bottompanel_left">
                     <ul className="__ul_bottompanel_left">
                     </ul>

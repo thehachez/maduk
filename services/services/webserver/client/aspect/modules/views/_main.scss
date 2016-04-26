@@ -1,3 +1,5 @@
+$color1: #333;
+$color2: #000;
 #__root_maduk_ {
     font-family: "arial";
     ul {
@@ -13,82 +15,96 @@
     width: 0%;
     height: 100%;
     z-index: 999999999;
-    box-shadow: 0 0 5px #333;
+    box-shadow: 0 0 5px $color1;
 }
 
-#__ul_mainpanel_ {
+#__mad_bottom_ {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    height: 40px;
+}
+
+.__ul_mainpanel_ {
     width: 100%;
     height: 100%;
-    background: #26292c;
+    background: #FFF;
     overflow: hidden;
     @include collapse();
 }
 
-#__con_containeritems_ {
+.__con_containeritems_ {
     width: 100%;
     height: 100%;
 }
 
-#__ul_containeritems_top {
+.__ul_containeritems_top {
     width: 100%;
-    height: 10%;
-    display: table;
+    height: 8%;
+    background: $color2;
     @include collapse();
     li {
-        width: 25%;
+        width: 20%;
         height: 100%;
-        display: table-cell;
-        vertical-align: middle;
+        float: right;
+        display: flex;
         svg {
             fill: #FFF;
-            width: 30%;
+            width: 40%;
             display: block;
             margin-left: auto;
             margin-right: auto;
             cursor: pointer;
             &:hover {
-                fill: #FFF176;
-                ;
+                fill: #40ce00;
             }
         }
     }
 }
 
-#__ul_containeritems_mid {
+.__ul_containeritems_add {
     width: 100%;
-    height: 83%;
+    height: 0%;
+    background: $color2;
+    float: left;
+    @include collapse();
+}
+
+.__ul_containeritems_mid {
+    width: 100%;
+    height: 85%;
     list-style: none;
     float: left;
     overflow: auto;
     @include collapse();
 }
 
-#__ul_containeritems_bot {
+.__ul_containeritems_bot {
     width: 100%;
     height: 7%;
     list-style: none;
     float: left;
-    display: table;
-    border-top: 1px solid #52585f;
     @include collapse();
     li {
         height: 100%;
-        display: table-cell;
-        vertical-align: middle;
+        float: left;
     }
 }
 
 .item_pal {
     width: 14%;
+    display: flex;
     svg {
-        fill: #FFF;
+        fill: $color1;
         width: 70%;
         display: block;
+        align-self: center;
         margin-left: auto;
         margin-right: auto;
         cursor: pointer;
         &:hover {
-            fill: #FFF176;
+            fill: $color2;
             ;
         }
     }
@@ -104,19 +120,11 @@
         padding: 5px;
         padding-left: 15px;
         background: transparent;
-        color: #FFF;
+        color: $color1;
     }
 }
 
-#__mad_bottom_ {
-    position: absolute;
-    bottom: 0px;
-    left: 0px;
-    width: 100%;
-    height: 40px;
-}
-
-#__con_bottompanel_ {
+.__con_bottompanel_ {
     width: 100%;
     height: 100%;
     ul {
@@ -146,35 +154,37 @@
     width: 70%;
     height: 100%;
     float: right;
-    display: table;
     @include collapse();
     li {
         height: 100%;
-        display: table-cell;
-        vertical-align: middle;
+        float: left;
         svg {
             width: 60%;
-            fill: #333;
+            fill: $color1;
         }
         p {
             font-size: 17px;
             font-family: "arial";
             text-align: right;
             font-weight: 700;
-            color: #333;
+            color: $color1;
         }
     }
 }
 
 .__li_btp_item {
     width: 20%;
-    padding-left: 10px;
 }
 
 .__li_btp_selector {
     width: 80%;
-    max-width: 188px;
     overflow: hidden;
+    p {
+        margin: 0px;
+        padding: 0px;
+        line-height: 43px;
+        padding-right: 20px;
+    }
 }
 
 .__selection_class {
@@ -185,63 +195,120 @@
     width: 100%;
     height: 25%;
     float: left;
-    background: #FFF176;
-    border-bottom: 1px solid #52585f;
-    @include collapse();
+    border-bottom: 1px solid #e7e7e7;
+    padding: 0px;
+    margin: 0px;
+    margin-top: 15px;
     li {
         width: 100%;
         float: left;
     }
 }
 
-.li_selec_label {
-    height: 30%;
-    color: #333;
-    font-weight: 700;
+.ul_selectors_pending {
+    width: 100%;
+    height: 10%;
+    float: left;
+    padding: 0px;
+    margin: 0px;
+    background: #40ce00;
+    color: #FFF;
+    display: flex;
+    border-bottom: 1px solid #FFF;
+    li {
+        height: 100%;
+        float: left;
+        display: flex;
+    }
+}
+
+.selec_pend_name {
+    width: 100%;
+    display: flex;
     p {
+        align-self: center;
+        margin: 0px;
         padding: 0px;
+        padding-left: 10px;
+    }
+}
+
+.selec_pend_items {
+    width: 40%;
+}
+
+.ul_selec_pend_items {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    @include collapse();
+    li {
+        width: 100%;
+        height: 100%;
+        svg {
+            fill: #FFF;
+            width: 60%;
+            align-self: center;
+            cursor: pointer;
+        }
+    }
+}
+
+.li_selec_label {
+    height: 24%;
+    color: $color1;
+    font-weight: 600;
+    display: flex;
+    p {
+        margin: 0px;
+        padding: 0px;
+        justify-content: center;
+        line-height: 35px;
         padding-left: 15px;
     }
 }
 
 .li_selec_props {
-    height: 70%;
-    color: #333;
-    ul {
+    height: 76%;
+    color: $color1;
+}
+
+.ulc_select_props {
+    width: 100%;
+    height: 100%;
+    float: left;
+    @include collapse();
+    li {
         width: 100%;
-        height: 100%;
+        height: 50%;
         float: left;
-        @include collapse();
-        li {
-            width: 100%;
-            height: 33.3%;
-            float: left;
-            display: table;
-        }
     }
 }
 
 .selector_lab_item {
     width: 15%;
     height: 100%;
-    display: table-cell;
-    vertical-align: middle;
+    float: left;
+    display: flex;
     svg {
-        width: 45%;
-        fill: #333;
+        width: 40%;
+        fill: #40ce00;
         display: block;
-            margin-left: auto;
-            margin-right: auto;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 
 .selector_label {
     width: 85%;
     height: 100%;
-    display: table-cell;
-    vertical-align: middle;
+    float: left;
+    display: flex;
     p {
         padding: 0px;
         margin: 0px;
+        align-self: center;
+        line-height: 50px;
     }
 }

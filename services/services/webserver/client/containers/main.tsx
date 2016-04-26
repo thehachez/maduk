@@ -13,12 +13,12 @@ interface Props {
     children?: any;
     dispatch?: Redux.Dispatch;
     actions: any;
-    mangeMenu: boolean;
 }
 
 function mapStateToProps(state: StateDef, props: any) {
     return {
         mangeMenu: state.mangeMenu,
+        selectorMenu: state.selectorMenu,
         selectorProps: state.selectorProps,
         selectorsStack: state.selectorsStack
     };
@@ -37,12 +37,14 @@ class AppView extends React.Component<any, any> {
 
     render() {
 
-        const { actions, mangeMenu, selectorProps, selectorsStack } = this.props
-
+        const { actions, mangeMenu, selectorMenu, selectorProps, selectorsStack } = this.props
+    
         return (
             <div>
                 <div id="__mad_topper_">
                     <MainPanel
+                        actions = { actions }
+                        selectorMenu = { selectorMenu }
                         selectorsStack = { selectorsStack }
                         />
                 </div>

@@ -39,7 +39,7 @@ export const _runner = {
         name: 'default',
         timeout: 99999,
         desiredCapabilities: {
-            //browserName: "internet explorer"
+           // browserName: "internet explorer"
             browserName: "chrome"
         }
     }

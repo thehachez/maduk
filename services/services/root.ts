@@ -1,5 +1,4 @@
 import * as events from 'events';
-import * as scripts from './runner/scripts/boot';
 import { Runner } from './runner/runner';
 import { api, proxy } from './services';
 import { _runner } from './_config';

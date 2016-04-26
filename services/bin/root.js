@@ -2187,6 +2187,7 @@
 	
 	exports.initialState = {
 	    mangeMenu: false,
+	    selectorMenu: false,
 	    selectorProps: {},
 	    selectorsStack: []
 	};
@@ -2217,7 +2218,8 @@
 	"use strict";
 	
 	exports.menus = {
-	    animationVelocity: 50
+	    animationVelocity: 0.2,
+	    animationVelocityMs: 0.2
 	};
 	exports.API = {
 	    URL: "http://localhost:5232",
@@ -2285,7 +2287,7 @@
 	        name: 'default',
 	        timeout: 99999,
 	        desiredCapabilities: {
-	            //browserName: "internet explorer"
+	            // browserName: "internet explorer"
 	            browserName: "chrome"
 	        }
 	    }

@@ -5,8 +5,14 @@ import * as q from 'jquery';
 // FLUX
 import * as fluxActions from '../actions';
 import { store } from '../store';
+import { StateDef } from '../store/props';
 
 const dispatch = store.dispatch;
+const state = {
+    get g(): StateDef {
+        return store.getState();
+    }
+};
 const uniquemodule = require("../statics/unique-selector/src/index");
 const unique = uniquemodule.default;
 
@@ -64,7 +70,6 @@ export class ParseDOM extends MadukClient {
                 if (q(`[name="${name}"]`)[0]) {
                     frameNode = q(`[name="${name}"]`)[0];
                     frameNode.onload = function () {
-                        console.log("load")
                         self.set(win, doc);
                     };
                 }
@@ -147,17 +152,18 @@ export class ParseDOM extends MadukClient {
     private setIndividualEvents(element: JQuery, scope: Document) {
         // al posar el mouse sobre los elementos se obtienen las props de los mismos
         element.on("mouseover", (eve) => {
-            dispatch(fluxActions.showSelectorsInfo(eve));
+            //dispatch(fluxActions.showSelectorsInfo(eve));
             return false;
         });
 
         element.on("click", (eve) => {
 
             if (this.keyActivated) {
+                eve.preventDefault();
                 eve.stopPropagation();
-
+             
                 dispatch(fluxActions.addSelector(eve, unique(eve.target)));
-                //this.getUniqueSelector(scope, unique(eve.target))
+                
                 return false;
             }
         });
@@ -187,10 +193,11 @@ export class ParseDOM extends MadukClient {
                 && event.shiftKey
                 && key === this.defaultKeyMenu) {
                 // REDUX DISPATCH ACTION
-                if (store.getState().mangeMenu)
-                    dispatch(fluxActions.hiddeTopMenu());
-                else
+
+                if (!state.g.mangeMenu)
                     dispatch(fluxActions.showTopMenu());
+                else
+                    dispatch(fluxActions.hiddeTopMenu());
             }
 
         });
@@ -210,23 +217,26 @@ export class ParseDOM extends MadukClient {
 
     private setEventsPerElement(win: Window, doc: Document, elements?: HTMLElement) {
         // metodo para iterar sobre todos los elementos del DOM
+
+        var currentNode;
+        var ni;
         try {
 
-            let currentNode;
-            let ni = doc.createNodeIterator(doc, NodeFilter.SHOW_ALL);
+            ni = doc.createNodeIterator(doc, NodeFilter.SHOW_ALL, null, false);
 
             while (currentNode = ni.nextNode()) {
                 let node = q(currentNode);
 
                 if (currentNode.tagName)
-                    if (!this.banElementTypes.find(ban => ban === currentNode.tagName.toLowerCase())) {
+                    if (!_.find(this.banElementTypes,
+                        ban => ban === currentNode.tagName.toLowerCase())) {
                         this.setIndividualEvents(node, doc);
                     }
             }
 
         } catch (err) {
 
-            this.logError(err, "there was a problem in the maduk dom parser: bindig events iterator nodes");
+            this.logError(err, "there was a problem in the maduk dom parser: error on create node iterator");
         }
     }
 }

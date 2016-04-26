@@ -44,6 +44,7 @@
     "connect": "^3.4.1",
     "cors": "^2.7.1",
     "eslint": "^2.5.3",
+    "gsap": "^1.18.3",
     "gulp": "3.9.1",
     "gulp-notify": "2.2.0",
     "gulp-rename": "1.2.2",
