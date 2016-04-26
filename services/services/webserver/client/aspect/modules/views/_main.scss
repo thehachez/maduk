@@ -10,9 +10,9 @@ $color2: #000;
 
 #__mad_topper_ {
     position: absolute;
-    left: 0px;
+    left: -30%;
     top: 0px;
-    width: 0%;
+    width: 25%;
     height: 100%;
     z-index: 999999999;
     box-shadow: 0 0 5px $color1;
@@ -233,6 +233,52 @@ $color2: #000;
     }
 }
 
+.selec_pend_name_editable {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    @include collapse();
+    li {
+        display: flex;
+        height: 100%;
+        @include collapse();
+    }
+}
+
+.selec_pname_edit_input {
+    width: 70%;
+    input {
+        width: 100%;
+        height: 100%;
+        border: none;
+        padding: 15px;
+        background: transparent;
+        @include opacity();
+    }
+}
+
+.selec_pname_edit_item {
+    width: 30%;
+    svg {
+        align-self: center;
+        width: 50%;
+    }
+    button {
+        width: 45px;
+        height: 30px;
+        align-self: center;
+        color: #FFF;
+        border: none;
+        background: #000;
+        border-radius: 5px;
+        cursor: pointer;
+        &:hover {
+            color: #000;
+            background: #FFF;
+        }
+    }
+}
+
 .selec_pend_items {
     width: 40%;
 }
@@ -246,11 +292,20 @@ $color2: #000;
     li {
         width: 100%;
         height: 100%;
+        display: flex;
+        justify-content: center;
+        span {
+            width: 55%;
+            height: 35%;
+            cursor: pointer;
+            align-self: center;
+        }
         svg {
             fill: #FFF;
-            width: 60%;
-            align-self: center;
-            cursor: pointer;
+            width: 100%;
+            &:hover {
+                fill: #000;
+            }
         }
     }
 }

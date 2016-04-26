@@ -27,6 +27,8 @@
 /// <reference path="connect/connect.d.ts" />
 /// <reference path="body-parser/body-parser.d.ts" />
 /// <reference path="modernizr/modernizr.d.ts" />
+/// <reference path="shortid/shortid.d.ts" />
+
 
 
 

@@ -1,12 +1,15 @@
 
 export type Selector = {
+    keyid: string | number,
     state: string,
     tagName: string,
     id: string,
     className: string,
     nodeName: string,
     uselector: string,
-    value: string
+    value: string,
+    uniqueName: any,
+    editable: boolean
 }
 
 export interface StateDef {

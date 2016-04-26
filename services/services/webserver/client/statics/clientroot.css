@@ -22,9 +22,9 @@ body {
 
 #__mad_topper_ {
   position: absolute;
-  left: 0px;
+  left: -30%;
   top: 0px;
-  width: 0%;
+  width: 25%;
   height: 100%;
   z-index: 999999999;
   box-shadow: 0 0 5px #333; }
@@ -214,6 +214,75 @@ body {
     padding: 0px;
     padding-left: 10px; }
 
+.selec_pend_name_editable {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  margin: 0px !important;
+  padding: 0px !important; }
+  .selec_pend_name_editable li {
+    display: flex;
+    height: 100%;
+    margin: 0px !important;
+    padding: 0px !important; }
+
+.selec_pname_edit_input {
+  width: 70%; }
+  .selec_pname_edit_input input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    padding: 15px;
+    background: transparent;
+    -webkit-animation: opacity 0.8s infinite;
+    -moz-animation: opacity 0.8s infinite;
+    -o-animation: opacity 0.8s infinite;
+    animation: opacity 0.8s infinite;
+    animation-direction: alternate;
+    opacity: 0.1; }
+
+@-moz-keyframes opacity {
+  from {
+    opacity: 0.1; }
+  to {
+    opacity: 10; } }
+
+@-o-keyframes opacity {
+  from {
+    opacity: 0.1; }
+  to {
+    opacity: 10; } }
+
+@keyframes opacity {
+  from {
+    opacity: 0.1; }
+  to {
+    opacity: 10; } }
+
+@-webkit-keyframes opacity {
+  from {
+    opacity: 0.1; }
+  to {
+    opacity: 10; } }
+
+.selec_pname_edit_item {
+  width: 30%; }
+  .selec_pname_edit_item svg {
+    align-self: center;
+    width: 50%; }
+  .selec_pname_edit_item button {
+    width: 45px;
+    height: 30px;
+    align-self: center;
+    color: #FFF;
+    border: none;
+    background: #000;
+    border-radius: 5px;
+    cursor: pointer; }
+    .selec_pname_edit_item button:hover {
+      color: #000;
+      background: #FFF; }
+
 .selec_pend_items {
   width: 40%; }
 
@@ -226,12 +295,19 @@ body {
   padding: 0px !important; }
   .ul_selec_pend_items li {
     width: 100%;
-    height: 100%; }
+    height: 100%;
+    display: flex;
+    justify-content: center; }
+    .ul_selec_pend_items li span {
+      width: 55%;
+      height: 35%;
+      cursor: pointer;
+      align-self: center; }
     .ul_selec_pend_items li svg {
       fill: #FFF;
-      width: 60%;
-      align-self: center;
-      cursor: pointer; }
+      width: 100%; }
+      .ul_selec_pend_items li svg:hover {
+        fill: #000; }
 
 .li_selec_label {
   height: 24%;

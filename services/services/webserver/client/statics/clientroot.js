@@ -32278,6 +32278,7 @@
 
 	"use strict";
 	
+	var shorid = __webpack_require__(298);
 	var config_1 = __webpack_require__(261);
 	var TweenLite = __webpack_require__(262);
 	exports.constants = {
@@ -32287,12 +32288,16 @@
 	    HIDDE_SELECTOR_MENU: "HIDDE_SELECTOR_MENU",
 	    SHOW_SELECTORS_INFO: "SHOW_SELECTORS_INFO",
 	    CREATE_STAGE: "CREATE_STAGE",
-	    ADD_SELECTOR: "ADD_SELECTOR"
+	    ADD_SELECTOR: "ADD_SELECTOR",
+	    CONFIRM_SELECTOR: "CONFIRM_SELECTOR",
+	    DELETE_SELECTOR: "DELETE_SELECTOR",
+	    EDIT_SELECTOR: "EDIT_SELECTOR",
+	    CONFIRM_EDIT_SELECTOR: "CONFIRM_EDIT_SELECTOR"
 	};
 	function showTopMenu() {
 	    // SHOW AND ANIMATE CLIENT MAIN PANEL
 	    TweenLite.to("#__mad_topper_", config_1.menus.animationVelocity, {
-	        width: "25%"
+	        left: "0%"
 	    });
 	    return {
 	        type: exports.constants.SHOW_TOP_MENU
@@ -32302,7 +32307,7 @@
 	function hiddeTopMenu() {
 	    // SHOW AND ANIMATE CLIENT MAIN PANEL
 	    TweenLite.to("#__mad_topper_", config_1.menus.animationVelocity, {
-	        width: "0%"
+	        left: "-30%"
 	    });
 	    return {
 	        type: exports.constants.HIDDE_TOP_MENU
@@ -32367,8 +32372,10 @@
 	function addSelector(eve, uniqueSelector) {
 	    var selectorProps = {};
 	    var target = eve.target;
+	    selectorProps.keyid = shorid.generate();
 	    selectorProps.uselector = uniqueSelector;
 	    selectorProps.state = "pending";
+	    selectorProps.editable = false;
 	    if (target.tagName) {
 	        selectorProps.tagName = target.tagName;
 	    }
@@ -32392,6 +32399,35 @@
 	    };
 	}
 	exports.addSelector = addSelector;
+	function confirmSelector(key) {
+	    return {
+	        type: exports.constants.CONFIRM_SELECTOR,
+	        key: key
+	    };
+	}
+	exports.confirmSelector = confirmSelector;
+	function deleteSelector(key) {
+	    return {
+	        type: exports.constants.DELETE_SELECTOR,
+	        key: key
+	    };
+	}
+	exports.deleteSelector = deleteSelector;
+	function editSelector(key) {
+	    return {
+	        type: exports.constants.EDIT_SELECTOR,
+	        key: key
+	    };
+	}
+	exports.editSelector = editSelector;
+	function confirmEditSelector(key, element) {
+	    return {
+	        type: exports.constants.CONFIRM_EDIT_SELECTOR,
+	        key: key,
+	        value: element.value
+	    };
+	}
+	exports.confirmEditSelector = confirmEditSelector;
 
 /***/ },
 /* 261 */
@@ -40160,7 +40196,16 @@
 	            return React.createElement("div", { className: "__con_containeritems_" }, React.createElement("ul", { id: "__me_select_top", className: "__ul_containeritems_top" }, React.createElement("li", { onClick: function onClick() {
 	                    if (!selectorMenu) actions.showSelectorMenu();else actions.hiddeSelectorMenu();
 	                } }, React.createElement(Items.ItemAddStage, null))), React.createElement("ul", { id: "__me_select_add", className: "__ul_containeritems_add" }), React.createElement("ul", { id: "__me_select_mid", className: "__ul_containeritems_mid" }, selectorsStack.map(function (selector, key) {
-	                if (selector.state === "pending") return React.createElement("ul", { className: "ul_selectors_pending", key: key }, React.createElement("li", { className: "selec_pend_name" }, React.createElement("p", null, selector.value || selector.tagName)), React.createElement("li", { className: "selec_pend_items" }, React.createElement("ul", { className: "ul_selec_pend_items" }, React.createElement("li", null, React.createElement(Items.ItemEdit, null)), React.createElement("li", null, React.createElement(Items.ItemDel, null)), React.createElement("li", null, React.createElement(Items.ItemCheck, null)))));else return React.createElement("ul", { className: "ul_selectors", key: key }, React.createElement("li", { className: "li_selec_label" }, React.createElement("p", null, "unique")), React.createElement("li", { className: "li_selec_props" }, React.createElement("ul", { className: "ulc_select_props" }, React.createElement("li", null, React.createElement("div", { className: "selector_lab_item" }, React.createElement(Items.ItemCode, null)), React.createElement("div", { className: "selector_label" }, React.createElement("p", null, selector.tagName))), React.createElement("li", null, React.createElement("div", { className: "selector_lab_item" }, React.createElement(Items.ItemLabel, null)), React.createElement("div", { className: "selector_label" }, React.createElement("p", null, selector.value || "no value"))))));
+	                var defaultValue = selector.value || selector.tagName;
+	                if (selector.state === "pending") return React.createElement("ul", { className: "ul_selectors_pending", key: key }, React.createElement("li", { className: "selec_pend_name" }, !selector.editable ? React.createElement("p", null, selector.uniqueName || defaultValue) : React.createElement("ul", { className: "selec_pend_name_editable" }, React.createElement("li", { className: "selec_pname_edit_input" }, React.createElement("input", { id: "editUnique", type: "text", defaultValue: selector.uniqueName || defaultValue })), React.createElement("li", { className: "selec_pname_edit_item" }, React.createElement("button", { onClick: function onClick() {
+	                        return actions.confirmEditSelector(selector.keyid, document.getElementById("editUnique"));
+	                    } }, "listo")))), React.createElement("li", { className: "selec_pend_items" }, React.createElement("ul", { className: "ul_selec_pend_items" }, React.createElement("li", null, React.createElement("span", { onClick: function onClick() {
+	                        return actions.editSelector(selector.keyid);
+	                    } }, React.createElement(Items.ItemEdit, null))), React.createElement("li", null, React.createElement("span", { onClick: function onClick() {
+	                        return actions.deleteSelector(selector.keyid);
+	                    } }, React.createElement(Items.ItemDel, null))), React.createElement("li", null, React.createElement("span", { onClick: function onClick() {
+	                        return actions.confirmSelector(selector.keyid);
+	                    } }, React.createElement(Items.ItemCheck, null))))));else return React.createElement("ul", { className: "ul_selectors", key: key }, React.createElement("li", { className: "li_selec_label" }, React.createElement("p", null, "unique")), React.createElement("li", { className: "li_selec_props" }, React.createElement("ul", { className: "ulc_select_props" }, React.createElement("li", null, React.createElement("div", { className: "selector_lab_item" }, React.createElement(Items.ItemCode, null)), React.createElement("div", { className: "selector_label" }, React.createElement("p", null, selector.tagName))), React.createElement("li", null, React.createElement("div", { className: "selector_lab_item" }, React.createElement(Items.ItemLabel, null)), React.createElement("div", { className: "selector_label" }, React.createElement("p", null, selector.value || "no value"))))));
 	            })), React.createElement("ul", { id: "__me_select_bot", className: "__ul_containeritems_bot" }, React.createElement("li", { className: "input_pal" }, React.createElement("input", { type: "text" })), React.createElement("li", { className: "item_pal" }, React.createElement(Items.ItemSearch, null))));
 	        }
 	    }]);
@@ -40480,7 +40525,7 @@
 	    (0, _createClass3.default)(ItemCheck, [{
 	        key: "render",
 	        value: function render() {
-	            return React.createElement("svg", { fill: "#000000", height: "48", viewBox: "0 0 24 24", width: "48" }, React.createElement("path", { d: "M0 0h24v24H0z", fill: "none" }), React.createElement("path", { d: "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" }));
+	            return React.createElement("svg", { fill: "#000000", viewBox: "0 0 24 24" }, React.createElement("path", { d: "M0 0h24v24H0z", fill: "none" }), React.createElement("path", { d: "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" }));
 	        }
 	    }]);
 	    return ItemCheck;
@@ -40500,7 +40545,7 @@
 	    (0, _createClass3.default)(ItemDel, [{
 	        key: "render",
 	        value: function render() {
-	            return React.createElement("svg", { fill: "#000000", height: "48", viewBox: "0 0 24 24", width: "48" }, React.createElement("path", { d: "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" }), React.createElement("path", { d: "M0 0h24v24H0z", fill: "none" }));
+	            return React.createElement("svg", { fill: "#000000", viewBox: "0 0 24 24" }, React.createElement("path", { d: "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" }), React.createElement("path", { d: "M0 0h24v24H0z", fill: "none" }));
 	        }
 	    }]);
 	    return ItemDel;
@@ -40520,7 +40565,7 @@
 	    (0, _createClass3.default)(ItemEdit, [{
 	        key: "render",
 	        value: function render() {
-	            return React.createElement("svg", { fill: "#000000", height: "48", viewBox: "0 0 24 24", width: "48" }, React.createElement("path", { d: "M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" }), React.createElement("path", { d: "M0 0h24v24H0z", fill: "none" }));
+	            return React.createElement("svg", { fill: "#000000", viewBox: "0 0 24 24" }, React.createElement("path", { d: "M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" }), React.createElement("path", { d: "M0 0h24v24H0z", fill: "none" }));
 	        }
 	    }]);
 	    return ItemEdit;
@@ -40634,6 +40679,7 @@
 	
 	var redux_1 = __webpack_require__(247);
 	var actions_1 = __webpack_require__(260);
+	var _ = __webpack_require__(283);
 	function mangeMenu() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
 	    var action = arguments[1];
@@ -40676,9 +40722,35 @@
 	    var action = arguments[1];
 	
 	    var selectors = (0, _from2.default)(state);
+	    var redo = void 0;
+	    var selector = void 0;
 	    switch (action.type) {
 	        case actions_1.constants.ADD_SELECTOR:
 	            selectors.push(action.payload.selectorProps);
+	            return selectors;
+	        case actions_1.constants.CONFIRM_SELECTOR:
+	            selector = selectors[_.findIndex(selectors, function (n) {
+	                return n.keyid === action.key;
+	            })];
+	            selector.state = "confirmed";
+	            return selectors;
+	        case actions_1.constants.DELETE_SELECTOR:
+	            redo = _.remove(selectors, function (n) {
+	                return n.keyid === action.key;
+	            });
+	            return selectors;
+	        case actions_1.constants.EDIT_SELECTOR:
+	            selector = selectors[_.findIndex(selectors, function (n) {
+	                return n.keyid === action.key;
+	            })];
+	            selector.editable = true;
+	            return selectors;
+	        case actions_1.constants.CONFIRM_EDIT_SELECTOR:
+	            selector = selectors[_.findIndex(selectors, function (n) {
+	                return n.keyid === action.key;
+	            })];
+	            selector.editable = false;
+	            selector.uniqueName = action.value;
 	            return selectors;
 	        default:
 	            return state;
@@ -57660,6 +57732,357 @@
 	
 	  return parents;
 	}
+
+/***/ },
+/* 298 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	module.exports = __webpack_require__(299);
+
+
+/***/ },
+/* 299 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var alphabet = __webpack_require__(300);
+	var encode = __webpack_require__(302);
+	var decode = __webpack_require__(304);
+	var isValid = __webpack_require__(305);
+	
+	// Ignore all milliseconds before a certain time to reduce the size of the date entropy without sacrificing uniqueness.
+	// This number should be updated every year or so to keep the generated id short.
+	// To regenerate `new Date() - 0` and bump the version. Always bump the version!
+	var REDUCE_TIME = 1459707606518;
+	
+	// don't change unless we change the algos or REDUCE_TIME
+	// must be an integer and less than 16
+	var version = 6;
+	
+	// if you are using cluster or multiple servers use this to make each instance
+	// has a unique value for worker
+	// Note: I don't know if this is automatically set when using third
+	// party cluster solutions such as pm2.
+	var clusterWorkerId = __webpack_require__(306) || 0;
+	
+	// Counter is used when shortid is called multiple times in one second.
+	var counter;
+	
+	// Remember the last time shortid was called in case counter is needed.
+	var previousSeconds;
+	
+	/**
+	 * Generate unique id
+	 * Returns string id
+	 */
+	function generate() {
+	
+	    var str = '';
+	
+	    var seconds = Math.floor((Date.now() - REDUCE_TIME) * 0.001);
+	
+	    if (seconds === previousSeconds) {
+	        counter++;
+	    } else {
+	        counter = 0;
+	        previousSeconds = seconds;
+	    }
+	
+	    str = str + encode(alphabet.lookup, version);
+	    str = str + encode(alphabet.lookup, clusterWorkerId);
+	    if (counter > 0) {
+	        str = str + encode(alphabet.lookup, counter);
+	    }
+	    str = str + encode(alphabet.lookup, seconds);
+	
+	    return str;
+	}
+	
+	
+	/**
+	 * Set the seed.
+	 * Highly recommended if you don't want people to try to figure out your id schema.
+	 * exposed as shortid.seed(int)
+	 * @param seed Integer value to seed the random alphabet.  ALWAYS USE THE SAME SEED or you might get overlaps.
+	 */
+	function seed(seedValue) {
+	    alphabet.seed(seedValue);
+	    return module.exports;
+	}
+	
+	/**
+	 * Set the cluster worker or machine id
+	 * exposed as shortid.worker(int)
+	 * @param workerId worker must be positive integer.  Number less than 16 is recommended.
+	 * returns shortid module so it can be chained.
+	 */
+	function worker(workerId) {
+	    clusterWorkerId = workerId;
+	    return module.exports;
+	}
+	
+	/**
+	 *
+	 * sets new characters to use in the alphabet
+	 * returns the shuffled alphabet
+	 */
+	function characters(newCharacters) {
+	    if (newCharacters !== undefined) {
+	        alphabet.characters(newCharacters);
+	    }
+	
+	    return alphabet.shuffled();
+	}
+	
+	
+	// Export all other functions as properties of the generate function
+	module.exports = generate;
+	module.exports.generate = generate;
+	module.exports.seed = seed;
+	module.exports.worker = worker;
+	module.exports.characters = characters;
+	module.exports.decode = decode;
+	module.exports.isValid = isValid;
+
+
+/***/ },
+/* 300 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var randomFromSeed = __webpack_require__(301);
+	
+	var ORIGINAL = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-';
+	var alphabet;
+	var previousSeed;
+	
+	var shuffled;
+	
+	function reset() {
+	    shuffled = false;
+	}
+	
+	function setCharacters(_alphabet_) {
+	    if (!_alphabet_) {
+	        if (alphabet !== ORIGINAL) {
+	            alphabet = ORIGINAL;
+	            reset();
+	        }
+	        return;
+	    }
+	
+	    if (_alphabet_ === alphabet) {
+	        return;
+	    }
+	
+	    if (_alphabet_.length !== ORIGINAL.length) {
+	        throw new Error('Custom alphabet for shortid must be ' + ORIGINAL.length + ' unique characters. You submitted ' + _alphabet_.length + ' characters: ' + _alphabet_);
+	    }
+	
+	    var unique = _alphabet_.split('').filter(function(item, ind, arr){
+	       return ind !== arr.lastIndexOf(item);
+	    });
+	
+	    if (unique.length) {
+	        throw new Error('Custom alphabet for shortid must be ' + ORIGINAL.length + ' unique characters. These characters were not unique: ' + unique.join(', '));
+	    }
+	
+	    alphabet = _alphabet_;
+	    reset();
+	}
+	
+	function characters(_alphabet_) {
+	    setCharacters(_alphabet_);
+	    return alphabet;
+	}
+	
+	function setSeed(seed) {
+	    randomFromSeed.seed(seed);
+	    if (previousSeed !== seed) {
+	        reset();
+	        previousSeed = seed;
+	    }
+	}
+	
+	function shuffle() {
+	    if (!alphabet) {
+	        setCharacters(ORIGINAL);
+	    }
+	
+	    var sourceArray = alphabet.split('');
+	    var targetArray = [];
+	    var r = randomFromSeed.nextValue();
+	    var characterIndex;
+	
+	    while (sourceArray.length > 0) {
+	        r = randomFromSeed.nextValue();
+	        characterIndex = Math.floor(r * sourceArray.length);
+	        targetArray.push(sourceArray.splice(characterIndex, 1)[0]);
+	    }
+	    return targetArray.join('');
+	}
+	
+	function getShuffled() {
+	    if (shuffled) {
+	        return shuffled;
+	    }
+	    shuffled = shuffle();
+	    return shuffled;
+	}
+	
+	/**
+	 * lookup shuffled letter
+	 * @param index
+	 * @returns {string}
+	 */
+	function lookup(index) {
+	    var alphabetShuffled = getShuffled();
+	    return alphabetShuffled[index];
+	}
+	
+	module.exports = {
+	    characters: characters,
+	    seed: setSeed,
+	    lookup: lookup,
+	    shuffled: getShuffled
+	};
+
+
+/***/ },
+/* 301 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	// Found this seed-based random generator somewhere
+	// Based on The Central Randomizer 1.3 (C) 1997 by Paul Houle (houle@msc.cornell.edu)
+	
+	var seed = 1;
+	
+	/**
+	 * return a random number based on a seed
+	 * @param seed
+	 * @returns {number}
+	 */
+	function getNextValue() {
+	    seed = (seed * 9301 + 49297) % 233280;
+	    return seed/(233280.0);
+	}
+	
+	function setSeed(_seed_) {
+	    seed = _seed_;
+	}
+	
+	module.exports = {
+	    nextValue: getNextValue,
+	    seed: setSeed
+	};
+
+
+/***/ },
+/* 302 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var randomByte = __webpack_require__(303);
+	
+	function encode(lookup, number) {
+	    var loopCounter = 0;
+	    var done;
+	
+	    var str = '';
+	
+	    while (!done) {
+	        str = str + lookup( ( (number >> (4 * loopCounter)) & 0x0f ) | randomByte() );
+	        done = number < (Math.pow(16, loopCounter + 1 ) );
+	        loopCounter++;
+	    }
+	    return str;
+	}
+	
+	module.exports = encode;
+
+
+/***/ },
+/* 303 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	var crypto = typeof window === 'object' && (window.crypto || window.msCrypto); // IE 11 uses window.msCrypto
+	
+	function randomByte() {
+	    if (!crypto || !crypto.getRandomValues) {
+	        return Math.floor(Math.random() * 256) & 0x30;
+	    }
+	    var dest = new Uint8Array(1);
+	    crypto.getRandomValues(dest);
+	    return dest[0] & 0x30;
+	}
+	
+	module.exports = randomByte;
+
+
+/***/ },
+/* 304 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	var alphabet = __webpack_require__(300);
+	
+	/**
+	 * Decode the id to get the version and worker
+	 * Mainly for debugging and testing.
+	 * @param id - the shortid-generated id.
+	 */
+	function decode(id) {
+	    var characters = alphabet.shuffled();
+	    return {
+	        version: characters.indexOf(id.substr(0, 1)) & 0x0f,
+	        worker: characters.indexOf(id.substr(1, 1)) & 0x0f
+	    };
+	}
+	
+	module.exports = decode;
+
+
+/***/ },
+/* 305 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	var alphabet = __webpack_require__(300);
+	
+	function isShortId(id) {
+	    if (!id || typeof id !== 'string' || id.length < 6 ) {
+	        return false;
+	    }
+	
+	    var characters = alphabet.characters();
+	    var len = id.length;
+	    for(var i = 0; i < len;i++) {
+	        if (characters.indexOf(id[i]) === -1) {
+	            return false;
+	        }
+	    }
+	    return true;
+	}
+	
+	module.exports = isShortId;
+
+
+/***/ },
+/* 306 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	module.exports = 0;
+
 
 /***/ }
 /******/ ]);

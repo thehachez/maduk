@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 import * as q from 'jquery';
+import * as shorid from 'shortid';
 import { menus } from '../core/config';
 const TweenLite = require("gsap");
 
@@ -14,14 +15,18 @@ export const constants = {
     HIDDE_SELECTOR_MENU: "HIDDE_SELECTOR_MENU",
     SHOW_SELECTORS_INFO: "SHOW_SELECTORS_INFO",
     CREATE_STAGE: "CREATE_STAGE",
-    ADD_SELECTOR: "ADD_SELECTOR"
+    ADD_SELECTOR: "ADD_SELECTOR",
+    CONFIRM_SELECTOR: "CONFIRM_SELECTOR",
+    DELETE_SELECTOR: "DELETE_SELECTOR",
+    EDIT_SELECTOR: "EDIT_SELECTOR",
+    CONFIRM_EDIT_SELECTOR: "CONFIRM_EDIT_SELECTOR"
 }
 
 export function showTopMenu() {
     // SHOW AND ANIMATE CLIENT MAIN PANEL
     TweenLite.to("#__mad_topper_", menus.animationVelocity,
         {
-            width: "25%"
+            left: "0%"
         }
     );
 
@@ -34,7 +39,7 @@ export function hiddeTopMenu() {
     // SHOW AND ANIMATE CLIENT MAIN PANEL
     TweenLite.to("#__mad_topper_", menus.animationVelocity,
         {
-            width: "0%"
+            left: "-30%"
         }
     );
 
@@ -117,8 +122,10 @@ export function addSelector(eve: JQueryEventObject, uniqueSelector) {
     const selectorProps: any = {};
     const target: any = eve.target;
 
+    selectorProps.keyid = shorid.generate();
     selectorProps.uselector = uniqueSelector;
     selectorProps.state = "pending";
+    selectorProps.editable = false;
 
     if (target.tagName) {
         selectorProps.tagName = target.tagName;
@@ -141,6 +148,35 @@ export function addSelector(eve: JQueryEventObject, uniqueSelector) {
         payload: {
             selectorProps
         }
+    }
+}
+
+export function confirmSelector(key) {
+    return {
+        type: constants.CONFIRM_SELECTOR,
+        key
+    }
+}
+
+export function deleteSelector(key) {
+    return {
+        type: constants.DELETE_SELECTOR,
+        key
+    }
+}
+
+export function editSelector(key) {
+    return {
+        type: constants.EDIT_SELECTOR,
+        key
+    }
+}
+
+export function confirmEditSelector(key, element) {
+    return {
+        type: constants.CONFIRM_EDIT_SELECTOR,
+        key,
+        value: element.value
     }
 }
 

@@ -23,9 +23,9 @@ export class CotaninerItems extends React.Component<Props, any> {
                         else
                             actions.hiddeSelectorMenu()
                     } }>
-                        <Items.ItemAddStage
 
-                            />
+                        <Items.ItemAddStage/>
+
                     </li>
                 </ul>
                 <ul id="__me_select_add"  className="__ul_containeritems_add">
@@ -33,19 +33,44 @@ export class CotaninerItems extends React.Component<Props, any> {
                 <ul id="__me_select_mid"  className="__ul_containeritems_mid">
                     {
                         selectorsStack.map((selector, key) => {
+                            const defaultValue = selector.value || selector.tagName;
+
                             if (selector.state === "pending")
                                 return (
                                     <ul className="ul_selectors_pending" key= { key }>
                                         <li className="selec_pend_name">
-                                            <p>
-                                                { selector.value || selector.tagName }
-                                            </p>
+                                        
+                                            {
+                                                !selector.editable
+                                                    ? <p>{  selector.uniqueName || defaultValue }</p>
+                                                    : <ul className="selec_pend_name_editable">
+                                                        <li className="selec_pname_edit_input">
+                                                            <input id="editUnique" type="text" defaultValue={ selector.uniqueName || defaultValue }/>
+                                                        </li>
+                                                        <li className="selec_pname_edit_item">
+                                                            <button onClick={ () => actions.confirmEditSelector(selector.keyid, document.getElementById("editUnique")) }>listo</button>
+                                                        </li>
+                                                    </ul>
+                                            }
+
                                         </li>
                                         <li className="selec_pend_items">
                                             <ul className="ul_selec_pend_items">
-                                                <li><Items.ItemEdit /></li>
-                                                <li><Items.ItemDel /></li>
-                                                <li><Items.ItemCheck /></li>
+                                                <li>
+                                                    <span onClick={ () => actions.editSelector(selector.keyid) }>
+                                                        <Items.ItemEdit />
+                                                    </span>
+                                                </li>
+                                                <li>
+                                                    <span onClick={ () => actions.deleteSelector(selector.keyid) }>
+                                                        <Items.ItemDel />
+                                                    </span>
+                                                </li>
+                                                <li>
+                                                    <span onClick={ () => actions.confirmSelector(selector.keyid) }>
+                                                        <Items.ItemCheck />
+                                                    </span>
+                                                </li>
                                             </ul>
                                         </li>
                                     </ul>)
