@@ -1,9 +1,10 @@
 import * as _ from 'lodash';
 import * as q from 'jquery';
 import * as shortid from 'shortid';
+import { store } from '../store';
 import { menus } from '../core/config';
 import { Stages } from '../store/props';
-
+import { StateDef } from '../store/props';
 const TweenLite = require("gsap");
 
 export interface ActionsDef {
@@ -43,18 +44,24 @@ export interface ActionsDef {
             }
         };
 
-    confirmSelector(key: string, stagekey: string): { type: string, stageKey: string };
-    editSelector(key: string, stagekey: string): { type: string, stageKey: string };
-    deleteSelector(key: string, stagekey: string): { type: string, stageKey: string };
-    confirmEditSelector(key: string, stagekey: string): { type: string, stageKey: string };
+    confirmSelector(key: string, stageKey: string): { type: string, stageKey: string };
+    editSelector(key: string, stageKey: string): { type: string, stageKey: string };
+    deleteSelector(key: string, stageKey: string): { type: string, stageKey: string };
+    confirmEditSelector(key: string, stageKey: string): { type: string, stageKey: string };
+    expandStage(stageKey: string): { type: string, stageKey: string }
+    reduceStage(stageKey: string): { type: string, stageKey: string }
+
 }
 
 export const constants = {
+    SHOW_MESSAGE: "SHOW_MESSAGE",
     SHOW_TOP_MENU: "SHOW_TOP_MENU",
     HIDDE_TOP_MENU: "HIDDE_TOP_MENU",
     SHOW_SELECTOR_MENU: "SHOW_SELECTOR_MENU",
     HIDDE_SELECTOR_MENU: "HIDDE_SELECTOR_MENU",
     SHOW_SELECTORS_INFO: "SHOW_SELECTORS_INFO",
+    EXPAND_STAGE: "EXPAND_STAGE",
+    REDUCE_STAGE: "REDUCE_STAGE",
     SELECT_STAGE: "SELECT_STAGE",
     CREATE_STAGE: "CREATE_STAGE",
     ADD_SELECTOR: "ADD_SELECTOR",
@@ -128,6 +135,35 @@ export function hiddeSelectorMenu() {
     }
 }
 
+
+export function expandStage(stageKey: string) {
+    
+    TweenLite.to("#stageContainer" + stageKey, menus.animationVelocityMs,
+        {
+            display: "block",
+            height: "auto"
+        }
+    );
+
+    return {
+        type: constants.EXPAND_STAGE,
+        stageKey
+    }
+}
+
+export function reduceStage(stageKey: string) {
+    TweenLite.to("#stageContainer" + stageKey, menus.animationVelocityMs,
+        {
+            height: "0%"
+        }
+    );
+
+    return {
+        type: constants.REDUCE_STAGE,
+        stageKey
+    }
+}
+
 export function selectStage(key: string) {
     return {
         type: constants.SELECT_STAGE,
@@ -196,11 +232,22 @@ export function addSelector(eve: JQueryEventObject, stagekey, uniqueSelector) {
         newSelector.value = target.value;
     }
 
-    return {
-        type: constants.ADD_SELECTOR,
-        payload: {
-            selector: newSelector,
-            uniqueSelector
+    return (dispatch, getState: () => StateDef) => {
+        if (getState().stages.length <= 0) {
+            dispatch({
+                type: constants.SHOW_MESSAGE,
+                message: "primero debes crear un stage"
+            });
+
+        } else {
+
+            dispatch({
+                type: constants.ADD_SELECTOR,
+                payload: {
+                    selector: newSelector,
+                    uniqueSelector
+                }
+            });
         }
     }
 }

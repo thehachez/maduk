@@ -22,6 +22,7 @@ body {
 
 #__mad_topper_ {
   position: absolute;
+  min-width: 341px;
   left: -30%;
   top: 0px;
   width: 25%;
@@ -67,7 +68,7 @@ body {
       margin-right: auto;
       cursor: pointer; }
       .__ul_containeritems_top li svg:hover {
-        fill: #40ce00; }
+        fill: #FF3D00; }
 
 .__ul_containeritems_add {
   width: 100%;
@@ -95,7 +96,7 @@ body {
       margin-right: auto;
       cursor: pointer; }
       .__ul_containeritems_add li svg:hover {
-        fill: #40ce00; }
+        fill: #FF3D00; }
 
 .__ul_containeritems_mid {
   width: 100%;
@@ -105,6 +106,15 @@ body {
   overflow: auto;
   margin: 0px !important;
   padding: 0px !important; }
+
+.__ul_containeritems_mid::-webkit-scrollbar {
+  width: 5px; }
+
+.__ul_containeritems_mid::-webkit-scrollbar-track {
+  border-radius: 0px; }
+
+.__ul_containeritems_mid::-webkit-scrollbar-thumb {
+  background: #000; }
 
 .__ul_containeritems_bot {
   width: 100%;
@@ -201,12 +211,17 @@ body {
 .ul_selectors {
   width: 100%;
   height: 20%;
+  min-height: 94px;
   float: left;
   padding: 0px;
-  margin: 0px; }
+  margin: 0px;
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #ECEFF1; }
   .ul_selectors li {
     width: 100%;
-    float: left; }
+    float: left;
+    display: flex; }
 
 .__con_stages {
   width: 100%;
@@ -219,14 +234,14 @@ body {
   float: left;
   padding: 0px;
   margin: 0px;
-  background: #263238;
+  background: #FF3D00;
   color: #FFF;
-  display: flex;
-  border-bottom: 1px solid #FFF; }
+  display: flex; }
   .ul_stages_props li {
     height: 100%;
     float: left;
-    display: flex; }
+    display: flex;
+    flex-direction: column; }
 
 .stages_items {
   width: 100%;
@@ -234,7 +249,7 @@ body {
   padding: 0px;
   margin: 0px;
   float: left;
-  border-bottom: 1px solid #FFF; }
+  overflow: hidden; }
 
 .ul_selectors_pending {
   width: 100%;
@@ -242,27 +257,39 @@ body {
   float: left;
   padding: 0px;
   margin: 0px;
-  color: #FFF;
+  color: #333;
   display: flex;
-  background: #40ce00; }
+  background: #CFD8DC; }
   .ul_selectors_pending li {
     height: 100%;
     float: left;
     display: flex; }
 
-.stage_name {
-  width: 100%;
-  max-width: 200px;
+.stage_props {
+  width: 85%;
   overflow: hidden;
   display: flex; }
+  .stage_props div {
+    width: 100%;
+    height: 100%; }
+    .stage_props div p {
+      align-self: center;
+      margin: 0px;
+      padding: 0px;
+      padding-left: 10px; }
+
+.stage_name {
+  display: flex; }
   .stage_name p {
-    align-self: center;
-    margin: 0px;
-    padding: 0px;
-    padding-left: 10px; }
+    align-self: center; }
+
+.stage_attrs {
+  display: flex; }
+  .stage_attrs p {
+    align-self: center; }
 
 .stage_items {
-  width: 100%;
+  width: 15%;
   display: flex; }
   .stage_items p {
     align-self: center;
@@ -270,9 +297,26 @@ body {
     padding: 0px;
     padding-left: 10px; }
 
-.selec_pend_name {
+.ul_stage_items {
   width: 100%;
-  display: flex; }
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 0px !important;
+  padding: 0px !important; }
+  .ul_stage_items li {
+    width: 100%;
+    height: 100%;
+    justify-content: center; }
+    .ul_stage_items li svg {
+      fill: #FFF;
+      width: 35%;
+      align-self: center; }
+      .ul_stage_items li svg:hover {
+        fill: #000; }
+
+.selec_pend_name {
+  width: 100%; }
   .selec_pend_name p {
     align-self: center;
     margin: 0px;
@@ -378,25 +422,25 @@ body {
         fill: #000; }
 
 .li_selec_label {
-  height: 24%;
+  height: 40%;
   color: #333;
-  font-weight: 600;
-  display: flex; }
+  font-weight: 600; }
   .li_selec_label p {
     margin: 0px;
     padding: 0px;
-    justify-content: center;
+    align-self: center;
     line-height: 35px;
     padding-left: 15px; }
 
 .li_selec_props {
-  height: 76%;
+  height: 60%;
   color: #333; }
 
 .ulc_select_props {
   width: 100%;
-  height: 100%;
+  height: 80%;
   float: left;
+  align-self: flex-start;
   margin: 0px !important;
   padding: 0px !important; }
   .ulc_select_props li {
@@ -410,8 +454,8 @@ body {
   float: left;
   display: flex; }
   .selector_lab_item svg {
-    width: 40%;
-    fill: #40ce00;
+    width: 35%;
+    fill: #546E7A;
     display: block;
     margin-left: auto;
     margin-right: auto; }
@@ -424,5 +468,6 @@ body {
   .selector_label p {
     padding: 0px;
     margin: 0px;
+    font-size: 12px;
     align-self: center;
     line-height: 50px; }

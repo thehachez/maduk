@@ -2186,6 +2186,7 @@
 	// set initial state
 	
 	exports.initialState = {
+	    message: "",
 	    mangeMenu: false,
 	    selectorMenu: false,
 	    selectorProps: {},

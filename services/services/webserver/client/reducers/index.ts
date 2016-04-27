@@ -1,15 +1,20 @@
+import { StateDef, Stages } from '../store/props';
 import { combineReducers } from 'redux';
 import { constants } from '../actions';
-import { StateDef, Stages } from '../store/props';
 import { menus } from '../core/config';
 import { store } from '../store';
+import { E } from '../core/easy';
 import * as _ from 'lodash';
 
-const getState = {
-    get g(): StateDef {
-        return store.getState();
+function message(state = "", action: { type: string, message: string }): string {
+    switch (action.type) {
+        case constants.SHOW_MESSAGE:
+            alert(action.message)
+            return action.message;
+        default:
+            return state;
     }
-};
+}
 
 function mangeMenu(state = false, action): boolean {
     switch (action.type) {
@@ -105,33 +110,51 @@ function stages(state = [], action) {
 
     let stages = Array.from(state);
     let stage: Stages;
-    let getStage;
+    let getStage: Stages;
     let selector;
 
     switch (action.type) {
         case constants.CREATE_STAGE:
             stage = action.stage;
 
-            stage.name = "stage " + (getState.g.stages.length + 1);
+            stage.name = "stage " + (E.state.stages.length + 1);
             stage.editable = false;
             stage.items = 0;
+            stage.stateExRe = true;
 
             stages.push(action.stage);
 
             return stages;
+            
         case constants.ADD_SELECTOR:
-    
+
             selector = action.payload.selector;
             getStage = stages[_.findIndex(stages, (n) => n.keyid === selector.stagekey)];
             getStage.items += 1;
-            
+
             return stages;
+            
         case constants.DELETE_SELECTOR:
-    
+
             getStage = stages[_.findIndex(stages, (n) => n.keyid === action.stageKey)];
             getStage.items -= 1;
 
             return stages;
+
+        case constants.EXPAND_STAGE:
+
+            getStage = stages[_.findIndex(stages, (n) => n.keyid === action.stageKey)];
+            getStage.stateExRe = true;
+
+            return stages;
+
+        case constants.REDUCE_STAGE:
+
+            getStage = stages[_.findIndex(stages, (n) => n.keyid === action.stageKey)];
+            getStage.stateExRe = false;
+            
+            return stages;
+            
         default:
             return state;
     }
@@ -139,6 +162,7 @@ function stages(state = [], action) {
 
 export const rootReducer = combineReducers({
     stages,
+    message,
     mangeMenu,
     selectorMenu,
     selectorProps,

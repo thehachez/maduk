@@ -10,6 +10,7 @@ $color2: #000;
 
 #__mad_topper_ {
     position: absolute;
+    min-width: 341px;
     left: -30%;
     top: 0px;
     width: 25%;
@@ -57,7 +58,7 @@ $color2: #000;
             margin-right: auto;
             cursor: pointer;
             &:hover {
-                fill: #40ce00;
+                fill: #FF3D00;
             }
         }
     }
@@ -89,7 +90,7 @@ $color2: #000;
             margin-right: auto;
             cursor: pointer;
             &:hover {
-                fill: #40ce00;
+                fill: #FF3D00;
             }
         }
     }
@@ -102,6 +103,18 @@ $color2: #000;
     float: left;
     overflow: auto;
     @include collapse();
+}
+
+.__ul_containeritems_mid::-webkit-scrollbar {
+    width: 5px;
+}
+
+.__ul_containeritems_mid::-webkit-scrollbar-track {
+    border-radius: 0px;
+}
+
+.__ul_containeritems_mid::-webkit-scrollbar-thumb {
+    background: #000;
 }
 
 .__ul_containeritems_bot {
@@ -218,12 +231,17 @@ $color2: #000;
 .ul_selectors {
     width: 100%;
     height: 20%;
+    min-height: 94px;
     float: left;
     padding: 0px;
     margin: 0px;
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #ECEFF1;
     li {
         width: 100%;
         float: left;
+        display: flex;
     }
 }
 
@@ -239,14 +257,14 @@ $color2: #000;
     float: left;
     padding: 0px;
     margin: 0px;
-    background: #263238;
+    background: #FF3D00;
     color: #FFF;
     display: flex;
-    border-bottom: 1px solid #FFF;
     li {
         height: 100%;
         float: left;
         display: flex;
+        flex-direction: column;
     }
 }
 
@@ -256,7 +274,7 @@ $color2: #000;
     padding: 0px;
     margin: 0px;
     float: left;
-    border-bottom: 1px solid #FFF;
+    overflow: hidden;
 }
 
 .ul_selectors_pending {
@@ -265,9 +283,9 @@ $color2: #000;
     float: left;
     padding: 0px;
     margin: 0px;
-    color: #FFF;
+    color: #333;
     display: flex;
-    background: #40ce00;
+    background: #CFD8DC;
     li {
         height: 100%;
         float: left;
@@ -275,10 +293,38 @@ $color2: #000;
     }
 }
 
-.stage_name {
-    width: 100%;
-    max-width: 200px;
+.stage_props {
+    width: 85%;
     overflow: hidden;
+    display: flex;
+    div {
+        width: 100%;
+        height: 100%;
+        p {
+            align-self: center;
+            margin: 0px;
+            padding: 0px;
+            padding-left: 10px;
+        }
+    }
+}
+
+.stage_name {
+    display: flex;
+    p {
+        align-self: center;
+    }
+}
+
+.stage_attrs {
+    display: flex;
+    p {
+        align-self: center;
+    }
+}
+
+.stage_items {
+    width: 15%;
     display: flex;
     p {
         align-self: center;
@@ -288,20 +334,29 @@ $color2: #000;
     }
 }
 
-.stage_items {
+.ul_stage_items {
     width: 100%;
+    height: 100%;
     display: flex;
-    p {
-        align-self: center;
-        margin: 0px;
-        padding: 0px;
-        padding-left: 10px;
+    flex-direction: column;
+    @include collapse();
+    li {
+        width: 100%;
+        height: 100%;
+        justify-content: center;
+        svg {
+            fill: #FFF;
+            width: 35%;
+            align-self: center;
+            &:hover {
+                fill: #000;
+            }
+        }
     }
 }
 
 .selec_pend_name {
     width: 100%;
-    display: flex;
     p {
         align-self: center;
         margin: 0px;
@@ -392,28 +447,28 @@ $color2: #000;
 }
 
 .li_selec_label {
-    height: 24%;
+    height: 40%;
     color: $color1;
     font-weight: 600;
-    display: flex;
     p {
         margin: 0px;
         padding: 0px;
-        justify-content: center;
+        align-self: center;
         line-height: 35px;
         padding-left: 15px;
     }
 }
 
 .li_selec_props {
-    height: 76%;
+    height: 60%;
     color: $color1;
 }
 
 .ulc_select_props {
     width: 100%;
-    height: 100%;
+    height: 80%;
     float: left;
+    align-self: flex-start;
     @include collapse();
     li {
         width: 100%;
@@ -428,8 +483,8 @@ $color2: #000;
     float: left;
     display: flex;
     svg {
-        width: 40%;
-        fill: #40ce00;
+        width: 35%;
+        fill: #546E7A;
         display: block;
         margin-left: auto;
         margin-right: auto;
@@ -444,6 +499,7 @@ $color2: #000;
     p {
         padding: 0px;
         margin: 0px;
+        font-size: 12px;
         align-self: center;
         line-height: 50px;
     }

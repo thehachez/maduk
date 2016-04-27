@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as Items from './svg';
-import { ActionsDef } from '../actions'; 
+import { ActionsDef } from '../actions';
 import { Selector, Stages } from '../store/props';
 import { PendingSelector } from './pendingselector';
 import { ConfirmSelector } from './confirmselector';
@@ -45,15 +45,32 @@ export class CotaninerItems extends React.Component<Props, any> {
                             return (
                                 <div className="__con_stages"  key={ key }>
 
-                                    <ul className="ul_stages_props" onClick= { () => actions.selectStage(stage.keyid) }>
-                                        <li className="stage_name">
-                                            <p>{ stage.name }</p>
+                                    <ul className="ul_stages_props" onClick= { () => {
+                                        actions.selectStage(stage.keyid)
+                                    } }>
+                                        <li className="stage_props">
+                                            <div className="stage_name">
+                                                <p>{ stage.name }</p>
+                                            </div>
+                                            <div className="stage_attrs">
+                                                <p>{ stage.items }</p>
+                                            </div>
                                         </li>
                                         <li className="stage_items">
-                                            <p>{ stage.items }</p>
+                                            <ul className="ul_stage_items">
+                                                <li><Items.ItemDel /> </li>
+                                                <li><Items.ItemEdit /></li>
+                                                <li onClick= { () => {
+                                                    if (!stage.stateExRe)
+                                                        actions.expandStage(stage.keyid);
+                                                    else
+                                                        actions.reduceStage(stage.keyid);
+                                                } }
+                                                    ><Items.ItemCode /></li>
+                                            </ul>
                                         </li>
                                     </ul>
-                                    <div className="stages_items">
+                                    <div className="stages_items" id={ "stageContainer" + stage.keyid }>
                                         {
                                             selectorsStack.map((selector, key) => {
                                                 if (stage.keyid === selector.stagekey)

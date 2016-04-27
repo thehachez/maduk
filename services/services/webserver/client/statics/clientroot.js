@@ -32284,11 +32284,14 @@
 	var config_1 = __webpack_require__(261);
 	var TweenLite = __webpack_require__(262);
 	exports.constants = {
+	    SHOW_MESSAGE: "SHOW_MESSAGE",
 	    SHOW_TOP_MENU: "SHOW_TOP_MENU",
 	    HIDDE_TOP_MENU: "HIDDE_TOP_MENU",
 	    SHOW_SELECTOR_MENU: "SHOW_SELECTOR_MENU",
 	    HIDDE_SELECTOR_MENU: "HIDDE_SELECTOR_MENU",
 	    SHOW_SELECTORS_INFO: "SHOW_SELECTORS_INFO",
+	    EXPAND_STAGE: "EXPAND_STAGE",
+	    REDUCE_STAGE: "REDUCE_STAGE",
 	    SELECT_STAGE: "SELECT_STAGE",
 	    CREATE_STAGE: "CREATE_STAGE",
 	    ADD_SELECTOR: "ADD_SELECTOR",
@@ -32343,6 +32346,27 @@
 	    };
 	}
 	exports.hiddeSelectorMenu = hiddeSelectorMenu;
+	function expandStage(stageKey) {
+	    TweenLite.to("#stageContainer" + stageKey, config_1.menus.animationVelocityMs, {
+	        display: "block",
+	        height: "auto"
+	    });
+	    return {
+	        type: exports.constants.EXPAND_STAGE,
+	        stageKey: stageKey
+	    };
+	}
+	exports.expandStage = expandStage;
+	function reduceStage(stageKey) {
+	    TweenLite.to("#stageContainer" + stageKey, config_1.menus.animationVelocityMs, {
+	        height: "0%"
+	    });
+	    return {
+	        type: exports.constants.REDUCE_STAGE,
+	        stageKey: stageKey
+	    };
+	}
+	exports.reduceStage = reduceStage;
 	function selectStage(key) {
 	    return {
 	        type: exports.constants.SELECT_STAGE,
@@ -32405,11 +32429,20 @@
 	    if (target.value) {
 	        newSelector.value = target.value;
 	    }
-	    return {
-	        type: exports.constants.ADD_SELECTOR,
-	        payload: {
-	            selector: newSelector,
-	            uniqueSelector: uniqueSelector
+	    return function (dispatch, getState) {
+	        if (getState().stages.length <= 0) {
+	            dispatch({
+	                type: exports.constants.SHOW_MESSAGE,
+	                message: "primero debes crear un stage"
+	            });
+	        } else {
+	            dispatch({
+	                type: exports.constants.ADD_SELECTOR,
+	                payload: {
+	                    selector: newSelector,
+	                    uniqueSelector: uniqueSelector
+	                }
+	            });
 	        }
 	    };
 	}
@@ -40220,8 +40253,10 @@
 	                    return actions.createStage();
 	                } }, React.createElement(Items.ItemAddStage, null)))), React.createElement("ul", { id: "__me_select_mid", className: "__ul_containeritems_mid" }, stages.map(function (stage, key) {
 	                return React.createElement("div", { className: "__con_stages", key: key }, React.createElement("ul", { className: "ul_stages_props", onClick: function onClick() {
-	                        return actions.selectStage(stage.keyid);
-	                    } }, React.createElement("li", { className: "stage_name" }, React.createElement("p", null, stage.name)), React.createElement("li", { className: "stage_items" }, React.createElement("p", null, stage.items))), React.createElement("div", { className: "stages_items" }, selectorsStack.map(function (selector, key) {
+	                        actions.selectStage(stage.keyid);
+	                    } }, React.createElement("li", { className: "stage_props" }, React.createElement("div", { className: "stage_name" }, React.createElement("p", null, stage.name)), React.createElement("div", { className: "stage_attrs" }, React.createElement("p", null, stage.items))), React.createElement("li", { className: "stage_items" }, React.createElement("ul", { className: "ul_stage_items" }, React.createElement("li", null, React.createElement(Items.ItemDel, null), " "), React.createElement("li", null, React.createElement(Items.ItemEdit, null)), React.createElement("li", { onClick: function onClick() {
+	                        if (!stage.stateExRe) actions.expandStage(stage.keyid);else actions.reduceStage(stage.keyid);
+	                    } }, React.createElement(Items.ItemCode, null))))), React.createElement("div", { className: "stages_items", id: "stageContainer" + stage.keyid }, selectorsStack.map(function (selector, key) {
 	                    if (stage.keyid === selector.stagekey) if (selector.state === "pending") return React.createElement(pendingselector_1.PendingSelector, { key: key, actions: actions, selector: selector });else if (selector.state === "confirmed") return React.createElement(confirmselector_1.ConfirmSelector, { key: key, actions: actions, selector: selector });
 	                })));
 	            })), React.createElement("ul", { id: "__me_select_bot", className: "__ul_containeritems_bot" }, React.createElement("li", { className: "input_pal" }, React.createElement("input", { type: "text" })), React.createElement("li", { className: "item_pal" }, React.createElement(Items.ItemSearch, null))));
@@ -40716,13 +40751,20 @@
 	
 	var redux_1 = __webpack_require__(247);
 	var actions_1 = __webpack_require__(260);
-	var store_1 = __webpack_require__(268);
+	var easy_1 = __webpack_require__(309);
 	var _ = __webpack_require__(283);
-	var getState = {
-	    get g() {
-	        return store_1.store.getState();
+	function message() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? "" : arguments[0];
+	    var action = arguments[1];
+	
+	    switch (action.type) {
+	        case actions_1.constants.SHOW_MESSAGE:
+	            alert(action.message);
+	            return action.message;
+	        default:
+	            return state;
 	    }
-	};
+	}
 	function mangeMenu() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
 	    var action = arguments[1];
@@ -40829,9 +40871,10 @@
 	    switch (action.type) {
 	        case actions_1.constants.CREATE_STAGE:
 	            stage = action.stage;
-	            stage.name = "stage " + (getState.g.stages.length + 1);
+	            stage.name = "stage " + (easy_1.E.state.stages.length + 1);
 	            stage.editable = false;
 	            stage.items = 0;
+	            stage.stateExRe = true;
 	            stages.push(action.stage);
 	            return stages;
 	        case actions_1.constants.ADD_SELECTOR:
@@ -40847,12 +40890,25 @@
 	            })];
 	            getStage.items -= 1;
 	            return stages;
+	        case actions_1.constants.EXPAND_STAGE:
+	            getStage = stages[_.findIndex(stages, function (n) {
+	                return n.keyid === action.stageKey;
+	            })];
+	            getStage.stateExRe = true;
+	            return stages;
+	        case actions_1.constants.REDUCE_STAGE:
+	            getStage = stages[_.findIndex(stages, function (n) {
+	                return n.keyid === action.stageKey;
+	            })];
+	            getStage.stateExRe = false;
+	            return stages;
 	        default:
 	            return state;
 	    }
 	}
 	exports.rootReducer = redux_1.combineReducers({
 	    stages: stages,
+	    message: message,
 	    mangeMenu: mangeMenu,
 	    selectorMenu: selectorMenu,
 	    selectorProps: selectorProps,
@@ -41020,6 +41076,7 @@
 	// set initial state
 	
 	exports.initialState = {
+	    message: "",
 	    mangeMenu: false,
 	    selectorMenu: false,
 	    selectorProps: {},
@@ -58302,6 +58359,23 @@
 	}(React.Component);
 	
 	exports.ConfirmSelector = ConfirmSelector;
+
+/***/ },
+/* 309 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var store_1 = __webpack_require__(268);
+	var EasyRedux = {
+	    get state() {
+	        return store_1.store.getState();
+	    },
+	    disp: function disp(action) {
+	        return store_1.store.dispatch(action);
+	    }
+	};
+	exports.E = EasyRedux;
 
 /***/ }
 /******/ ]);
