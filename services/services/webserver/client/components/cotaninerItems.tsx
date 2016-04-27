@@ -1,9 +1,13 @@
 import * as React from 'react';
 import * as Items from './svg';
-import { Selector } from '../store/props';
+import { ActionsDef } from '../actions'; 
+import { Selector, Stages } from '../store/props';
+import { PendingSelector } from './pendingselector';
+import { ConfirmSelector } from './confirmselector';
 
 interface Props {
-    actions: any;
+    actions: ActionsDef;
+    stages: Stages[];
     selectorMenu: boolean;
     selectorsStack: Selector[];
 }
@@ -12,7 +16,7 @@ export class CotaninerItems extends React.Component<Props, any> {
 
     render() {
 
-        const { actions, selectorMenu, selectorsStack } = this.props;
+        const { actions, stages, selectorMenu, selectorsStack } = this.props;
 
         return (
             <div className="__con_containeritems_">
@@ -24,88 +28,63 @@ export class CotaninerItems extends React.Component<Props, any> {
                             actions.hiddeSelectorMenu()
                     } }>
 
-                        <Items.ItemAddStage/>
+                        <Items.ItemOpenOps />
 
                     </li>
                 </ul>
                 <ul id="__me_select_add"  className="__ul_containeritems_add">
+                    <li>
+                        <span onClick={ () => actions.createStage() }>
+                            <Items.ItemAddStage />
+                        </span>
+                    </li>
                 </ul>
                 <ul id="__me_select_mid"  className="__ul_containeritems_mid">
                     {
-                        selectorsStack.map((selector, key) => {
-                            const defaultValue = selector.value || selector.tagName;
+                        stages.map((stage, key) => {
+                            return (
+                                <div className="__con_stages"  key={ key }>
 
-                            if (selector.state === "pending")
-                                return (
-                                    <ul className="ul_selectors_pending" key= { key }>
-                                        <li className="selec_pend_name">
-                                        
-                                            {
-                                                !selector.editable
-                                                    ? <p>{  selector.uniqueName || defaultValue }</p>
-                                                    : <ul className="selec_pend_name_editable">
-                                                        <li className="selec_pname_edit_input">
-                                                            <input id="editUnique" type="text" defaultValue={ selector.uniqueName || defaultValue }/>
-                                                        </li>
-                                                        <li className="selec_pname_edit_item">
-                                                            <button onClick={ () => actions.confirmEditSelector(selector.keyid, document.getElementById("editUnique")) }>listo</button>
-                                                        </li>
-                                                    </ul>
-                                            }
-
+                                    <ul className="ul_stages_props" onClick= { () => actions.selectStage(stage.keyid) }>
+                                        <li className="stage_name">
+                                            <p>{ stage.name }</p>
                                         </li>
-                                        <li className="selec_pend_items">
-                                            <ul className="ul_selec_pend_items">
-                                                <li>
-                                                    <span onClick={ () => actions.editSelector(selector.keyid) }>
-                                                        <Items.ItemEdit />
-                                                    </span>
-                                                </li>
-                                                <li>
-                                                    <span onClick={ () => actions.deleteSelector(selector.keyid) }>
-                                                        <Items.ItemDel />
-                                                    </span>
-                                                </li>
-                                                <li>
-                                                    <span onClick={ () => actions.confirmSelector(selector.keyid) }>
-                                                        <Items.ItemCheck />
-                                                    </span>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>)
-                            else
-                                return (
-                                    <ul className="ul_selectors" key={ key }>
-                                        <li className="li_selec_label"><p>unique</p></li>
-                                        <li className="li_selec_props">
-                                            <ul className="ulc_select_props">
-                                                <li>
-                                                    <div className="selector_lab_item">
-                                                        <Items.ItemCode/>
-                                                    </div>
-                                                    <div className="selector_label">
-                                                        <p>{ selector.tagName }</p>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div className="selector_lab_item">
-                                                        <Items.ItemLabel/>
-                                                    </div>
-                                                    <div className="selector_label">
-                                                        <p>{ selector.value || "no value" }</p>
-                                                    </div>
-                                                </li>
-                                            </ul>
+                                        <li className="stage_items">
+                                            <p>{ stage.items }</p>
                                         </li>
                                     </ul>
-                                )
+                                    <div className="stages_items">
+                                        {
+                                            selectorsStack.map((selector, key) => {
+                                                if (stage.keyid === selector.stagekey)
+                                                    if (selector.state === "pending")
+                                                        return <PendingSelector
+                                                            key= { key }
+                                                            actions = { actions }
+                                                            selector = { selector }
+                                                            />
+                                                    else if (selector.state === "confirmed")
+                                                        return <ConfirmSelector
+                                                            key= { key }
+
+                                                            actions = { actions }
+                                                            selector = { selector }
+                                                            />
+                                            })
+                                        }
+                                    </div>
+                                </div>
+                            )
                         })
                     }
                 </ul>
                 <ul id="__me_select_bot" className="__ul_containeritems_bot">
-                    <li className="input_pal"><input type="text"/></li>
-                    <li className="item_pal"><Items.ItemSearch /></li>
+                    <li className="input_pal">
+                        <input type="text"/>
+                    </li>
+                    <li className="item_pal">
+                        <Items.ItemSearch />
+                    </li>
                 </ul>
             </div>
         )

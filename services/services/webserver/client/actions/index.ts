@@ -1,11 +1,52 @@
 import * as _ from 'lodash';
 import * as q from 'jquery';
-import * as shorid from 'shortid';
+import * as shortid from 'shortid';
 import { menus } from '../core/config';
+import { Stages } from '../store/props';
+
 const TweenLite = require("gsap");
 
 export interface ActionsDef {
-    manageMainMenu(): { type: string }
+    showTopMenu(): { type: string };
+    hiddeTopMenu(): { type: string };
+    showSelectorMenu(): { type: string };
+    hiddeSelectorMenu(): { type: string };
+    hiddeSelectorMenu(): { type: string };
+    selectStage(key: string): { type: string, key: string };
+    createStage(): { type: string, stage: Stages };
+    showSelectorsInfo(eve: JQueryEventObject): {
+        type: string,
+        payload: {
+            hoverSelectorProps: {
+                tagName: string,
+                id: string,
+                className: string,
+                nodeName: string,
+                value: string
+            }
+        }
+    };
+
+    addSelector(eve: JQueryEventObject,
+        stagekey: string,
+        uniqueSelector: string): {
+            type: string,
+            payload: {
+                uniqueSelector: string,
+                selector: {
+                    tagName: string,
+                    id: string,
+                    className: string,
+                    nodeName: string,
+                    value: string
+                }
+            }
+        };
+
+    confirmSelector(key: string, stagekey: string): { type: string, stageKey: string };
+    editSelector(key: string, stagekey: string): { type: string, stageKey: string };
+    deleteSelector(key: string, stagekey: string): { type: string, stageKey: string };
+    confirmEditSelector(key: string, stagekey: string): { type: string, stageKey: string };
 }
 
 export const constants = {
@@ -14,6 +55,7 @@ export const constants = {
     SHOW_SELECTOR_MENU: "SHOW_SELECTOR_MENU",
     HIDDE_SELECTOR_MENU: "HIDDE_SELECTOR_MENU",
     SHOW_SELECTORS_INFO: "SHOW_SELECTORS_INFO",
+    SELECT_STAGE: "SELECT_STAGE",
     CREATE_STAGE: "CREATE_STAGE",
     ADD_SELECTOR: "ADD_SELECTOR",
     CONFIRM_SELECTOR: "CONFIRM_SELECTOR",
@@ -86,16 +128,26 @@ export function hiddeSelectorMenu() {
     }
 }
 
+export function selectStage(key: string) {
+    return {
+        type: constants.SELECT_STAGE,
+        key
+    }
+}
 
 export function createStage() {
+    const newStage: any = {};
+    newStage.keyid = shortid.generate();
     return {
-        type: constants.CREATE_STAGE
+        type: constants.CREATE_STAGE,
+        stage: newStage
     }
 }
 
 
 export function showSelectorsInfo(eve: JQueryEventObject) {
     const hoverSelectorProps: any = {};
+    const target: any = eve.target;
 
     if (eve.target.tagName) {
         hoverSelectorProps.tagName = eve.target.tagName;
@@ -104,12 +156,15 @@ export function showSelectorsInfo(eve: JQueryEventObject) {
         hoverSelectorProps.id = eve.target.id;
     }
     if (eve.target.className) {
-        hoverSelectorProps.tagName = eve.target.className;
+        hoverSelectorProps.className = eve.target.className;
     }
     if (eve.target.nodeName) {
         hoverSelectorProps.nodeName = eve.target.nodeName;
     }
-    //constants.SHOW_SELECTORS_INFO
+    if (target.value) {
+        hoverSelectorProps.value = target.value;
+    }
+
     return {
         type: "SHOW_SELECTORS_INFO",
         payload: {
@@ -118,56 +173,58 @@ export function showSelectorsInfo(eve: JQueryEventObject) {
     }
 }
 
-export function addSelector(eve: JQueryEventObject, uniqueSelector) {
-    const selectorProps: any = {};
+export function addSelector(eve: JQueryEventObject, stagekey, uniqueSelector) {
+    const newSelector: any = {};
     const target: any = eve.target;
 
-    selectorProps.keyid = shorid.generate();
-    selectorProps.uselector = uniqueSelector;
-    selectorProps.state = "pending";
-    selectorProps.editable = false;
+    newSelector.stagekey = stagekey;
+    newSelector.keyid = shortid.generate();
 
     if (target.tagName) {
-        selectorProps.tagName = target.tagName;
+        newSelector.tagName = target.tagName;
     }
     if (target.id) {
-        selectorProps.id = target.id;
+        newSelector.id = target.id;
     }
     if (target.className) {
-        selectorProps.tagName = target.className;
+        newSelector.tagName = target.className;
     }
     if (target.nodeName) {
-        selectorProps.nodeName = target.nodeName;
+        newSelector.nodeName = target.nodeName;
     }
     if (target.value) {
-        selectorProps.value = target.value;
+        newSelector.value = target.value;
     }
 
     return {
         type: constants.ADD_SELECTOR,
         payload: {
-            selectorProps
+            selector: newSelector,
+            uniqueSelector
         }
     }
 }
 
-export function confirmSelector(key) {
+export function confirmSelector(key, stagekey) {
     return {
         type: constants.CONFIRM_SELECTOR,
+        stagekey,
         key
     }
 }
 
-export function deleteSelector(key) {
+export function deleteSelector(key, stageKey) {
     return {
         type: constants.DELETE_SELECTOR,
+        stageKey,
         key
     }
 }
 
-export function editSelector(key) {
+export function editSelector(key, stagekey) {
     return {
         type: constants.EDIT_SELECTOR,
+        stagekey,
         key
     }
 }
@@ -175,8 +232,8 @@ export function editSelector(key) {
 export function confirmEditSelector(key, element) {
     return {
         type: constants.CONFIRM_EDIT_SELECTOR,
-        key,
-        value: element.value
+        value: element.value,
+        key
     }
 }
 

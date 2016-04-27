@@ -2189,6 +2189,8 @@
 	    mangeMenu: false,
 	    selectorMenu: false,
 	    selectorProps: {},
+	    stages: [],
+	    stageSelected: "default",
 	    selectorsStack: []
 	};
 

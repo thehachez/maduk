@@ -162,7 +162,7 @@ export class ParseDOM extends MadukClient {
                 eve.preventDefault();
                 eve.stopPropagation();
              
-                dispatch(fluxActions.addSelector(eve, unique(eve.target)));
+                dispatch(fluxActions.addSelector(eve, state.g.stageSelected, unique(eve.target)));
                 
                 return false;
             }

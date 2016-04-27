@@ -29400,6 +29400,7 @@
 	var bottompanel_1 = __webpack_require__(267);
 	function mapStateToProps(state, props) {
 	    return {
+	        stages: state.stages,
 	        mangeMenu: state.mangeMenu,
 	        selectorMenu: state.selectorMenu,
 	        selectorProps: state.selectorProps,
@@ -29426,11 +29427,12 @@
 	            var _props = this.props;
 	            var actions = _props.actions;
 	            var mangeMenu = _props.mangeMenu;
+	            var stages = _props.stages;
 	            var selectorMenu = _props.selectorMenu;
 	            var selectorProps = _props.selectorProps;
 	            var selectorsStack = _props.selectorsStack;
 	
-	            return React.createElement("div", null, React.createElement("div", { id: "__mad_topper_" }, React.createElement(mainpanel_1.MainPanel, { actions: actions, selectorMenu: selectorMenu, selectorsStack: selectorsStack })), React.createElement("div", { id: "__mad_bottom_" }, React.createElement(bottompanel_1.BottomPanel, { selectorProps: selectorProps })));
+	            return React.createElement("div", null, React.createElement("div", { id: "__mad_topper_" }, React.createElement(mainpanel_1.MainPanel, { actions: actions, stages: stages, selectorMenu: selectorMenu, selectorsStack: selectorsStack })), React.createElement("div", { id: "__mad_bottom_" }, React.createElement(bottompanel_1.BottomPanel, { selectorProps: selectorProps })));
 	        }
 	    }]);
 	    return AppView;
@@ -32278,7 +32280,7 @@
 
 	"use strict";
 	
-	var shorid = __webpack_require__(298);
+	var shortid = __webpack_require__(298);
 	var config_1 = __webpack_require__(261);
 	var TweenLite = __webpack_require__(262);
 	exports.constants = {
@@ -32287,6 +32289,7 @@
 	    SHOW_SELECTOR_MENU: "SHOW_SELECTOR_MENU",
 	    HIDDE_SELECTOR_MENU: "HIDDE_SELECTOR_MENU",
 	    SHOW_SELECTORS_INFO: "SHOW_SELECTORS_INFO",
+	    SELECT_STAGE: "SELECT_STAGE",
 	    CREATE_STAGE: "CREATE_STAGE",
 	    ADD_SELECTOR: "ADD_SELECTOR",
 	    CONFIRM_SELECTOR: "CONFIRM_SELECTOR",
@@ -32340,14 +32343,25 @@
 	    };
 	}
 	exports.hiddeSelectorMenu = hiddeSelectorMenu;
-	function createStage() {
+	function selectStage(key) {
 	    return {
-	        type: exports.constants.CREATE_STAGE
+	        type: exports.constants.SELECT_STAGE,
+	        key: key
+	    };
+	}
+	exports.selectStage = selectStage;
+	function createStage() {
+	    var newStage = {};
+	    newStage.keyid = shortid.generate();
+	    return {
+	        type: exports.constants.CREATE_STAGE,
+	        stage: newStage
 	    };
 	}
 	exports.createStage = createStage;
 	function showSelectorsInfo(eve) {
 	    var hoverSelectorProps = {};
+	    var target = eve.target;
 	    if (eve.target.tagName) {
 	        hoverSelectorProps.tagName = eve.target.tagName;
 	    }
@@ -32355,12 +32369,14 @@
 	        hoverSelectorProps.id = eve.target.id;
 	    }
 	    if (eve.target.className) {
-	        hoverSelectorProps.tagName = eve.target.className;
+	        hoverSelectorProps.className = eve.target.className;
 	    }
 	    if (eve.target.nodeName) {
 	        hoverSelectorProps.nodeName = eve.target.nodeName;
 	    }
-	    //constants.SHOW_SELECTORS_INFO
+	    if (target.value) {
+	        hoverSelectorProps.value = target.value;
+	    }
 	    return {
 	        type: "SHOW_SELECTORS_INFO",
 	        payload: {
@@ -32369,53 +32385,55 @@
 	    };
 	}
 	exports.showSelectorsInfo = showSelectorsInfo;
-	function addSelector(eve, uniqueSelector) {
-	    var selectorProps = {};
+	function addSelector(eve, stagekey, uniqueSelector) {
+	    var newSelector = {};
 	    var target = eve.target;
-	    selectorProps.keyid = shorid.generate();
-	    selectorProps.uselector = uniqueSelector;
-	    selectorProps.state = "pending";
-	    selectorProps.editable = false;
+	    newSelector.stagekey = stagekey;
+	    newSelector.keyid = shortid.generate();
 	    if (target.tagName) {
-	        selectorProps.tagName = target.tagName;
+	        newSelector.tagName = target.tagName;
 	    }
 	    if (target.id) {
-	        selectorProps.id = target.id;
+	        newSelector.id = target.id;
 	    }
 	    if (target.className) {
-	        selectorProps.tagName = target.className;
+	        newSelector.tagName = target.className;
 	    }
 	    if (target.nodeName) {
-	        selectorProps.nodeName = target.nodeName;
+	        newSelector.nodeName = target.nodeName;
 	    }
 	    if (target.value) {
-	        selectorProps.value = target.value;
+	        newSelector.value = target.value;
 	    }
 	    return {
 	        type: exports.constants.ADD_SELECTOR,
 	        payload: {
-	            selectorProps: selectorProps
+	            selector: newSelector,
+	            uniqueSelector: uniqueSelector
 	        }
 	    };
 	}
 	exports.addSelector = addSelector;
-	function confirmSelector(key) {
+	function confirmSelector(key, stagekey) {
 	    return {
 	        type: exports.constants.CONFIRM_SELECTOR,
+	        stagekey: stagekey,
 	        key: key
 	    };
 	}
 	exports.confirmSelector = confirmSelector;
-	function deleteSelector(key) {
+	function deleteSelector(key, stageKey) {
 	    return {
 	        type: exports.constants.DELETE_SELECTOR,
+	        stageKey: stageKey,
 	        key: key
 	    };
 	}
 	exports.deleteSelector = deleteSelector;
-	function editSelector(key) {
+	function editSelector(key, stagekey) {
 	    return {
 	        type: exports.constants.EDIT_SELECTOR,
+	        stagekey: stagekey,
 	        key: key
 	    };
 	}
@@ -32423,8 +32441,8 @@
 	function confirmEditSelector(key, element) {
 	    return {
 	        type: exports.constants.CONFIRM_EDIT_SELECTOR,
-	        key: key,
-	        value: element.value
+	        value: element.value,
+	        key: key
 	    };
 	}
 	exports.confirmEditSelector = confirmEditSelector;
@@ -40138,7 +40156,7 @@
 	    (0, _createClass3.default)(MainPanel, [{
 	        key: 'render',
 	        value: function render() {
-	            return React.createElement("ul", { className: "__ul_mainpanel_" }, React.createElement(cotaninerItems_1.CotaninerItems, { actions: this.props.actions, selectorMenu: this.props.selectorMenu, selectorsStack: this.props.selectorsStack }));
+	            return React.createElement("ul", { className: "__ul_mainpanel_" }, React.createElement(cotaninerItems_1.CotaninerItems, { actions: this.props.actions, stages: this.props.stages, selectorMenu: this.props.selectorMenu, selectorsStack: this.props.selectorsStack }));
 	        }
 	    }]);
 	    return MainPanel;
@@ -40176,6 +40194,8 @@
 	
 	var React = __webpack_require__(2);
 	var Items = __webpack_require__(266);
+	var pendingselector_1 = __webpack_require__(307);
+	var confirmselector_1 = __webpack_require__(308);
 	
 	var CotaninerItems = function (_React$Component) {
 	    (0, _inherits3.default)(CotaninerItems, _React$Component);
@@ -40190,22 +40210,20 @@
 	        value: function render() {
 	            var _props = this.props;
 	            var actions = _props.actions;
+	            var stages = _props.stages;
 	            var selectorMenu = _props.selectorMenu;
 	            var selectorsStack = _props.selectorsStack;
 	
 	            return React.createElement("div", { className: "__con_containeritems_" }, React.createElement("ul", { id: "__me_select_top", className: "__ul_containeritems_top" }, React.createElement("li", { onClick: function onClick() {
 	                    if (!selectorMenu) actions.showSelectorMenu();else actions.hiddeSelectorMenu();
-	                } }, React.createElement(Items.ItemAddStage, null))), React.createElement("ul", { id: "__me_select_add", className: "__ul_containeritems_add" }), React.createElement("ul", { id: "__me_select_mid", className: "__ul_containeritems_mid" }, selectorsStack.map(function (selector, key) {
-	                var defaultValue = selector.value || selector.tagName;
-	                if (selector.state === "pending") return React.createElement("ul", { className: "ul_selectors_pending", key: key }, React.createElement("li", { className: "selec_pend_name" }, !selector.editable ? React.createElement("p", null, selector.uniqueName || defaultValue) : React.createElement("ul", { className: "selec_pend_name_editable" }, React.createElement("li", { className: "selec_pname_edit_input" }, React.createElement("input", { id: "editUnique", type: "text", defaultValue: selector.uniqueName || defaultValue })), React.createElement("li", { className: "selec_pname_edit_item" }, React.createElement("button", { onClick: function onClick() {
-	                        return actions.confirmEditSelector(selector.keyid, document.getElementById("editUnique"));
-	                    } }, "listo")))), React.createElement("li", { className: "selec_pend_items" }, React.createElement("ul", { className: "ul_selec_pend_items" }, React.createElement("li", null, React.createElement("span", { onClick: function onClick() {
-	                        return actions.editSelector(selector.keyid);
-	                    } }, React.createElement(Items.ItemEdit, null))), React.createElement("li", null, React.createElement("span", { onClick: function onClick() {
-	                        return actions.deleteSelector(selector.keyid);
-	                    } }, React.createElement(Items.ItemDel, null))), React.createElement("li", null, React.createElement("span", { onClick: function onClick() {
-	                        return actions.confirmSelector(selector.keyid);
-	                    } }, React.createElement(Items.ItemCheck, null))))));else return React.createElement("ul", { className: "ul_selectors", key: key }, React.createElement("li", { className: "li_selec_label" }, React.createElement("p", null, "unique")), React.createElement("li", { className: "li_selec_props" }, React.createElement("ul", { className: "ulc_select_props" }, React.createElement("li", null, React.createElement("div", { className: "selector_lab_item" }, React.createElement(Items.ItemCode, null)), React.createElement("div", { className: "selector_label" }, React.createElement("p", null, selector.tagName))), React.createElement("li", null, React.createElement("div", { className: "selector_lab_item" }, React.createElement(Items.ItemLabel, null)), React.createElement("div", { className: "selector_label" }, React.createElement("p", null, selector.value || "no value"))))));
+	                } }, React.createElement(Items.ItemOpenOps, null))), React.createElement("ul", { id: "__me_select_add", className: "__ul_containeritems_add" }, React.createElement("li", null, React.createElement("span", { onClick: function onClick() {
+	                    return actions.createStage();
+	                } }, React.createElement(Items.ItemAddStage, null)))), React.createElement("ul", { id: "__me_select_mid", className: "__ul_containeritems_mid" }, stages.map(function (stage, key) {
+	                return React.createElement("div", { className: "__con_stages", key: key }, React.createElement("ul", { className: "ul_stages_props", onClick: function onClick() {
+	                        return actions.selectStage(stage.keyid);
+	                    } }, React.createElement("li", { className: "stage_name" }, React.createElement("p", null, stage.name)), React.createElement("li", { className: "stage_items" }, React.createElement("p", null, stage.items))), React.createElement("div", { className: "stages_items" }, selectorsStack.map(function (selector, key) {
+	                    if (stage.keyid === selector.stagekey) if (selector.state === "pending") return React.createElement(pendingselector_1.PendingSelector, { key: key, actions: actions, selector: selector });else if (selector.state === "confirmed") return React.createElement(confirmselector_1.ConfirmSelector, { key: key, actions: actions, selector: selector });
+	                })));
 	            })), React.createElement("ul", { id: "__me_select_bot", className: "__ul_containeritems_bot" }, React.createElement("li", { className: "input_pal" }, React.createElement("input", { type: "text" })), React.createElement("li", { className: "item_pal" }, React.createElement(Items.ItemSearch, null))));
 	        }
 	    }]);
@@ -40302,8 +40320,27 @@
 	
 	exports.ItemLabel = ItemLabel;
 	
-	var ItemAddStage = function (_React$Component4) {
-	    (0, _inherits3.default)(ItemAddStage, _React$Component4);
+	var ItemOpenOps = function (_React$Component4) {
+	    (0, _inherits3.default)(ItemOpenOps, _React$Component4);
+	
+	    function ItemOpenOps() {
+	        (0, _classCallCheck3.default)(this, ItemOpenOps);
+	        return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ItemOpenOps).apply(this, arguments));
+	    }
+	
+	    (0, _createClass3.default)(ItemOpenOps, [{
+	        key: "render",
+	        value: function render() {
+	            return React.createElement("svg", { fill: "#000000", viewBox: "0 0 24 24" }, React.createElement("path", { d: "M0 0h24v24H0z", fill: "none" }), React.createElement("path", { d: "M14 10H2v2h12v-2zm0-4H2v2h12V6zm4 8v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM2 16h8v-2H2v2z" }));
+	        }
+	    }]);
+	    return ItemOpenOps;
+	}(React.Component);
+	
+	exports.ItemOpenOps = ItemOpenOps;
+	
+	var ItemAddStage = function (_React$Component5) {
+	    (0, _inherits3.default)(ItemAddStage, _React$Component5);
 	
 	    function ItemAddStage() {
 	        (0, _classCallCheck3.default)(this, ItemAddStage);
@@ -40313,7 +40350,7 @@
 	    (0, _createClass3.default)(ItemAddStage, [{
 	        key: "render",
 	        value: function render() {
-	            return React.createElement("svg", { fill: "#000000", viewBox: "0 0 24 24" }, React.createElement("path", { d: "M0 0h24v24H0z", fill: "none" }), React.createElement("path", { d: "M14 10H2v2h12v-2zm0-4H2v2h12V6zm4 8v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM2 16h8v-2H2v2z" }));
+	            return React.createElement("svg", { fill: "#000000", viewBox: "0 0 24 24" }, React.createElement("path", { d: "M0 .5h24v24H0z", fill: "none" }), React.createElement("path", { d: "M12 16.5l4-4h-3v-9h-2v9H8l4 4zm9-13h-6v1.99h6v14.03H3V5.49h6V3.5H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2v-14c0-1.1-.9-2-2-2z" }));
 	        }
 	    }]);
 	    return ItemAddStage;
@@ -40321,8 +40358,8 @@
 	
 	exports.ItemAddStage = ItemAddStage;
 	
-	var ItemHot = function (_React$Component5) {
-	    (0, _inherits3.default)(ItemHot, _React$Component5);
+	var ItemHot = function (_React$Component6) {
+	    (0, _inherits3.default)(ItemHot, _React$Component6);
 	
 	    function ItemHot() {
 	        (0, _classCallCheck3.default)(this, ItemHot);
@@ -40340,8 +40377,8 @@
 	
 	exports.ItemHot = ItemHot;
 	
-	var ItemCodeColor = function (_React$Component6) {
-	    (0, _inherits3.default)(ItemCodeColor, _React$Component6);
+	var ItemCodeColor = function (_React$Component7) {
+	    (0, _inherits3.default)(ItemCodeColor, _React$Component7);
 	
 	    function ItemCodeColor() {
 	        (0, _classCallCheck3.default)(this, ItemCodeColor);
@@ -40359,8 +40396,8 @@
 	
 	exports.ItemCodeColor = ItemCodeColor;
 	
-	var ItemList = function (_React$Component7) {
-	    (0, _inherits3.default)(ItemList, _React$Component7);
+	var ItemList = function (_React$Component8) {
+	    (0, _inherits3.default)(ItemList, _React$Component8);
 	
 	    function ItemList() {
 	        (0, _classCallCheck3.default)(this, ItemList);
@@ -40378,8 +40415,8 @@
 	
 	exports.ItemList = ItemList;
 	
-	var ItemRedoList = function (_React$Component8) {
-	    (0, _inherits3.default)(ItemRedoList, _React$Component8);
+	var ItemRedoList = function (_React$Component9) {
+	    (0, _inherits3.default)(ItemRedoList, _React$Component9);
 	
 	    function ItemRedoList() {
 	        (0, _classCallCheck3.default)(this, ItemRedoList);
@@ -40397,8 +40434,8 @@
 	
 	exports.ItemRedoList = ItemRedoList;
 	
-	var ItemCode = function (_React$Component9) {
-	    (0, _inherits3.default)(ItemCode, _React$Component9);
+	var ItemCode = function (_React$Component10) {
+	    (0, _inherits3.default)(ItemCode, _React$Component10);
 	
 	    function ItemCode() {
 	        (0, _classCallCheck3.default)(this, ItemCode);
@@ -40416,8 +40453,8 @@
 	
 	exports.ItemCode = ItemCode;
 	
-	var ItemMinusCircle = function (_React$Component10) {
-	    (0, _inherits3.default)(ItemMinusCircle, _React$Component10);
+	var ItemMinusCircle = function (_React$Component11) {
+	    (0, _inherits3.default)(ItemMinusCircle, _React$Component11);
 	
 	    function ItemMinusCircle() {
 	        (0, _classCallCheck3.default)(this, ItemMinusCircle);
@@ -40435,8 +40472,8 @@
 	
 	exports.ItemMinusCircle = ItemMinusCircle;
 	
-	var ItemAddCircle = function (_React$Component11) {
-	    (0, _inherits3.default)(ItemAddCircle, _React$Component11);
+	var ItemAddCircle = function (_React$Component12) {
+	    (0, _inherits3.default)(ItemAddCircle, _React$Component12);
 	
 	    function ItemAddCircle() {
 	        (0, _classCallCheck3.default)(this, ItemAddCircle);
@@ -40454,8 +40491,8 @@
 	
 	exports.ItemAddCircle = ItemAddCircle;
 	
-	var ItemSearch = function (_React$Component12) {
-	    (0, _inherits3.default)(ItemSearch, _React$Component12);
+	var ItemSearch = function (_React$Component13) {
+	    (0, _inherits3.default)(ItemSearch, _React$Component13);
 	
 	    function ItemSearch() {
 	        (0, _classCallCheck3.default)(this, ItemSearch);
@@ -40474,8 +40511,8 @@
 	exports.ItemSearch = ItemSearch;
 	;
 	
-	var ItemMicro = function (_React$Component13) {
-	    (0, _inherits3.default)(ItemMicro, _React$Component13);
+	var ItemMicro = function (_React$Component14) {
+	    (0, _inherits3.default)(ItemMicro, _React$Component14);
 	
 	    function ItemMicro() {
 	        (0, _classCallCheck3.default)(this, ItemMicro);
@@ -40494,8 +40531,8 @@
 	exports.ItemMicro = ItemMicro;
 	;
 	
-	var ItemClass = function (_React$Component14) {
-	    (0, _inherits3.default)(ItemClass, _React$Component14);
+	var ItemClass = function (_React$Component15) {
+	    (0, _inherits3.default)(ItemClass, _React$Component15);
 	
 	    function ItemClass() {
 	        (0, _classCallCheck3.default)(this, ItemClass);
@@ -40514,8 +40551,8 @@
 	exports.ItemClass = ItemClass;
 	;
 	
-	var ItemCheck = function (_React$Component15) {
-	    (0, _inherits3.default)(ItemCheck, _React$Component15);
+	var ItemCheck = function (_React$Component16) {
+	    (0, _inherits3.default)(ItemCheck, _React$Component16);
 	
 	    function ItemCheck() {
 	        (0, _classCallCheck3.default)(this, ItemCheck);
@@ -40534,8 +40571,8 @@
 	exports.ItemCheck = ItemCheck;
 	;
 	
-	var ItemDel = function (_React$Component16) {
-	    (0, _inherits3.default)(ItemDel, _React$Component16);
+	var ItemDel = function (_React$Component17) {
+	    (0, _inherits3.default)(ItemDel, _React$Component17);
 	
 	    function ItemDel() {
 	        (0, _classCallCheck3.default)(this, ItemDel);
@@ -40554,8 +40591,8 @@
 	exports.ItemDel = ItemDel;
 	;
 	
-	var ItemEdit = function (_React$Component17) {
-	    (0, _inherits3.default)(ItemEdit, _React$Component17);
+	var ItemEdit = function (_React$Component18) {
+	    (0, _inherits3.default)(ItemEdit, _React$Component18);
 	
 	    function ItemEdit() {
 	        (0, _classCallCheck3.default)(this, ItemEdit);
@@ -40679,7 +40716,13 @@
 	
 	var redux_1 = __webpack_require__(247);
 	var actions_1 = __webpack_require__(260);
+	var store_1 = __webpack_require__(268);
 	var _ = __webpack_require__(283);
+	var getState = {
+	    get g() {
+	        return store_1.store.getState();
+	    }
+	};
 	function mangeMenu() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
 	    var action = arguments[1];
@@ -40717,22 +40760,41 @@
 	            return state;
 	    }
 	}
+	function stageSelected() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? "default" : arguments[0];
+	    var action = arguments[1];
+	
+	    switch (action.type) {
+	        case actions_1.constants.SELECT_STAGE:
+	            return action.key;
+	        case actions_1.constants.CREATE_STAGE:
+	            return action.stage.keyid;
+	        default:
+	            return state;
+	    }
+	}
 	function selectorsStack() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
 	    var action = arguments[1];
 	
 	    var selectors = (0, _from2.default)(state);
 	    var redo = void 0;
-	    var selector = void 0;
+	    var getSelector = void 0;
 	    switch (action.type) {
 	        case actions_1.constants.ADD_SELECTOR:
-	            selectors.push(action.payload.selectorProps);
+	            var selector = action.payload.selector;
+	            var unique = action.payload.uniqueSelector;
+	            selector.uselector = unique;
+	            selector.state = "pending";
+	            selector.editable = false;
+	            selectors.push(selector);
 	            return selectors;
 	        case actions_1.constants.CONFIRM_SELECTOR:
-	            selector = selectors[_.findIndex(selectors, function (n) {
+	            getSelector = selectors[_.findIndex(selectors, function (n) {
 	                return n.keyid === action.key;
 	            })];
-	            selector.state = "confirmed";
+	            getSelector.state = "confirmed";
+	            getSelector.uniqueName = getSelector.uniqueName || getSelector.value || getSelector.id || getSelector.tagName;
 	            return selectors;
 	        case actions_1.constants.DELETE_SELECTOR:
 	            redo = _.remove(selectors, function (n) {
@@ -40740,26 +40802,61 @@
 	            });
 	            return selectors;
 	        case actions_1.constants.EDIT_SELECTOR:
-	            selector = selectors[_.findIndex(selectors, function (n) {
+	            getSelector = selectors[_.findIndex(selectors, function (n) {
 	                return n.keyid === action.key;
 	            })];
-	            selector.editable = true;
+	            getSelector.editable = true;
 	            return selectors;
 	        case actions_1.constants.CONFIRM_EDIT_SELECTOR:
-	            selector = selectors[_.findIndex(selectors, function (n) {
+	            getSelector = selectors[_.findIndex(selectors, function (n) {
 	                return n.keyid === action.key;
 	            })];
-	            selector.editable = false;
-	            selector.uniqueName = action.value;
+	            getSelector.editable = false;
+	            getSelector.uniqueName = action.value;
 	            return selectors;
 	        default:
 	            return state;
 	    }
 	}
+	function stages() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	    var action = arguments[1];
+	
+	    var stages = (0, _from2.default)(state);
+	    var stage = void 0;
+	    var getStage = void 0;
+	    var selector = void 0;
+	    switch (action.type) {
+	        case actions_1.constants.CREATE_STAGE:
+	            stage = action.stage;
+	            stage.name = "stage " + (getState.g.stages.length + 1);
+	            stage.editable = false;
+	            stage.items = 0;
+	            stages.push(action.stage);
+	            return stages;
+	        case actions_1.constants.ADD_SELECTOR:
+	            selector = action.payload.selector;
+	            getStage = stages[_.findIndex(stages, function (n) {
+	                return n.keyid === selector.stagekey;
+	            })];
+	            getStage.items += 1;
+	            return stages;
+	        case actions_1.constants.DELETE_SELECTOR:
+	            getStage = stages[_.findIndex(stages, function (n) {
+	                return n.keyid === action.stageKey;
+	            })];
+	            getStage.items -= 1;
+	            return stages;
+	        default:
+	            return state;
+	    }
+	}
 	exports.rootReducer = redux_1.combineReducers({
+	    stages: stages,
 	    mangeMenu: mangeMenu,
 	    selectorMenu: selectorMenu,
 	    selectorProps: selectorProps,
+	    stageSelected: stageSelected,
 	    selectorsStack: selectorsStack
 	});
 
@@ -40926,6 +41023,8 @@
 	    mangeMenu: false,
 	    selectorMenu: false,
 	    selectorProps: {},
+	    stages: [],
+	    stageSelected: "default",
 	    selectorsStack: []
 	};
 
@@ -41109,7 +41208,7 @@
 	                if (_this3.keyActivated) {
 	                    eve.preventDefault();
 	                    eve.stopPropagation();
-	                    dispatch(fluxActions.addSelector(eve, unique(eve.target)));
+	                    dispatch(fluxActions.addSelector(eve, state.g.stageSelected, unique(eve.target)));
 	                    return false;
 	                }
 	            });
@@ -58083,6 +58182,126 @@
 	
 	module.exports = 0;
 
+
+/***/ },
+/* 307 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _getPrototypeOf = __webpack_require__(159);
+	
+	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+	
+	var _classCallCheck2 = __webpack_require__(185);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _createClass2 = __webpack_require__(186);
+	
+	var _createClass3 = _interopRequireDefault(_createClass2);
+	
+	var _possibleConstructorReturn2 = __webpack_require__(190);
+	
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+	
+	var _inherits2 = __webpack_require__(233);
+	
+	var _inherits3 = _interopRequireDefault(_inherits2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var React = __webpack_require__(2);
+	var Items = __webpack_require__(266);
+	
+	var PendingSelector = function (_React$Component) {
+	    (0, _inherits3.default)(PendingSelector, _React$Component);
+	
+	    function PendingSelector() {
+	        (0, _classCallCheck3.default)(this, PendingSelector);
+	        return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(PendingSelector).apply(this, arguments));
+	    }
+	
+	    (0, _createClass3.default)(PendingSelector, [{
+	        key: 'render',
+	        value: function render() {
+	            var _props = this.props;
+	            var actions = _props.actions;
+	            var selector = _props.selector;
+	            var key = _props.key;
+	
+	            var defaultValue = selector.value || selector.tagName;
+	            return React.createElement("ul", { className: "ul_selectors_pending", key: key }, React.createElement("li", { className: "selec_pend_name" }, !selector.editable ? React.createElement("p", null, selector.uniqueName || defaultValue) : React.createElement("ul", { className: "selec_pend_name_editable" }, React.createElement("li", { className: "selec_pname_edit_input" }, React.createElement("input", { id: "editUnique", type: "text", defaultValue: selector.uniqueName || defaultValue })), React.createElement("li", { className: "selec_pname_edit_item" }, React.createElement("button", { onClick: function onClick() {
+	                    return actions.confirmEditSelector(selector.keyid, document.getElementById("editUnique"));
+	                } }, "listo")))), React.createElement("li", { className: "selec_pend_items" }, React.createElement("ul", { className: "ul_selec_pend_items" }, React.createElement("li", null, React.createElement("span", { onClick: function onClick() {
+	                    return actions.editSelector(selector.keyid, selector.stagekey);
+	                } }, React.createElement(Items.ItemEdit, null))), React.createElement("li", null, React.createElement("span", { onClick: function onClick() {
+	                    return actions.deleteSelector(selector.keyid, selector.stagekey);
+	                } }, React.createElement(Items.ItemDel, null))), React.createElement("li", null, React.createElement("span", { onClick: function onClick() {
+	                    return actions.confirmSelector(selector.keyid, selector.stagekey);
+	                } }, React.createElement(Items.ItemCheck, null))))));
+	        }
+	    }]);
+	    return PendingSelector;
+	}(React.Component);
+	
+	exports.PendingSelector = PendingSelector;
+
+/***/ },
+/* 308 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _getPrototypeOf = __webpack_require__(159);
+	
+	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+	
+	var _classCallCheck2 = __webpack_require__(185);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _createClass2 = __webpack_require__(186);
+	
+	var _createClass3 = _interopRequireDefault(_createClass2);
+	
+	var _possibleConstructorReturn2 = __webpack_require__(190);
+	
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+	
+	var _inherits2 = __webpack_require__(233);
+	
+	var _inherits3 = _interopRequireDefault(_inherits2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var React = __webpack_require__(2);
+	var Items = __webpack_require__(266);
+	
+	var ConfirmSelector = function (_React$Component) {
+	    (0, _inherits3.default)(ConfirmSelector, _React$Component);
+	
+	    function ConfirmSelector() {
+	        (0, _classCallCheck3.default)(this, ConfirmSelector);
+	        return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ConfirmSelector).apply(this, arguments));
+	    }
+	
+	    (0, _createClass3.default)(ConfirmSelector, [{
+	        key: 'render',
+	        value: function render() {
+	            var _props = this.props;
+	            var actions = _props.actions;
+	            var selector = _props.selector;
+	            var key = _props.key;
+	
+	            var defaultValue = selector.value || selector.tagName;
+	            return React.createElement("ul", { className: "ul_selectors", key: key }, React.createElement("li", { className: "li_selec_label" }, React.createElement("p", null, selector.uniqueName)), React.createElement("li", { className: "li_selec_props" }, React.createElement("ul", { className: "ulc_select_props" }, React.createElement("li", null, React.createElement("div", { className: "selector_lab_item" }, React.createElement(Items.ItemCode, null)), React.createElement("div", { className: "selector_label" }, React.createElement("p", null, selector.tagName))), React.createElement("li", null, React.createElement("div", { className: "selector_lab_item" }, React.createElement(Items.ItemLabel, null)), React.createElement("div", { className: "selector_label" }, React.createElement("p", null, selector.value || "no value"))))));
+	        }
+	    }]);
+	    return ConfirmSelector;
+	}(React.Component);
+	
+	exports.ConfirmSelector = ConfirmSelector;
 
 /***/ }
 /******/ ]);

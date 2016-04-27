@@ -1,8 +1,15 @@
 import { combineReducers } from 'redux';
 import { constants } from '../actions';
+import { StateDef, Stages } from '../store/props';
 import { menus } from '../core/config';
-import { StateDef } from '../store/props';
+import { store } from '../store';
 import * as _ from 'lodash';
+
+const getState = {
+    get g(): StateDef {
+        return store.getState();
+    }
+};
 
 function mangeMenu(state = false, action): boolean {
     switch (action.type) {
@@ -35,21 +42,40 @@ function selectorProps(state = {}, action) {
     }
 }
 
+function stageSelected(state = "default", action) {
+    switch (action.type) {
+        case constants.SELECT_STAGE:
+            return action.key;
+        case constants.CREATE_STAGE:
+            return action.stage.keyid;
+        default:
+            return state;
+    }
+}
+
 function selectorsStack(state = [], action) {
     let selectors = Array.from(state);
     let redo;
-    let selector;
+    let getSelector;
 
     switch (action.type) {
         case constants.ADD_SELECTOR:
 
-            selectors.push(action.payload.selectorProps);
+            const selector = action.payload.selector;
+            const unique = action.payload.uniqueSelector;
+
+            selector.uselector = unique;
+            selector.state = "pending";
+            selector.editable = false;
+
+            selectors.push(selector);
             return selectors;
 
         case constants.CONFIRM_SELECTOR:
 
-            selector = selectors[_.findIndex(selectors, (n) => n.keyid === action.key)];
-            selector.state = "confirmed";
+            getSelector = selectors[_.findIndex(selectors, (n) => n.keyid === action.key)];
+            getSelector.state = "confirmed";
+            getSelector.uniqueName = getSelector.uniqueName || getSelector.value || getSelector.id || getSelector.tagName;
             return selectors;
 
         case constants.DELETE_SELECTOR:
@@ -59,15 +85,15 @@ function selectorsStack(state = [], action) {
 
         case constants.EDIT_SELECTOR:
 
-            selector = selectors[_.findIndex(selectors, (n) => n.keyid === action.key)];
-            selector.editable = true;
+            getSelector = selectors[_.findIndex(selectors, (n) => n.keyid === action.key)];
+            getSelector.editable = true;
             return selectors;
 
         case constants.CONFIRM_EDIT_SELECTOR:
 
-            selector = selectors[_.findIndex(selectors, (n) => n.keyid === action.key)];
-            selector.editable = false;
-            selector.uniqueName = action.value;
+            getSelector = selectors[_.findIndex(selectors, (n) => n.keyid === action.key)];
+            getSelector.editable = false;
+            getSelector.uniqueName = action.value;
             return selectors;
 
         default:
@@ -75,10 +101,48 @@ function selectorsStack(state = [], action) {
     }
 }
 
+function stages(state = [], action) {
+
+    let stages = Array.from(state);
+    let stage: Stages;
+    let getStage;
+    let selector;
+
+    switch (action.type) {
+        case constants.CREATE_STAGE:
+            stage = action.stage;
+
+            stage.name = "stage " + (getState.g.stages.length + 1);
+            stage.editable = false;
+            stage.items = 0;
+
+            stages.push(action.stage);
+
+            return stages;
+        case constants.ADD_SELECTOR:
+    
+            selector = action.payload.selector;
+            getStage = stages[_.findIndex(stages, (n) => n.keyid === selector.stagekey)];
+            getStage.items += 1;
+            
+            return stages;
+        case constants.DELETE_SELECTOR:
+    
+            getStage = stages[_.findIndex(stages, (n) => n.keyid === action.stageKey)];
+            getStage.items -= 1;
+
+            return stages;
+        default:
+            return state;
+    }
+}
+
 export const rootReducer = combineReducers({
+    stages,
     mangeMenu,
     selectorMenu,
     selectorProps,
+    stageSelected,
     selectorsStack
 });
 
