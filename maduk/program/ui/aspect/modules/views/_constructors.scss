@@ -65,9 +65,9 @@
     width: 30%;
     @extend .flexit;
     svg {
-        align-self: center;
         width: 40%;
-        fill: #474a4d;
+        fill: #606a73;
+        align-self: center;
     }
 }
 
@@ -86,7 +86,7 @@
     border-left: 0;
     &:hover {
         background: #474a4d;
-        color: #4FC3F7;
+        color: #FF3D00;
     }
 }
 
@@ -124,7 +124,7 @@
     height: 45%;
     display: flex;
     flex-wrap: wrap;
-    border: 3px solid #4FC3F7;
+    border: 3px solid #FF3D00;
     box-shadow: 0 2px 5px #1f2224;
     cursor: pointer;
     padding: 0;
@@ -356,14 +356,14 @@
 .const_div_button {
     width: 120px;
     height: 70%;
-    background: #4FC3F7;
+    background: #90A4AE;
     display: flex;
     align-self: flex-end;
     justify-content: center;
     cursor: pointer;
     border: none;
     &:hover {
-        background: #B0BEC5;
+        background: #FF3D00;
     }
     p {
         padding: 0;

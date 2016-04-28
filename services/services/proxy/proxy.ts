@@ -1,6 +1,6 @@
-import { MiddleWare } from './middleware';
 import * as http from 'http';
 import * as connect from 'connect';
+import { MiddleWare } from './middleware';
 import { _proxyMiddleware } from '../_config';
 const httpProxy = require('http-proxy');
 const harmon = require("harmon");
@@ -45,8 +45,8 @@ export class Proxy extends MiddleWare {
     start() {
         
         const self: Proxy = this;
-        const { port } = this.config;
         const app = this.app;
+        const { port } = this.config;
 
         app.use(require('harmon')([], this.selector(_proxyMiddleware), true));
         app.use((req, res, next) => {

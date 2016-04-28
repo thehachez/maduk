@@ -4759,7 +4759,7 @@ footer {
 
 .nav_col_left {
   height: 100%;
-  background: #4FC3F7;
+  background: #FF3D00;
   margin: 0px !important;
   padding: 0px !important; }
 
@@ -4772,7 +4772,7 @@ footer {
   height: 100%;
   display: flex;
   justify-content: center;
-  background: #4FC3F7;
+  background: #FF3D00;
   margin: 0px !important;
   padding: 0px !important; }
 
@@ -4783,7 +4783,7 @@ footer {
 
 .footer_col_left {
   height: 100%;
-  background: #4FC3F7;
+  background: #FF3D00;
   margin: 0px !important;
   padding: 0px !important; }
 
@@ -4938,9 +4938,9 @@ footer {
 .div_item {
   width: 30%; }
   .div_item svg {
-    align-self: center;
     width: 40%;
-    fill: #474a4d; }
+    fill: #606a73;
+    align-self: center; }
 
 .div_item_opt {
   width: 100% !important;
@@ -4956,7 +4956,7 @@ footer {
   border-left: 0; }
   .li_opt:hover {
     background: #474a4d;
-    color: #4FC3F7; }
+    color: #FF3D00; }
 
 .li_opt:nth-child(1) {
   border-left: 1px solid #474a4d; }
@@ -4988,7 +4988,7 @@ footer {
   height: 45%;
   display: flex;
   flex-wrap: wrap;
-  border: 3px solid #4FC3F7;
+  border: 3px solid #FF3D00;
   box-shadow: 0 2px 5px #1f2224;
   cursor: pointer;
   padding: 0;
@@ -5209,14 +5209,14 @@ footer {
 .const_div_button {
   width: 120px;
   height: 70%;
-  background: #4FC3F7;
+  background: #90A4AE;
   display: flex;
   align-self: flex-end;
   justify-content: center;
   cursor: pointer;
   border: none; }
   .const_div_button:hover {
-    background: #B0BEC5; }
+    background: #FF3D00; }
   .const_div_button p {
     padding: 0;
     margin: 0;

@@ -98,8 +98,7 @@ export class CotaninerItems extends React.Component<Props, any> {
                                                 <li
                                                     onClick= { () => {
                                                         actions.selectStage(stage.keyid)
-                                                    }
-                                                    }>
+                                                    } }>
                                                     {
                                                         stage.selected
                                                             ? <Items.ItemCheckBoxCheck />

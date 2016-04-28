@@ -480,9 +480,9 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var middleware_1 = __webpack_require__(87);
 	var http = __webpack_require__(88);
 	var connect = __webpack_require__(89);
+	var middleware_1 = __webpack_require__(87);
 	var _config_1 = __webpack_require__(90);
 	var httpProxy = __webpack_require__(91);
 	var harmon = __webpack_require__(92);
@@ -519,9 +519,9 @@
 	        key: 'start',
 	        value: function start() {
 	            var self = this;
+	            var app = this.app;
 	            var port = this.config.port;
 	
-	            var app = this.app;
 	            app.use(__webpack_require__(92)([], this.selector(_config_1._proxyMiddleware), true));
 	            app.use(function (req, res, next) {
 	                // INTERFACE PROXY

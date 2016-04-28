@@ -41396,23 +41396,14 @@
 	                return false;
 	            });
 	            switch (type) {
-	                case "select":
+	                default:
 	                    element.on("click", function (eve) {
 	                        eve.preventDefault();
 	                        if (_this3.keyActivated) {
 	                            element.attr("disabled", "disabled");
 	                            setTimeout(function () {
 	                                return element.removeAttr("disabled");
-	                            }, 1000);
-	                            dispatch(fluxActions.addSelector(eve, state.g.stageSelected, unique(eve.target)));
-	                            return false;
-	                        }
-	                    });
-	                    break;
-	                default:
-	                    element.on("click", function (eve) {
-	                        eve.preventDefault();
-	                        if (_this3.keyActivated) {
+	                            }, 500);
 	                            dispatch(fluxActions.addSelector(eve, state.g.stageSelected, unique(eve.target)));
 	                            return false;
 	                        }
@@ -58454,8 +58445,8 @@
 	            var selector = _props.selector;
 	            var key = _props.key;
 	
-	            var defaultValue = selector.value || selector.tagName;
-	            return React.createElement("ul", { className: "ul_selectors_pending", key: key }, React.createElement("li", { className: "selec_pend_name" }, !selector.editable ? React.createElement("p", null, selector.uniqueName || defaultValue) : React.createElement("ul", { className: "selec_pend_name_editable" }, React.createElement("li", { className: "selec_pname_edit_input" }, React.createElement("input", { id: "editUnique", type: "text", defaultValue: selector.uniqueName || defaultValue })), React.createElement("li", { className: "selec_pname_edit_item" }, React.createElement("button", { onClick: function onClick() {
+	            var defValue = selector.value || selector.tagName;
+	            return React.createElement("ul", { className: "ul_selectors_pending", key: key }, React.createElement("li", { className: "selec_pend_name" }, !selector.editable ? React.createElement("p", null, selector.uniqueName || defValue) : React.createElement("ul", { className: "selec_pend_name_editable" }, React.createElement("li", { className: "selec_pname_edit_input" }, React.createElement("input", { id: "editUnique", type: "text", defaultValue: selector.uniqueName || defValue })), React.createElement("li", { className: "selec_pname_edit_item" }, React.createElement("button", { onClick: function onClick() {
 	                    return actions.confirmEditSelector(selector.keyid, document.getElementById("editUnique"));
 	                } }, "listo")))), React.createElement("li", { className: "selec_pend_items" }, React.createElement("ul", { className: "ul_selec_pend_items" }, React.createElement("li", null, React.createElement("span", { onClick: function onClick() {
 	                    return actions.editSelector(selector.keyid, selector.stagekey);

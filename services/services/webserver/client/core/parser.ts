@@ -158,28 +158,15 @@ export class ParseDOM extends MadukClient {
         });
 
         switch (type) {
-            case "select":
-
-                element.on("click", (eve) => {
-                    eve.preventDefault();
-
-                    if (this.keyActivated) {
-                        element.attr("disabled", "disabled");
-                        setTimeout(() => element.removeAttr("disabled"), 1000);
-                        dispatch(fluxActions.addSelector(eve, state.g.stageSelected, unique(eve.target)));
-
-                        return false;
-                    }
-                });
-
-                break;
             default:
 
                 element.on("click", (eve) => {
                     eve.preventDefault();
-
+                 
                     if (this.keyActivated) {
-
+                       
+                        element.attr("disabled", "disabled");
+                        setTimeout(() => element.removeAttr("disabled"), 500);
                         dispatch(fluxActions.addSelector(eve, state.g.stageSelected, unique(eve.target)));
 
                         return false;

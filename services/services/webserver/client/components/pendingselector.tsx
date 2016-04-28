@@ -12,7 +12,7 @@ export class PendingSelector extends React.Component<Props, any> {
     render() {
 
         const { actions, selector, key } = this.props;
-        const defaultValue = selector.value || selector.tagName;
+        const defValue = selector.value || selector.tagName;
 
         return (
             <ul className="ul_selectors_pending" key={ key }>
@@ -20,10 +20,10 @@ export class PendingSelector extends React.Component<Props, any> {
 
                     {
                         !selector.editable
-                            ? <p>{  selector.uniqueName || defaultValue }</p>
+                            ? <p>{  selector.uniqueName || defValue }</p>
                             : <ul className="selec_pend_name_editable">
                                 <li className="selec_pname_edit_input">
-                                    <input id="editUnique" type="text" defaultValue={ selector.uniqueName || defaultValue }/>
+                                    <input id="editUnique" type="text" defaultValue={ selector.uniqueName || defValue }/>
                                 </li>
                                 <li className="selec_pname_edit_item">
                                     <button onClick={ () => actions.confirmEditSelector(selector.keyid, document.getElementById("editUnique")) }>listo</button>
