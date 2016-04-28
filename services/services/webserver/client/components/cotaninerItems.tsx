@@ -21,58 +21,99 @@ export class CotaninerItems extends React.Component<Props, any> {
         return (
             <div className="__con_containeritems_">
                 <ul id="__me_select_top" className="__ul_containeritems_top">
-                    <li  onClick= {() => {
-                        if (!selectorMenu)
-                            actions.showSelectorMenu()
-                        else
-                            actions.hiddeSelectorMenu()
-                    } }>
+                    <li className="select_top_logo">
+                        <p>Maduk</p>
+                    </li>
+                    <li className="select_top_items"
+                        onClick= {() => {
+                            if (!selectorMenu)
+                                actions.showSelectorMenu()
+                            else
+                                actions.hiddeSelectorMenu()
+                        } }>
 
                         <Items.ItemOpenOps />
 
                     </li>
+
                 </ul>
-                <ul id="__me_select_add"  className="__ul_containeritems_add">
+                <ul id="__me_select_add" className="__ul_containeritems_add">
+
                     <li>
                         <span onClick={ () => actions.createStage() }>
                             <Items.ItemAddStage />
                         </span>
                     </li>
+
+                    <li>
+                        <span >
+                            <Items.ItemRestore />
+                        </span>
+                    </li>
+
                 </ul>
-                <ul id="__me_select_mid"  className="__ul_containeritems_mid">
+                <ul id="__me_select_mid" className="__ul_containeritems_mid">
                     {
                         stages.map((stage, key) => {
                             return (
                                 <div className="__con_stages"  key={ key }>
 
-                                    <ul className="ul_stages_props" onClick= { () => {
-                                        actions.selectStage(stage.keyid)
-                                    } }>
-                                        <li className="stage_props">
+                                    <ul className={ stage.selected ? "ul_stages_props_selected" : "ul_stages_props" } >
+
+                                        <li className="stage_props"
+                                            onClick= { () => {
+
+                                                if (!stage.stateExRe)
+                                                    actions.expandStage(stage.keyid);
+                                                else
+                                                    actions.reduceStage(stage.keyid);
+                                            }
+                                            }>
+
                                             <div className="stage_name">
+
                                                 <p>{ stage.name }</p>
+
                                             </div>
                                             <div className="stage_attrs">
-                                                <p>{ stage.items }</p>
+
+                                                <p>{ "selectores " + stage.items }</p>
+
                                             </div>
                                         </li>
                                         <li className="stage_items">
                                             <ul className="ul_stage_items">
-                                                <li><Items.ItemDel /> </li>
-                                                <li><Items.ItemEdit /></li>
+
                                                 <li onClick= { () => {
-                                                    if (!stage.stateExRe)
-                                                        actions.expandStage(stage.keyid);
-                                                    else
-                                                        actions.reduceStage(stage.keyid);
-                                                } }
-                                                    ><Items.ItemCode /></li>
+                                                    actions.deleteStage(stage.keyid)
+                                                } }><Items.ItemDel />
+
+                                                </li>
+                                                <li onClick= { () => {
+                                                    actions.editStage(stage.keyid)
+                                                } }><Items.ItemEdit />
+
+                                                </li>
+
+                                                <li
+                                                    onClick= { () => {
+                                                        actions.selectStage(stage.keyid)
+                                                    }
+                                                    }>
+                                                    {
+                                                        stage.selected
+                                                            ? <Items.ItemCheckBoxCheck />
+                                                            : <Items.ItemCheckBoxUncheck />
+                                                    }
+                                                </li>
+
                                             </ul>
                                         </li>
                                     </ul>
                                     <div className="stages_items" id={ "stageContainer" + stage.keyid }>
                                         {
                                             selectorsStack.map((selector, key) => {
+
                                                 if (stage.keyid === selector.stagekey)
                                                     if (selector.state === "pending")
                                                         return <PendingSelector
@@ -83,7 +124,6 @@ export class CotaninerItems extends React.Component<Props, any> {
                                                     else if (selector.state === "confirmed")
                                                         return <ConfirmSelector
                                                             key= { key }
-
                                                             actions = { actions }
                                                             selector = { selector }
                                                             />
@@ -100,7 +140,9 @@ export class CotaninerItems extends React.Component<Props, any> {
                         <input type="text"/>
                     </li>
                     <li className="item_pal">
+
                         <Items.ItemSearch />
+
                     </li>
                 </ul>
             </div>

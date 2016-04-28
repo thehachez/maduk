@@ -149,43 +149,74 @@ export class ParseDOM extends MadukClient {
     }
 
 
-    private setIndividualEvents(element: JQuery, scope: Document) {
+    private setIndividualEvents(element: JQuery, scope: Document, type: string) {
         // al posar el mouse sobre los elementos se obtienen las props de los mismos
+
         element.on("mouseover", (eve) => {
             //dispatch(fluxActions.showSelectorsInfo(eve));
             return false;
         });
 
-        element.on("click", (eve) => {
+        switch (type) {
+            case "select":
 
-            if (this.keyActivated) {
-                eve.preventDefault();
-                eve.stopPropagation();
-             
-                dispatch( fluxActions.addSelector(eve, state.g.stageSelected, unique(eve.target)) );
-                
-                return false;
-            }
-        });
+                element.on("click", (eve) => {
+                    eve.preventDefault();
+
+                    if (this.keyActivated) {
+                        element.attr("disabled", "disabled");
+                        setTimeout(() => element.removeAttr("disabled"), 1000);
+                        dispatch(fluxActions.addSelector(eve, state.g.stageSelected, unique(eve.target)));
+
+                        return false;
+                    }
+                });
+
+                break;
+            default:
+
+                element.on("click", (eve) => {
+                    eve.preventDefault();
+
+                    if (this.keyActivated) {
+
+                        dispatch(fluxActions.addSelector(eve, state.g.stageSelected, unique(eve.target)));
+
+                        return false;
+                    }
+                });
+
+                break;
+        }
     }
 
 
     private setGlobalsEvents(win: Window, doc: Document, elements?: HTMLElement) {
         // metodo para setear los eventos globales en window y document y en elementos particulares.
 
+        //win.focus();
+
         q(win).on("keyup", (event) => {
             const key: number = event.keyCode || event.which;
 
-            if (key === 17) {
-                this.keyActivated = false;
-            }
+            event.preventDefault();
+            event.stopPropagation();
+
+            this.keyActivated = false;
+
+            return false;
 
         });
+
 
         q(win).on("keydown", (event) => {
             const key: number = event.keyCode || event.which;
 
-            if (event.ctrlKey) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            if (event.ctrlKey
+                && event.shiftKey) {
                 this.keyActivated = true;
             }
 
@@ -201,6 +232,8 @@ export class ParseDOM extends MadukClient {
             }
 
         });
+
+        return false;
     }
 
     private getUniqueSelector(doc: Document, queryCssPath): Element {
@@ -217,7 +250,7 @@ export class ParseDOM extends MadukClient {
 
     private setEventsPerElement(win: Window, doc: Document, elements?: HTMLElement) {
         // metodo para iterar sobre todos los elementos del DOM
-
+        // previene los elementos baneados para evitar los bindings en nodos como el body y html
         var currentNode;
         var ni;
         try {
@@ -226,12 +259,16 @@ export class ParseDOM extends MadukClient {
 
             while (currentNode = ni.nextNode()) {
                 let node = q(currentNode);
+                let tagName;
 
-                if (currentNode.tagName)
+                if (currentNode.tagName) {
+                    tagName = currentNode.tagName.toLowerCase();
                     if (!_.find(this.banElementTypes,
-                        ban => ban === currentNode.tagName.toLowerCase())) {
-                        this.setIndividualEvents(node, doc);
+                        ban => ban === tagName)) {
+
+                        this.setIndividualEvents(node, doc, tagName);
                     }
+                }
             }
 
         } catch (err) {

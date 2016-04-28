@@ -48,7 +48,7 @@
 	
 	var runner_1 = __webpack_require__(1);
 	var services_1 = __webpack_require__(23);
-	var _config_1 = __webpack_require__(108);
+	var _config_1 = __webpack_require__(90);
 	// create a new runner instance
 	exports.runner = new runner_1.Runner(_config_1._runner);
 	var client = exports.runner.start();
@@ -447,8 +447,8 @@
 	"use strict";
 	
 	var proxy_1 = __webpack_require__(24);
-	var app_1 = __webpack_require__(92);
-	var _config_1 = __webpack_require__(108);
+	var app_1 = __webpack_require__(93);
+	var _config_1 = __webpack_require__(90);
 	exports.proxy = new proxy_1.Proxy(_config_1._proxy);
 	exports.api = new app_1.webServer(_config_1._api);
 
@@ -481,11 +481,11 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var middleware_1 = __webpack_require__(87);
-	var http = __webpack_require__(89);
-	var connect = __webpack_require__(90);
-	var _config_1 = __webpack_require__(108);
+	var http = __webpack_require__(88);
+	var connect = __webpack_require__(89);
+	var _config_1 = __webpack_require__(90);
 	var httpProxy = __webpack_require__(91);
-	var harmon = __webpack_require__(111);
+	var harmon = __webpack_require__(92);
 	
 	var Proxy = function (_middleware_1$MiddleW) {
 	    (0, _inherits3.default)(Proxy, _middleware_1$MiddleW);
@@ -522,7 +522,7 @@
 	            var port = this.config.port;
 	
 	            var app = this.app;
-	            app.use(__webpack_require__(111)([], this.selector(_config_1._proxyMiddleware), true));
+	            app.use(__webpack_require__(92)([], this.selector(_config_1._proxyMiddleware), true));
 	            app.use(function (req, res, next) {
 	                // INTERFACE PROXY
 	                self.proxy.web(req, res);
@@ -1798,19 +1798,61 @@
 /* 88 */
 /***/ function(module, exports) {
 
-	module.exports = require("lodash");
+	module.exports = require("http");
 
 /***/ },
 /* 89 */
 /***/ function(module, exports) {
 
-	module.exports = require("http");
+	module.exports = require("connect");
 
 /***/ },
 /* 90 */
 /***/ function(module, exports) {
 
-	module.exports = require("connect");
+	"use strict";
+	
+	exports._application = {
+	    appType: "legacy"
+	};
+	exports._api = {
+	    port: 5232
+	};
+	exports._proxy = {
+	    protocol: "http",
+	    target: "localhost",
+	    port: 8888,
+	    timeout: 5000,
+	    proxyTimeout: 5000
+	};
+	exports._proxyMiddleware = {
+	    port: 5232,
+	    target: "localhost",
+	    protocol: "http",
+	    scriptName: "clientroot.js",
+	    linkName: "clientroot.css",
+	    divRootId: "__root_maduk_"
+	};
+	exports._runner = {
+	    // app config
+	    name: "default",
+	    protocol: "http",
+	    url: "localhost",
+	    path: "ste",
+	    port: 8888,
+	    // webdriver config
+	    config: {
+	        logLevel: "dev",
+	        version: '11',
+	        platform: 'WINDOWS',
+	        tags: ['tag1', 'tag2'],
+	        name: 'default',
+	        desiredCapabilities: {
+	            // browserName: "internet explorer"
+	            browserName: "chrome"
+	        }
+	    }
+	};
 
 /***/ },
 /* 91 */
@@ -1820,6 +1862,12 @@
 
 /***/ },
 /* 92 */
+/***/ function(module, exports) {
+
+	module.exports = require("harmon");
+
+/***/ },
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(__dirname) {"use strict";
@@ -1834,24 +1882,24 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var express = __webpack_require__(93);
-	var path = __webpack_require__(94);
-	var http = __webpack_require__(89);
-	var logger = __webpack_require__(95);
-	var cookieParser = __webpack_require__(96);
-	var bodyParser = __webpack_require__(97);
-	var errorhandler = __webpack_require__(98);
-	var notifier = __webpack_require__(99);
-	var debugModule = __webpack_require__(100);
-	var _ = __webpack_require__(88);
-	var routesViews = __webpack_require__(101);
+	var express = __webpack_require__(94);
+	var path = __webpack_require__(95);
+	var http = __webpack_require__(88);
+	var logger = __webpack_require__(96);
+	var cookieParser = __webpack_require__(97);
+	var bodyParser = __webpack_require__(98);
+	var errorhandler = __webpack_require__(99);
+	var notifier = __webpack_require__(100);
+	var debugModule = __webpack_require__(101);
+	var _ = __webpack_require__(102);
+	var routesViews = __webpack_require__(103);
 	// controllers
-	var routesFlux = __webpack_require__(102);
-	var routesEvents = __webpack_require__(104);
+	var routesFlux = __webpack_require__(104);
+	var routesEvents = __webpack_require__(106);
 	// config files
-	var clConfig = __webpack_require__(105);
-	var wsConfigs = __webpack_require__(106);
-	var cors = __webpack_require__(107);
+	var clConfig = __webpack_require__(107);
+	var wsConfigs = __webpack_require__(108);
+	var cors = __webpack_require__(109);
 	
 	var webServer = function () {
 	    function webServer(config) {
@@ -2099,55 +2147,61 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, "services\\webserver"))
 
 /***/ },
-/* 93 */
+/* 94 */
 /***/ function(module, exports) {
 
 	module.exports = require("express");
 
 /***/ },
-/* 94 */
+/* 95 */
 /***/ function(module, exports) {
 
 	module.exports = require("path");
 
 /***/ },
-/* 95 */
+/* 96 */
 /***/ function(module, exports) {
 
 	module.exports = require("morgan");
 
 /***/ },
-/* 96 */
+/* 97 */
 /***/ function(module, exports) {
 
 	module.exports = require("cookie-parser");
 
 /***/ },
-/* 97 */
+/* 98 */
 /***/ function(module, exports) {
 
 	module.exports = require("body-parser");
 
 /***/ },
-/* 98 */
+/* 99 */
 /***/ function(module, exports) {
 
 	module.exports = require("errorhandler");
 
 /***/ },
-/* 99 */
+/* 100 */
 /***/ function(module, exports) {
 
 	module.exports = require("node-notifier");
 
 /***/ },
-/* 100 */
+/* 101 */
 /***/ function(module, exports) {
 
 	module.exports = require("debug");
 
 /***/ },
-/* 101 */
+/* 102 */
+/***/ function(module, exports) {
+
+	module.exports = require("lodash");
+
+/***/ },
+/* 103 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2158,12 +2212,12 @@
 	exports.index = index;
 
 /***/ },
-/* 102 */
+/* 104 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var props_1 = __webpack_require__(103);
+	var props_1 = __webpack_require__(105);
 	var state = state || props_1.initialState;
 	function getState(req, res, next) {
 	    res.json(state);
@@ -2179,14 +2233,23 @@
 	exports.setState = setState;
 
 /***/ },
-/* 103 */
+/* 105 */
 /***/ function(module, exports) {
 
 	"use strict";
 	// set initial state
 	
 	exports.initialState = {
-	    message: "",
+	    message: {
+	        message: "",
+	        options: {
+	            offset: 14,
+	            position: 'top right',
+	            theme: 'dark',
+	            time: 5000,
+	            transition: 'scale'
+	        }
+	    },
 	    mangeMenu: false,
 	    selectorMenu: false,
 	    selectorProps: {},
@@ -2196,7 +2259,7 @@
 	};
 
 /***/ },
-/* 104 */
+/* 106 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2215,7 +2278,7 @@
 	exports.beforeUnload = beforeUnload;
 
 /***/ },
-/* 105 */
+/* 107 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2231,7 +2294,7 @@
 	};
 
 /***/ },
-/* 106 */
+/* 108 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2242,67 +2305,10 @@
 	};
 
 /***/ },
-/* 107 */
+/* 109 */
 /***/ function(module, exports) {
 
 	module.exports = require("cors");
-
-/***/ },
-/* 108 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	exports._application = {
-	    appType: "legacy"
-	};
-	exports._api = {
-	    port: 5232
-	};
-	exports._proxy = {
-	    protocol: "http",
-	    target: "localhost",
-	    port: 8888,
-	    timeout: 5000,
-	    proxyTimeout: 5000
-	};
-	exports._proxyMiddleware = {
-	    port: 5232,
-	    target: "localhost",
-	    protocol: "http",
-	    scriptName: "clientroot.js",
-	    linkName: "clientroot.css",
-	    divRootId: "__root_maduk_"
-	};
-	exports._runner = {
-	    // app config
-	    name: "default",
-	    protocol: "http",
-	    url: "localhost",
-	    path: "ste",
-	    port: 8888,
-	    // webdriver config
-	    config: {
-	        logLevel: "dev",
-	        version: '11',
-	        platform: 'WINDOWS',
-	        tags: ['tag1', 'tag2'],
-	        name: 'default',
-	        timeout: 99999,
-	        desiredCapabilities: {
-	            // browserName: "internet explorer"
-	            browserName: "chrome"
-	        }
-	    }
-	};
-
-/***/ },
-/* 109 */,
-/* 110 */,
-/* 111 */
-/***/ function(module, exports) {
-
-	module.exports = require("harmon");
 
 /***/ }
 /******/ ]);

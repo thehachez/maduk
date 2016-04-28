@@ -11,7 +11,7 @@ $color2: #000;
 #__mad_topper_ {
     position: absolute;
     min-width: 341px;
-    left: -30%;
+    left: -346px;
     top: 0px;
     width: 25%;
     height: 100%;
@@ -43,23 +43,39 @@ $color2: #000;
 .__ul_containeritems_top {
     width: 100%;
     height: 8%;
+    display: flex;
     background: $color2;
     @include collapse();
     li {
-        width: 20%;
         height: 100%;
-        float: right;
         display: flex;
-        svg {
-            fill: #FFF;
-            width: 40%;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            cursor: pointer;
-            &:hover {
-                fill: #FF3D00;
-            }
+    }
+}
+
+.select_top_logo {
+    width: 85%;
+    display: flex;
+    p {
+        color: #FFF;
+        font-size: 15px;
+        font-weight: 700;
+        padding-left: 15px;
+        align-self: center;
+        text-transform: uppercase;
+    }
+}
+
+.select_top_items {
+    width: 15%;
+    svg {
+        fill: #FFF;
+        width: 50%;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        cursor: pointer;
+        &:hover {
+            fill: #FF3D00;
         }
     }
 }
@@ -257,15 +273,20 @@ $color2: #000;
     float: left;
     padding: 0px;
     margin: 0px;
-    background: #FF3D00;
     color: #FFF;
     display: flex;
+    background: #90A4AE;
     li {
         height: 100%;
         float: left;
         display: flex;
         flex-direction: column;
     }
+}
+
+.ul_stages_props_selected {
+    @extend .ul_stages_props;
+    background: #FF3D00 !important;
 }
 
 .stages_items {
@@ -280,12 +301,16 @@ $color2: #000;
 .ul_selectors_pending {
     width: 100%;
     height: 15%;
+    min-height: 70px;
     float: left;
     padding: 0px;
     margin: 0px;
     color: #333;
     display: flex;
     background: #CFD8DC;
+    &:hover {
+        background: #c3cdd1;
+    }
     li {
         height: 100%;
         float: left;
@@ -432,15 +457,15 @@ $color2: #000;
         justify-content: center;
         span {
             width: 55%;
-            height: 30%;
+            height: 25%;
             cursor: pointer;
             align-self: center;
         }
         svg {
-            fill: #FFF;
+            fill: #000;
             width: 100%;
             &:hover {
-                fill: #000;
+                fill: #FFF;
             }
         }
     }

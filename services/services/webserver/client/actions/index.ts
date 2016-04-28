@@ -48,6 +48,10 @@ export interface ActionsDef {
     editSelector(key: string, stageKey: string): { type: string, stageKey: string };
     deleteSelector(key: string, stageKey: string): { type: string, stageKey: string };
     confirmEditSelector(key: string, stageKey: string): { type: string, stageKey: string };
+
+    deleteStage(stageKey: string): { type: string, stageKey: string }
+    editStage(stageKey: string): { type: string, stageKey: string }
+
     expandStage(stageKey: string): { type: string, stageKey: string }
     reduceStage(stageKey: string): { type: string, stageKey: string }
 
@@ -64,6 +68,8 @@ export const constants = {
     REDUCE_STAGE: "REDUCE_STAGE",
     SELECT_STAGE: "SELECT_STAGE",
     CREATE_STAGE: "CREATE_STAGE",
+    DELETE_STAGE: "DELETE_STAGE",
+    EDIT_STAGE: "EDIT_STAGE",
     ADD_SELECTOR: "ADD_SELECTOR",
     CONFIRM_SELECTOR: "CONFIRM_SELECTOR",
     DELETE_SELECTOR: "DELETE_SELECTOR",
@@ -75,7 +81,7 @@ export function showTopMenu() {
     // SHOW AND ANIMATE CLIENT MAIN PANEL
     TweenLite.to("#__mad_topper_", menus.animationVelocity,
         {
-            left: "0%"
+            left: "0px"
         }
     );
 
@@ -88,7 +94,7 @@ export function hiddeTopMenu() {
     // SHOW AND ANIMATE CLIENT MAIN PANEL
     TweenLite.to("#__mad_topper_", menus.animationVelocity,
         {
-            left: "-30%"
+            left: "-346px"
         }
     );
 
@@ -137,13 +143,7 @@ export function hiddeSelectorMenu() {
 
 
 export function expandStage(stageKey: string) {
-    
-    TweenLite.to("#stageContainer" + stageKey, menus.animationVelocityMs,
-        {
-            display: "block",
-            height: "auto"
-        }
-    );
+    q("#stageContainer" + stageKey).slideToggle("fast");
 
     return {
         type: constants.EXPAND_STAGE,
@@ -152,15 +152,25 @@ export function expandStage(stageKey: string) {
 }
 
 export function reduceStage(stageKey: string) {
-    TweenLite.to("#stageContainer" + stageKey, menus.animationVelocityMs,
-        {
-            height: "0%"
-        }
-    );
+    q("#stageContainer" + stageKey).slideToggle("fast");
 
     return {
         type: constants.REDUCE_STAGE,
         stageKey
+    }
+}
+
+export function deleteStage(key: string) {
+    return {
+        type: constants.DELETE_STAGE,
+        key
+    }
+}
+
+export function editStage(key: string) {
+    return {
+        type: constants.EDIT_STAGE,
+        key
     }
 }
 
@@ -209,12 +219,13 @@ export function showSelectorsInfo(eve: JQueryEventObject) {
     }
 }
 
-export function addSelector(eve: JQueryEventObject, stagekey, uniqueSelector) {
+export function addSelector(eve: JQueryEventObject, stageKey, uniqueSelector) {
     const newSelector: any = {};
     const target: any = eve.target;
 
-    newSelector.stagekey = stagekey;
+    newSelector.stagekey = stageKey;
     newSelector.keyid = shortid.generate();
+    newSelector.element = target;
 
     if (target.tagName) {
         newSelector.tagName = target.tagName;
@@ -233,10 +244,23 @@ export function addSelector(eve: JQueryEventObject, stagekey, uniqueSelector) {
     }
 
     return (dispatch, getState: () => StateDef) => {
-        if (getState().stages.length <= 0) {
+        
+        const stages = getState().stages;
+        const selectors = getState().selectorsStack;
+        const findSelectorRepeat = _.find(selectors, (selector) => selector.element === target);
+        
+        if (stages.length <= 0) {
+            
             dispatch({
                 type: constants.SHOW_MESSAGE,
                 message: "primero debes crear un stage"
+            });
+
+        } else if (findSelectorRepeat) {
+           
+            dispatch({
+                type: constants.SHOW_MESSAGE,
+                message: "el elemento ya se encuentra dentro de: " + _.find(stages, (stage)=> stage.keyid === findSelectorRepeat.stagekey).name
             });
 
         } else {

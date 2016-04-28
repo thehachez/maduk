@@ -47,8 +47,8 @@
 
 	"use strict";
 	
-	var jsdom = __webpack_require__(109);
-	var fs = __webpack_require__(110);
+	var jsdom = __webpack_require__(110);
+	var fs = __webpack_require__(111);
 	console.log("START TEST IN VDOM");
 	var clientroot = fs.readFileSync("./services/webserver/client/statics/clientroot.js", "utf-8");
 	jsdom.env({
@@ -77,14 +77,14 @@
 
 /***/ },
 
-/***/ 109:
+/***/ 110:
 /***/ function(module, exports) {
 
 	module.exports = require("jsdom");
 
 /***/ },
 
-/***/ 110:
+/***/ 111:
 /***/ function(module, exports) {
 
 	module.exports = require("fs");

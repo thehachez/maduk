@@ -29402,6 +29402,7 @@
 	    return {
 	        stages: state.stages,
 	        mangeMenu: state.mangeMenu,
+	        message: state.message,
 	        selectorMenu: state.selectorMenu,
 	        selectorProps: state.selectorProps,
 	        selectorsStack: state.selectorsStack
@@ -29428,6 +29429,7 @@
 	            var actions = _props.actions;
 	            var mangeMenu = _props.mangeMenu;
 	            var stages = _props.stages;
+	            var message = _props.message;
 	            var selectorMenu = _props.selectorMenu;
 	            var selectorProps = _props.selectorProps;
 	            var selectorsStack = _props.selectorsStack;
@@ -32280,6 +32282,8 @@
 
 	"use strict";
 	
+	var _ = __webpack_require__(283);
+	var q = __webpack_require__(1);
 	var shortid = __webpack_require__(298);
 	var config_1 = __webpack_require__(261);
 	var TweenLite = __webpack_require__(262);
@@ -32294,6 +32298,8 @@
 	    REDUCE_STAGE: "REDUCE_STAGE",
 	    SELECT_STAGE: "SELECT_STAGE",
 	    CREATE_STAGE: "CREATE_STAGE",
+	    DELETE_STAGE: "DELETE_STAGE",
+	    EDIT_STAGE: "EDIT_STAGE",
 	    ADD_SELECTOR: "ADD_SELECTOR",
 	    CONFIRM_SELECTOR: "CONFIRM_SELECTOR",
 	    DELETE_SELECTOR: "DELETE_SELECTOR",
@@ -32303,7 +32309,7 @@
 	function showTopMenu() {
 	    // SHOW AND ANIMATE CLIENT MAIN PANEL
 	    TweenLite.to("#__mad_topper_", config_1.menus.animationVelocity, {
-	        left: "0%"
+	        left: "0px"
 	    });
 	    return {
 	        type: exports.constants.SHOW_TOP_MENU
@@ -32313,7 +32319,7 @@
 	function hiddeTopMenu() {
 	    // SHOW AND ANIMATE CLIENT MAIN PANEL
 	    TweenLite.to("#__mad_topper_", config_1.menus.animationVelocity, {
-	        left: "-30%"
+	        left: "-346px"
 	    });
 	    return {
 	        type: exports.constants.HIDDE_TOP_MENU
@@ -32347,10 +32353,7 @@
 	}
 	exports.hiddeSelectorMenu = hiddeSelectorMenu;
 	function expandStage(stageKey) {
-	    TweenLite.to("#stageContainer" + stageKey, config_1.menus.animationVelocityMs, {
-	        display: "block",
-	        height: "auto"
-	    });
+	    q("#stageContainer" + stageKey).slideToggle("fast");
 	    return {
 	        type: exports.constants.EXPAND_STAGE,
 	        stageKey: stageKey
@@ -32358,15 +32361,27 @@
 	}
 	exports.expandStage = expandStage;
 	function reduceStage(stageKey) {
-	    TweenLite.to("#stageContainer" + stageKey, config_1.menus.animationVelocityMs, {
-	        height: "0%"
-	    });
+	    q("#stageContainer" + stageKey).slideToggle("fast");
 	    return {
 	        type: exports.constants.REDUCE_STAGE,
 	        stageKey: stageKey
 	    };
 	}
 	exports.reduceStage = reduceStage;
+	function deleteStage(key) {
+	    return {
+	        type: exports.constants.DELETE_STAGE,
+	        key: key
+	    };
+	}
+	exports.deleteStage = deleteStage;
+	function editStage(key) {
+	    return {
+	        type: exports.constants.EDIT_STAGE,
+	        key: key
+	    };
+	}
+	exports.editStage = editStage;
 	function selectStage(key) {
 	    return {
 	        type: exports.constants.SELECT_STAGE,
@@ -32409,11 +32424,12 @@
 	    };
 	}
 	exports.showSelectorsInfo = showSelectorsInfo;
-	function addSelector(eve, stagekey, uniqueSelector) {
+	function addSelector(eve, stageKey, uniqueSelector) {
 	    var newSelector = {};
 	    var target = eve.target;
-	    newSelector.stagekey = stagekey;
+	    newSelector.stagekey = stageKey;
 	    newSelector.keyid = shortid.generate();
+	    newSelector.element = target;
 	    if (target.tagName) {
 	        newSelector.tagName = target.tagName;
 	    }
@@ -32430,10 +32446,22 @@
 	        newSelector.value = target.value;
 	    }
 	    return function (dispatch, getState) {
-	        if (getState().stages.length <= 0) {
+	        var stages = getState().stages;
+	        var selectors = getState().selectorsStack;
+	        var findSelectorRepeat = _.find(selectors, function (selector) {
+	            return selector.element === target;
+	        });
+	        if (stages.length <= 0) {
 	            dispatch({
 	                type: exports.constants.SHOW_MESSAGE,
 	                message: "primero debes crear un stage"
+	            });
+	        } else if (findSelectorRepeat) {
+	            dispatch({
+	                type: exports.constants.SHOW_MESSAGE,
+	                message: "el elemento ya se encuentra dentro de: " + _.find(stages, function (stage) {
+	                    return stage.keyid === findSelectorRepeat.stagekey;
+	                }).name
 	            });
 	        } else {
 	            dispatch({
@@ -40247,16 +40275,20 @@
 	            var selectorMenu = _props.selectorMenu;
 	            var selectorsStack = _props.selectorsStack;
 	
-	            return React.createElement("div", { className: "__con_containeritems_" }, React.createElement("ul", { id: "__me_select_top", className: "__ul_containeritems_top" }, React.createElement("li", { onClick: function onClick() {
+	            return React.createElement("div", { className: "__con_containeritems_" }, React.createElement("ul", { id: "__me_select_top", className: "__ul_containeritems_top" }, React.createElement("li", { className: "select_top_logo" }, React.createElement("p", null, "Maduk")), React.createElement("li", { className: "select_top_items", onClick: function onClick() {
 	                    if (!selectorMenu) actions.showSelectorMenu();else actions.hiddeSelectorMenu();
 	                } }, React.createElement(Items.ItemOpenOps, null))), React.createElement("ul", { id: "__me_select_add", className: "__ul_containeritems_add" }, React.createElement("li", null, React.createElement("span", { onClick: function onClick() {
 	                    return actions.createStage();
-	                } }, React.createElement(Items.ItemAddStage, null)))), React.createElement("ul", { id: "__me_select_mid", className: "__ul_containeritems_mid" }, stages.map(function (stage, key) {
-	                return React.createElement("div", { className: "__con_stages", key: key }, React.createElement("ul", { className: "ul_stages_props", onClick: function onClick() {
-	                        actions.selectStage(stage.keyid);
-	                    } }, React.createElement("li", { className: "stage_props" }, React.createElement("div", { className: "stage_name" }, React.createElement("p", null, stage.name)), React.createElement("div", { className: "stage_attrs" }, React.createElement("p", null, stage.items))), React.createElement("li", { className: "stage_items" }, React.createElement("ul", { className: "ul_stage_items" }, React.createElement("li", null, React.createElement(Items.ItemDel, null), " "), React.createElement("li", null, React.createElement(Items.ItemEdit, null)), React.createElement("li", { onClick: function onClick() {
+	                } }, React.createElement(Items.ItemAddStage, null))), React.createElement("li", null, React.createElement("span", null, React.createElement(Items.ItemRestore, null)))), React.createElement("ul", { id: "__me_select_mid", className: "__ul_containeritems_mid" }, stages.map(function (stage, key) {
+	                return React.createElement("div", { className: "__con_stages", key: key }, React.createElement("ul", { className: stage.selected ? "ul_stages_props_selected" : "ul_stages_props" }, React.createElement("li", { className: "stage_props", onClick: function onClick() {
 	                        if (!stage.stateExRe) actions.expandStage(stage.keyid);else actions.reduceStage(stage.keyid);
-	                    } }, React.createElement(Items.ItemCode, null))))), React.createElement("div", { className: "stages_items", id: "stageContainer" + stage.keyid }, selectorsStack.map(function (selector, key) {
+	                    } }, React.createElement("div", { className: "stage_name" }, React.createElement("p", null, stage.name)), React.createElement("div", { className: "stage_attrs" }, React.createElement("p", null, "selectores " + stage.items))), React.createElement("li", { className: "stage_items" }, React.createElement("ul", { className: "ul_stage_items" }, React.createElement("li", { onClick: function onClick() {
+	                        actions.deleteStage(stage.keyid);
+	                    } }, React.createElement(Items.ItemDel, null)), React.createElement("li", { onClick: function onClick() {
+	                        actions.editStage(stage.keyid);
+	                    } }, React.createElement(Items.ItemEdit, null)), React.createElement("li", { onClick: function onClick() {
+	                        actions.selectStage(stage.keyid);
+	                    } }, stage.selected ? React.createElement(Items.ItemCheckBoxCheck, null) : React.createElement(Items.ItemCheckBoxUncheck, null))))), React.createElement("div", { className: "stages_items", id: "stageContainer" + stage.keyid }, selectorsStack.map(function (selector, key) {
 	                    if (stage.keyid === selector.stagekey) if (selector.state === "pending") return React.createElement(pendingselector_1.PendingSelector, { key: key, actions: actions, selector: selector });else if (selector.state === "confirmed") return React.createElement(confirmselector_1.ConfirmSelector, { key: key, actions: actions, selector: selector });
 	                })));
 	            })), React.createElement("ul", { id: "__me_select_bot", className: "__ul_containeritems_bot" }, React.createElement("li", { className: "input_pal" }, React.createElement("input", { type: "text" })), React.createElement("li", { className: "item_pal" }, React.createElement(Items.ItemSearch, null))));
@@ -40385,7 +40417,7 @@
 	    (0, _createClass3.default)(ItemAddStage, [{
 	        key: "render",
 	        value: function render() {
-	            return React.createElement("svg", { fill: "#000000", viewBox: "0 0 24 24" }, React.createElement("path", { d: "M0 .5h24v24H0z", fill: "none" }), React.createElement("path", { d: "M12 16.5l4-4h-3v-9h-2v9H8l4 4zm9-13h-6v1.99h6v14.03H3V5.49h6V3.5H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2v-14c0-1.1-.9-2-2-2z" }));
+	            return React.createElement("svg", { fill: "#000000", viewBox: "0 0 24 24" }, React.createElement("path", { d: "M6 2c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6H6zm7 7V3.5L18.5 9H13z" }), React.createElement("path", { d: "M0 0h24v24H0z", fill: "none" }));
 	        }
 	    }]);
 	    return ItemAddStage;
@@ -40645,6 +40677,66 @@
 	
 	exports.ItemEdit = ItemEdit;
 	;
+	
+	var ItemCheckBoxCheck = function (_React$Component19) {
+	    (0, _inherits3.default)(ItemCheckBoxCheck, _React$Component19);
+	
+	    function ItemCheckBoxCheck() {
+	        (0, _classCallCheck3.default)(this, ItemCheckBoxCheck);
+	        return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ItemCheckBoxCheck).apply(this, arguments));
+	    }
+	
+	    (0, _createClass3.default)(ItemCheckBoxCheck, [{
+	        key: "render",
+	        value: function render() {
+	            return React.createElement("svg", { fill: "#000000", viewBox: "0 0 24 24" }, React.createElement("path", { d: "M0 0h24v24H0z", fill: "none" }), React.createElement("path", { d: "M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" }));
+	        }
+	    }]);
+	    return ItemCheckBoxCheck;
+	}(React.Component);
+	
+	exports.ItemCheckBoxCheck = ItemCheckBoxCheck;
+	;
+	
+	var ItemCheckBoxUncheck = function (_React$Component20) {
+	    (0, _inherits3.default)(ItemCheckBoxUncheck, _React$Component20);
+	
+	    function ItemCheckBoxUncheck() {
+	        (0, _classCallCheck3.default)(this, ItemCheckBoxUncheck);
+	        return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ItemCheckBoxUncheck).apply(this, arguments));
+	    }
+	
+	    (0, _createClass3.default)(ItemCheckBoxUncheck, [{
+	        key: "render",
+	        value: function render() {
+	            return React.createElement("svg", { fill: "#000000", viewBox: "0 0 24 24" }, React.createElement("path", { d: "M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z" }), React.createElement("path", { d: "M0 0h24v24H0z", fill: "none" }));
+	        }
+	    }]);
+	    return ItemCheckBoxUncheck;
+	}(React.Component);
+	
+	exports.ItemCheckBoxUncheck = ItemCheckBoxUncheck;
+	;
+	
+	var ItemRestore = function (_React$Component21) {
+	    (0, _inherits3.default)(ItemRestore, _React$Component21);
+	
+	    function ItemRestore() {
+	        (0, _classCallCheck3.default)(this, ItemRestore);
+	        return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ItemRestore).apply(this, arguments));
+	    }
+	
+	    (0, _createClass3.default)(ItemRestore, [{
+	        key: "render",
+	        value: function render() {
+	            return React.createElement("svg", { fill: "#000000", viewBox: "0 0 24 24" }, React.createElement("path", { d: "M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm-2 16c-2.05 0-3.81-1.24-4.58-3h1.71c.63.9 1.68 1.5 2.87 1.5 1.93 0 3.5-1.57 3.5-3.5S13.93 9.5 12 9.5c-1.35 0-2.52.78-3.1 1.9l1.6 1.6h-4V9l1.3 1.3C8.69 8.92 10.23 8 12 8c2.76 0 5 2.24 5 5s-2.24 5-5 5z" }), React.createElement("path", { d: "M0 0h24v24H0z", fill: "none" }));
+	        }
+	    }]);
+	    return ItemRestore;
+	}(React.Component);
+	
+	exports.ItemRestore = ItemRestore;
+	;
 
 /***/ },
 /* 267 */
@@ -40749,18 +40841,21 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	var props_1 = __webpack_require__(279);
 	var redux_1 = __webpack_require__(247);
 	var actions_1 = __webpack_require__(260);
 	var easy_1 = __webpack_require__(309);
 	var _ = __webpack_require__(283);
 	function message() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? "" : arguments[0];
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? props_1.initialState.message : arguments[0];
 	    var action = arguments[1];
 	
+	    var message = state;
 	    switch (action.type) {
 	        case actions_1.constants.SHOW_MESSAGE:
 	            alert(action.message);
-	            return action.message;
+	            message.message = action.message;
+	            return message;
 	        default:
 	            return state;
 	    }
@@ -40868,6 +40963,7 @@
 	    var stage = void 0;
 	    var getStage = void 0;
 	    var selector = void 0;
+	    var redo = void 0;
 	    switch (action.type) {
 	        case actions_1.constants.CREATE_STAGE:
 	            stage = action.stage;
@@ -40875,9 +40971,27 @@
 	            stage.editable = false;
 	            stage.items = 0;
 	            stage.stateExRe = true;
+	            stage.selected = true;
+	            _.map(stages, function (e) {
+	                if (e.keyid !== stage.keyid) {
+	                    e.selected = false;
+	                }
+	            });
 	            stages.push(action.stage);
 	            return stages;
+	        case actions_1.constants.DELETE_STAGE:
+	            redo = _.remove(stages, function (n) {
+	                return n.keyid === action.key;
+	            });
+	            return stages;
+	        case actions_1.constants.EDIT_STAGE:
+	            getStage = stages[_.findIndex(stages, function (n) {
+	                return n.keyid === action.key;
+	            })];
+	            getStage.editable = true;
+	            return stages;
 	        case actions_1.constants.ADD_SELECTOR:
+	            var stageContainer = void 0;
 	            selector = action.payload.selector;
 	            getStage = stages[_.findIndex(stages, function (n) {
 	                return n.keyid === selector.stagekey;
@@ -40901,6 +41015,17 @@
 	                return n.keyid === action.stageKey;
 	            })];
 	            getStage.stateExRe = false;
+	            return stages;
+	        case actions_1.constants.SELECT_STAGE:
+	            getStage = stages[_.findIndex(stages, function (n) {
+	                return n.keyid === action.key;
+	            })];
+	            getStage.selected = true;
+	            _.map(stages, function (e) {
+	                if (e.keyid !== action.key) {
+	                    e.selected = false;
+	                }
+	            });
 	            return stages;
 	        default:
 	            return state;
@@ -41076,7 +41201,16 @@
 	// set initial state
 	
 	exports.initialState = {
-	    message: "",
+	    message: {
+	        message: "",
+	        options: {
+	            offset: 14,
+	            position: 'top right',
+	            theme: 'dark',
+	            time: 5000,
+	            transition: 'scale'
+	        }
+	    },
 	    mangeMenu: false,
 	    selectorMenu: false,
 	    selectorProps: {},
@@ -41253,7 +41387,7 @@
 	        }
 	    }, {
 	        key: 'setIndividualEvents',
-	        value: function setIndividualEvents(element, scope) {
+	        value: function setIndividualEvents(element, scope, type) {
 	            var _this3 = this;
 	
 	            // al posar el mouse sobre los elementos se obtienen las props de los mismos
@@ -41261,14 +41395,30 @@
 	                //dispatch(fluxActions.showSelectorsInfo(eve));
 	                return false;
 	            });
-	            element.on("click", function (eve) {
-	                if (_this3.keyActivated) {
-	                    eve.preventDefault();
-	                    eve.stopPropagation();
-	                    dispatch(fluxActions.addSelector(eve, state.g.stageSelected, unique(eve.target)));
-	                    return false;
-	                }
-	            });
+	            switch (type) {
+	                case "select":
+	                    element.on("click", function (eve) {
+	                        eve.preventDefault();
+	                        if (_this3.keyActivated) {
+	                            element.attr("disabled", "disabled");
+	                            setTimeout(function () {
+	                                return element.removeAttr("disabled");
+	                            }, 1000);
+	                            dispatch(fluxActions.addSelector(eve, state.g.stageSelected, unique(eve.target)));
+	                            return false;
+	                        }
+	                    });
+	                    break;
+	                default:
+	                    element.on("click", function (eve) {
+	                        eve.preventDefault();
+	                        if (_this3.keyActivated) {
+	                            dispatch(fluxActions.addSelector(eve, state.g.stageSelected, unique(eve.target)));
+	                            return false;
+	                        }
+	                    });
+	                    break;
+	            }
 	        }
 	    }, {
 	        key: 'setGlobalsEvents',
@@ -41276,15 +41426,19 @@
 	            var _this4 = this;
 	
 	            // metodo para setear los eventos globales en window y document y en elementos particulares.
+	            //win.focus();
 	            q(win).on("keyup", function (event) {
 	                var key = event.keyCode || event.which;
-	                if (key === 17) {
-	                    _this4.keyActivated = false;
-	                }
+	                event.preventDefault();
+	                event.stopPropagation();
+	                _this4.keyActivated = false;
+	                return false;
 	            });
 	            q(win).on("keydown", function (event) {
 	                var key = event.keyCode || event.which;
-	                if (event.ctrlKey) {
+	                event.preventDefault();
+	                event.stopPropagation();
+	                if (event.ctrlKey && event.shiftKey) {
 	                    _this4.keyActivated = true;
 	                }
 	                if (event.ctrlKey && event.shiftKey && key === _this4.defaultKeyMenu) {
@@ -41292,6 +41446,7 @@
 	                    if (!state.g.mangeMenu) dispatch(fluxActions.showTopMenu());else dispatch(fluxActions.hiddeTopMenu());
 	                }
 	            });
+	            return false;
 	        }
 	    }, {
 	        key: 'getUniqueSelector',
@@ -41305,18 +41460,30 @@
 	    }, {
 	        key: 'setEventsPerElement',
 	        value: function setEventsPerElement(win, doc, elements) {
+	            var _this5 = this;
+	
 	            // metodo para iterar sobre todos los elementos del DOM
+	            // previene los elementos baneados para evitar los bindings en nodos como el body y html
 	            var currentNode;
 	            var ni;
 	            try {
 	                ni = doc.createNodeIterator(doc, NodeFilter.SHOW_ALL, null, false);
-	                while (currentNode = ni.nextNode()) {
+	
+	                var _loop = function _loop() {
 	                    var node = q(currentNode);
-	                    if (currentNode.tagName) if (!_.find(this.banElementTypes, function (ban) {
-	                        return ban === currentNode.tagName.toLowerCase();
-	                    })) {
-	                        this.setIndividualEvents(node, doc);
+	                    var tagName = void 0;
+	                    if (currentNode.tagName) {
+	                        tagName = currentNode.tagName.toLowerCase();
+	                        if (!_.find(_this5.banElementTypes, function (ban) {
+	                            return ban === tagName;
+	                        })) {
+	                            _this5.setIndividualEvents(node, doc, tagName);
+	                        }
 	                    }
+	                };
+	
+	                while (currentNode = ni.nextNode()) {
+	                    _loop();
 	                }
 	            } catch (err) {
 	                this.logError(err, "there was a problem in the maduk dom parser: error on create node iterator");

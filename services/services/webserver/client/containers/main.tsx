@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { StateDef } from '../store/props';
+import { Message } from '../store/props';
 import { bindActionCreators } from 'redux';
 
 // actions
@@ -13,12 +14,19 @@ interface Props {
     children?: any;
     dispatch?: Redux.Dispatch;
     actions: any;
+    message: Message;
+    mangeMenu: any;
+    stages: any;
+    selectorMenu: any;
+    selectorProps: any;
+    selectorsStack: any;
 }
 
 function mapStateToProps(state: StateDef, props: any) {
     return {
         stages: state.stages,
         mangeMenu: state.mangeMenu,
+        message: state.message,
         selectorMenu: state.selectorMenu,
         selectorProps: state.selectorProps,
         selectorsStack: state.selectorsStack
@@ -31,24 +39,29 @@ function mapDispatchToProps(dispatch: Redux.Dispatch) {
     };
 }
 
-class AppView extends React.Component<any, any> {
+class AppView extends React.Component<Props, any> {
     constructor(props: Props) {
         super(props);
     }
 
     render() {
 
-        const { 
+        const {
             actions,
             mangeMenu,
             stages,
+            message,
             selectorMenu,
             selectorProps,
-            selectorsStack 
+            selectorsStack
         } = this.props
+
 
         return (
             <div>
+                { /*
+                    message ? <AlertContainer ref={ a => message.message } { ...message.options } /> : null
+                */ }
                 <div id="__mad_topper_">
                     <MainPanel
                         actions = { actions }

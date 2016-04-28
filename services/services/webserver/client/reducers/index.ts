@@ -1,4 +1,4 @@
-import { StateDef, Stages } from '../store/props';
+import { initialState, StateDef, Stages, Message } from '../store/props';
 import { combineReducers } from 'redux';
 import { constants } from '../actions';
 import { menus } from '../core/config';
@@ -6,11 +6,14 @@ import { store } from '../store';
 import { E } from '../core/easy';
 import * as _ from 'lodash';
 
-function message(state = "", action: { type: string, message: string }): string {
+function message(state = initialState.message, action: { type: string, message: string }): Message {
+    var message: Message = state;
     switch (action.type) {
         case constants.SHOW_MESSAGE:
-            alert(action.message)
-            return action.message;
+            alert(action.message);
+            message.message = action.message;
+            return message;
+
         default:
             return state;
     }
@@ -112,6 +115,7 @@ function stages(state = [], action) {
     let stage: Stages;
     let getStage: Stages;
     let selector;
+    let redo;
 
     switch (action.type) {
         case constants.CREATE_STAGE:
@@ -121,19 +125,38 @@ function stages(state = [], action) {
             stage.editable = false;
             stage.items = 0;
             stage.stateExRe = true;
+            stage.selected = true;
+
+            _.map(stages, (e) => {
+                if (e.keyid !== stage.keyid) {
+                    e.selected = false;
+                }
+            });
 
             stages.push(action.stage);
 
             return stages;
-            
+
+        case constants.DELETE_STAGE:
+
+            redo = _.remove(stages, (n) => n.keyid === action.key);
+            return stages;
+
+        case constants.EDIT_STAGE:
+
+            getStage = stages[_.findIndex(stages, (n) => n.keyid === action.key)];
+            getStage.editable = true;
+            return stages;
+
         case constants.ADD_SELECTOR:
 
+            let stageContainer: HTMLElement;
             selector = action.payload.selector;
             getStage = stages[_.findIndex(stages, (n) => n.keyid === selector.stagekey)];
             getStage.items += 1;
 
             return stages;
-            
+
         case constants.DELETE_SELECTOR:
 
             getStage = stages[_.findIndex(stages, (n) => n.keyid === action.stageKey)];
@@ -152,9 +175,20 @@ function stages(state = [], action) {
 
             getStage = stages[_.findIndex(stages, (n) => n.keyid === action.stageKey)];
             getStage.stateExRe = false;
-            
+
             return stages;
-            
+        case constants.SELECT_STAGE:
+
+            getStage = stages[_.findIndex(stages, (n) => n.keyid === action.key)];
+            getStage.selected = true;
+            _.map(stages, (e) => {
+                if (e.keyid !== action.key) {
+                    e.selected = false;
+                }
+            });
+
+            return stages;
+
         default:
             return state;
     }

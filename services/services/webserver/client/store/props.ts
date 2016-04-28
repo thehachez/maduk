@@ -10,7 +10,8 @@ export type Selector = {
     uselector: string,
     value: string,
     uniqueName: any,
-    editable: boolean
+    editable: boolean,
+    element: HTMLElement
 }
 
 export type Stages = {
@@ -18,11 +19,23 @@ export type Stages = {
     name: string,
     editable: boolean,
     items: number,
-    stateExRe: boolean
+    stateExRe: boolean,
+    selected: boolean,
+}
+
+export type Message = {
+    message: string,
+    options: {
+        offset: number,
+        position: string,
+        theme: string,
+        time: number,
+        transition: string
+    }
 }
 
 export interface StateDef {
-    message: string;
+    message: Message;
     mangeMenu: boolean;
     selectorMenu: boolean;
     selectorProps: {};
@@ -33,7 +46,16 @@ export interface StateDef {
 
 // set initial state 
 export const initialState: StateDef = {
-    message: "",
+    message: {
+        message: "",
+        options: {
+            offset: 14,
+            position: 'top right',
+            theme: 'dark',
+            time: 5000,
+            transition: 'scale'
+        }
+    },
     mangeMenu: false,
     selectorMenu: false,
     selectorProps: {},
